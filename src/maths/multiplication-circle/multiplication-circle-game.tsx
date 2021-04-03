@@ -33,7 +33,7 @@ export class MultiplicationCircleGame extends ProcessingComponent<
   private getMultiplicatorProps = (): NumberInputProps => {
     return {
       step: this.sketch.multiplicatorIncrement,
-      label: this.strings.multiplciationCircle.multiplicator,
+      label: this.strings.multiplicationCircle.multiplicator,
       value: this.sketch.multiplicator,
       onValueChanged: (value: number) => {
         this.sketch.setMultiplicatorValue(value);
@@ -44,7 +44,7 @@ export class MultiplicationCircleGame extends ProcessingComponent<
   private getSpeedProps = (): NumberInputProps => {
     return {
       step: 0.001,
-      label: this.strings.multiplciationCircle.speed,
+      label: this.strings.multiplicationCircle.speed,
       value: this.sketch.multiplicatorIncrement,
       onValueChanged: (value: number) => {
         this.sketch.multiplicatorIncrement = value;

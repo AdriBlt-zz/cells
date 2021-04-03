@@ -7,13 +7,13 @@ const strings = {
     battleship: "Battleship",
     simulations: "Simulations",
     flock: "Boids Flock",
-    fractales: "Fractales",
+    fractals: "Fractals",
     mandelbrot: "Mandelbrot",
     maths: "Maths",
     fourierSignal: "Fourier Signal",
     fourierDrawing: "Fourier Drawing",
     multiplicationCircle: "Multiplication Circle",
-    celullarAutomaton: "Cellular Automatons",
+    cellularAutomaton: "Cellular Automatons",
     gameOfLife: "Game of Life",
     elementaryRules: "Elementary Rules",
     langtonAnt: "Langton's Ant",
@@ -25,7 +25,7 @@ const strings = {
     width: "Width",
     height: "Height",
     mines: "Mines",
-    autoresolve: "Auto-resolve",
+    autoResolve: "Auto-resolve",
     remainingMines_plural:
       "(inf--1){Too many mines};(0-1){{0} remaining mine};(2-inf){{0} remaining mines};",
   },
@@ -48,7 +48,7 @@ const strings = {
     numberOfCircles: "Frequency count",
     showOriginal: "Show original shape",
   },
-  multiplciationCircle: {
+  multiplicationCircle: {
     multiplicator: "Multiplicator",
     speed: "Speed",
   },
@@ -56,7 +56,7 @@ const strings = {
     mode: "Mode",
     burning: "Burning",
     burningTooltip:
-      "Add a transiant state where cells that have just died cannot be directly reborn. [Colors: Alive(B) Burning(R)]",
+      "Add a transient state where cells that have just died cannot be directly reborn. [Colors: Alive(B) Burning(R)]",
     colors: "Colors",
     colorsTooltip: "Green=Newborn Blue=Alive Red=Dying Yellow=Ephemeral",
     borders: "Border cells",
@@ -92,7 +92,7 @@ const strings = {
     threeStateTooltip: "Whether the turmite has 2 or 3 different states",
   },
   shared: {
-    newgame: "New Game (R)",
+    newGame: "New Game (R)",
     playPause: "Play/Pause",
     oneStep: "One Step",
     reset: "Reset",

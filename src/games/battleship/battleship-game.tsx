@@ -15,7 +15,7 @@ export class BattleshipGame extends ProcessingComponent<BattleshipSketch> {
   protected renderCommands(): JSX.Element {
     return (
       <Button onClick={this.sketch.resetGrid} block={true}>
-        {this.strings.shared.newgame}
+        {this.strings.shared.newGame}
       </Button>
     );
   }

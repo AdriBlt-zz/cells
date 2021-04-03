@@ -40,7 +40,7 @@ export class FourierDrawingSketch implements ProcessingSketch {
 
     this.resetPoints();
 
-    // this.replaceData("/data/fourier/japan.svg");
+    // this.replaceData("/data/fourier/north-america.svg");
   }
 
   public draw(): void {
@@ -119,8 +119,6 @@ export class FourierDrawingSketch implements ProcessingSketch {
           path = v;
         }
       })
-      // tslint:disable-next-line: no-console
-      console.log(JSON.stringify(path));
       this.setPoints(path);
     })
     .catch(error => {

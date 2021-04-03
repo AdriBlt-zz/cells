@@ -35,58 +35,58 @@ const strings: LocalizedStrings = getStrings();
 const cellularAutomatonPages: Page[] = [
   {
     name: strings.menu.gameOfLife,
-    route: "/game-of-life",
+    route: "game-of-life",
     component: <GameOfLifeGame />,
   },
   {
     name: strings.menu.elementaryRules,
-    route: "/elementary-rules",
+    route: "elementary-rules",
     component: <ElementaryRulesGame />,
   },
   {
     name: strings.menu.langtonAnt,
-    route: "/langton-ant",
+    route: "langton-ant",
     component: <AntGame />,
   },
   {
     name: strings.menu.turmite,
-    route: "/turmite",
+    route: "turmite",
     component: <TurmiteGame />,
   },
 ];
 const gamesPages: Page[] = [
   {
     name: strings.menu.minesweeper,
-    route: "/minesweeper",
+    route: "minesweeper",
     component: <MinesweeperGame />,
   },
   {
     name: strings.menu.snake,
-    route: "/snake",
+    route: "snake",
     component: <SnakeGame />,
   },
   {
     name: strings.menu.battleship,
-    route: "/battleship",
+    route: "battleship",
     component: <BattleshipGame />,
   },
 ];
 const simulationsPages: Page[] = [
   {
     name: strings.menu.flock,
-    route: "/flock",
+    route: "flock",
     component: <FlockGame />,
   },
   {
     name: strings.menu.stars,
-    route: "/stars",
+    route: "stars",
     component: <StarsGame />,
   },
 ];
 const fractalesPages: Page[] = [
   {
     name: strings.menu.mandelbrot,
-    route: "/mandelbrot",
+    route: "mandelbrot",
     component: <MandelbrotGame />,
   },
   // TODO: MANDELBROT PATH
@@ -97,17 +97,17 @@ const fractalesPages: Page[] = [
 const mathsPages: Page[] = [
   {
     name: strings.menu.fourierSignal,
-    route: "/fourier-signal",
+    route: "fourier-signal",
     component: <FourierSignalGame />,
   },
   {
     name: strings.menu.fourierDrawing,
-    route: "/fourier-drawing",
+    route: "fourier-drawing",
     component: <FourierDrawingGame />,
   },
   {
     name: strings.menu.multiplicationCircle,
-    route: "/multiplication-circle",
+    route: "multiplication-circle",
     component: <MultiplicationCircleGame />,
   },
   // TODO: SPACE FILLING CURVE (HILBERT)
@@ -118,7 +118,7 @@ export const appMenu: Menu = {
   name: strings.menu.cells,
   categories: [
     {
-      name: strings.menu.celullarAutomaton,
+      name: strings.menu.cellularAutomaton,
       pages: cellularAutomatonPages,
     },
     {
@@ -130,7 +130,7 @@ export const appMenu: Menu = {
       pages: simulationsPages,
     },
     {
-      name: strings.menu.fractales,
+      name: strings.menu.fractals,
       pages: fractalesPages,
     },
     {

@@ -25,12 +25,12 @@ export class MinesweeperGame extends ProcessingComponent<MinesweeperSketch> {
         <NumberInput {...this.getHeightProps()} />
         <NumberInput {...this.getMinesProps()} />
         <CheckboxInput
-          label={this.strings.minesweeper.autoresolve}
+          label={this.strings.minesweeper.autoResolve}
           value={this.sketch.isAutoResolve}
           onValueChanged={(v) => this.sketch.setAutoResolve(v)}
         />
         <Button onClick={() => this.sketch.resetGrid()} block={true}>
-          {this.strings.shared.newgame}
+          {this.strings.shared.newGame}
         </Button>
       </div>
     );

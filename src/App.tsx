@@ -1,23 +1,23 @@
 import * as React from "react";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { HashRouter, Route, Switch } from "react-router-dom";
 
 import { appMenu, Category, Menu, Page } from "./Menu";
 
 class App extends React.Component {
   public render() {
     return (
-      <div>
+      <HashRouter hashType="noslash">
         {this.renderMenu(appMenu)}
         {this.renderRoute(appMenu)}
-      </div>
+      </HashRouter>
     );
   }
 
   private renderMenu(menu: Menu): JSX.Element {
     return (
       <Navbar expand="lg" bg="dark" variant="dark">
-        <Navbar.Brand href="/home">{menu.name}</Navbar.Brand>
+        <Navbar.Brand href="#home">{menu.name}</Navbar.Brand>
         <Nav className="mr-auto">
           {menu.categories.map((category: Category) => (
             <NavDropdown
@@ -26,7 +26,10 @@ class App extends React.Component {
               title={category.name}
             >
               {category.pages.map((page: Page) => (
-                <NavDropdown.Item key={page.route} href={page.route}>
+                <NavDropdown.Item
+                  key={page.route}
+                  href={'#' + page.route}
+                >
                   {page.name}
                 </NavDropdown.Item>
               ))}
@@ -38,23 +41,29 @@ class App extends React.Component {
   }
 
   private renderRoute(menu: Menu): JSX.Element {
-    const allPages: Page[] = ([] as Page[]).concat(
-      ...menu.categories.map((category: Category) => category.pages)
-    );
+    /* A <Switch> looks through its children <Route>s and
+    renders the first one that matches the current URL. */
     return (
-      <BrowserRouter>
-        <Switch>
-          {allPages.map((page: Page) => (
+      <Switch>
+        {menu.categories.map((category: Category) => 
+          category.pages.map((page: Page) => (
             <Route
               key={page.route}
-              path={page.route}
-              render={(props) => page.component}
+              path={'/' + page.route}
+              render={() => page.component}
             />
-          ))}
-        </Switch>
-      </BrowserRouter>
+          ))
+        )}
+        <Route key="home" component={Home} />
+      </Switch>
     );
   }
 }
+
+const Home = () => (
+  <div>
+    <h1>Hello world!</h1>
+  </div>
+)
 
 export default App;
