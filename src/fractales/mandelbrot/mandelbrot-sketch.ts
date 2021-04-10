@@ -3,6 +3,7 @@ import * as p5 from "p5";
 import { Complex } from "../../numbers/Complex";
 import { ProcessingSketch } from "../../services/processing.service";
 import { getKeyFromCode, KeyBoard } from "../../utils/keyboard";
+import { Point } from "../../utils/points";
 
 // Variables
 const w = 800;
@@ -10,11 +11,6 @@ const h = 600;
 const MAX_ITERATION = 10000;
 const MIN_SQUARE_DISTANCE = 0.000000001;
 const MIN_DRAG_RECT_SIDE = 10;
-
-interface Point {
-  x: number;
-  y: number;
-}
 
 interface Convergence {
   point: Complex;

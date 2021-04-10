@@ -29,6 +29,7 @@ export interface Category {
 
 export interface Menu {
   name: string;
+  route: string;
   categories: Category[];
 }
 
@@ -122,6 +123,7 @@ const mathsPages: Page[] = [
 
 export const appMenu: Menu = {
   name: strings.menu.cells,
+  route: "home",
   categories: [
     {
       name: strings.menu.cellularAutomaton,
