@@ -12,6 +12,8 @@ import {
 } from "../../utils/color";
 import { getKeyFromCode, KeyBoard } from "../../utils/keyboard";
 import { clamp } from "../../utils/numbers";
+import { Point } from "../../utils/points";
+import { ProjectionToPlan, ViewPoint } from "../../utils/projection";
 import {
   Constellation,
   KnownConstellationsFamilies,
@@ -28,26 +30,14 @@ const HALF_HEIGHT = HEIGHT / 2;
 const DELTA_ANGLE = Math.PI / 10;
 // const DELTA_MOVEMENT = 10;
 
-interface Position {
-  x: number;
-  y: number;
-}
-
-interface ViewPoint {
-  x: number;
-  y: number;
-  z: number;
-  phi: number;
-  thetaAlt: number; // from -pi/2 to +pi/2
-}
-
 export class StarsSketch implements ProcessingSketch {
   public displayOptions: DisplayOptions;
   @observable public selectedConstellation: string;
   private p5js: p5;
   private camera: ViewPoint;
   private stars: Star[];
-  private starPositions: Map<string, Position>;
+  private starPositions: Map<string, Point>;
+  private readonly projector: ProjectionToPlan;
 
   private starsLayer: p5.Graphics;
   private starNamesLayer: p5.Graphics;
@@ -58,10 +48,11 @@ export class StarsSketch implements ProcessingSketch {
 
   constructor() {
     this.camera = getDefaultCamera();
+    this.projector = new ProjectionToPlan(HALF_WIDTH, HALF_HEIGHT);
     this.stars = [];
     this.constellationsFamilies = [];
     this.constellationIndex = 0;
-    this.starPositions = new Map<string, Position>();
+    this.starPositions = new Map<string, Point>();
 
     this.displayOptions = {
       showStars: true,
@@ -217,7 +208,7 @@ export class StarsSketch implements ProcessingSketch {
 
     this.constellationsFamilies[this.constellationIndex].forEach(
       (constellation) => {
-        const center: Position = { x: 0, y: 0 };
+        const center: Point = { x: 0, y: 0 };
         let count = 0;
         constellation.edges.forEach((edge) => {
           const start = this.starPositions.get(edge.start);
@@ -269,32 +260,8 @@ export class StarsSketch implements ProcessingSketch {
   //   this.camera.z += dist * Math.sin(this.camera.thetaAlt);
   // }
 
-  private getPointOnScreen(star: Star): Position | undefined {
-    const { x, y, z, phi, thetaAlt } = this.camera;
-
-    // translation
-    const x0 = star.x - x;
-    const y0 = star.y - y;
-    const z0 = star.z - z;
-
-    // rotation
-    const x1 = x0 * Math.cos(phi) + y0 * Math.sin(phi);
-    const y1 = y0 * Math.cos(phi) - x0 * Math.sin(phi);
-    const z1 = z0;
-
-    // inclinaison
-    const x2 = x1 * Math.cos(thetaAlt) + z1 * Math.sin(thetaAlt);
-    const y2 = y1;
-    const z2 = z1 * Math.cos(thetaAlt) - x1 * Math.sin(thetaAlt);
-
-    // on screen
-    if (x2 <= 0) {
-      return undefined;
-    }
-
-    const x3 = HALF_WIDTH + HALF_WIDTH * Math.atan2(y2, x2);
-    const y3 = HALF_HEIGHT + HALF_HEIGHT * Math.atan2(z2, x2);
-    return { x: x3, y: y3 };
+  private getPointOnScreen(star: Star): Point | undefined {
+    return this.projector.getPointOnScreen(star, this.camera);
   }
 }
 
