@@ -8,6 +8,7 @@ import { MandelbrotGame } from "./fractales/mandelbrot/mandelbrot-game";
 import { BattleshipGame } from "./games/battleship/battleship-game";
 import { MinesweeperGame } from "./games/minesweeper/minesweeper-game";
 import { SnakeGame } from "./games/snake/snake-game";
+import { WolfensteinGame } from "./games/wolfenstein/wolfenstein-game";
 import { FourierDrawingGame } from "./maths/fourier-drawing/fourier-drawing-game";
 import { FourierSignalGame } from "./maths/fourier-signal/fourier-signal-game";
 import { MultiplicationCircleGame } from "./maths/multiplication-circle/multiplication-circle-game";
@@ -69,6 +70,11 @@ const gamesPages: Page[] = [
     name: strings.menu.battleship,
     route: "battleship",
     component: <BattleshipGame />,
+  },
+  {
+    name: strings.menu.wolfenstein,
+    route: "wolfenstein",
+    component: <WolfensteinGame />
   },
 ];
 const simulationsPages: Page[] = [

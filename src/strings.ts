@@ -19,6 +19,7 @@ const strings = {
     langtonAnt: "Langton's Ant",
     turmite: "Turmite",
     stars: "Night Sky Stars",
+    wolfenstein: "Wolfenstein",
   },
   minesweeper: {
     difficulty: "Difficulty",
