@@ -7,6 +7,7 @@ import { TurmiteGame } from "./cellular-automaton/turmite-game";
 import { MandelbrotGame } from "./fractales/mandelbrot/mandelbrot-game";
 import { BattleshipGame } from "./games/battleship/battleship-game";
 import { MinesweeperGame } from "./games/minesweeper/minesweeper-game";
+import { MazeGame } from "./games/ray-casting/maze-game";
 import { WolfensteinGame } from "./games/ray-casting/wolfenstein-game";
 import { SnakeGame } from "./games/snake/snake-game";
 import { FourierDrawingGame } from "./maths/fourier-drawing/fourier-drawing-game";
@@ -76,6 +77,11 @@ const gamesPages: Page[] = [
     name: strings.menu.wolfenstein,
     route: "wolfenstein",
     component: <WolfensteinGame />
+  },
+  {
+    name: strings.menu.alixMaze,
+    route: "alix-maze",
+    component: <MazeGame />
   },
 ];
 const simulationsPages: Page[] = [

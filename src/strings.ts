@@ -20,6 +20,7 @@ const strings = {
     turmite: "Turmite",
     stars: "Night Sky Stars",
     wolfenstein: "Wolfenstein",
+    alixMaze: "Alix's Maze",
   },
   minesweeper: {
     difficulty: "Difficulty",
