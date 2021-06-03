@@ -2,7 +2,7 @@ import * as p5 from "p5";
 import { ProcessingSketch } from "../../services/processing.service";
 import { Color, COLORS, getColorBetween, setFillColor } from "../../utils/color";
 import { isStatisticallyNull } from "../../utils/numbers";
-import { createVector, Vector } from "../../utils/vector";
+import { Vector } from "../../utils/vector";
 
 interface RayCastingProjection {
     column: number;
@@ -20,19 +20,34 @@ interface Player {
     plane: Vector;
 }
 
-const WIDTH = 640;
-const HEIGHT = 480;
+interface RayCastingGameProps {
+    playerInitialPosition: Vector,
+    playerInitialDirection: Vector,
+    getCellColorOrNullIfEmpty: (i: number, j: number) => Color | null | undefined,
+    ceilingColor: Color;
+    floorColor: Color;
+
+}
+
+const WIDTH = 1200;
+const HEIGHT = 800;
 
 const FRAME_TIME = 0.01;
 const MOVE_SPEED = 5 * FRAME_TIME; // the constant value is in squares/second
 const ROT_SPEED = 3 * FRAME_TIME; // the constant value is in radians/second
 
-export class WolfensteinSketch implements ProcessingSketch {
+export class RayCastingSketch implements ProcessingSketch {
+    public player: Player;
     private p5js: p5;
-    private player: Player = {
-        position: createVector(22, 12),
-        direction: createVector(-1, 0),
-        plane: createVector(0, 0.66),
+
+    constructor(
+        private properties: RayCastingGameProps,
+    ) {
+        this.player = {
+            position: this.properties.playerInitialPosition.copy(),
+            direction: this.properties.playerInitialDirection.copy(),
+            plane: this.properties.playerInitialDirection.rotate(-Math.PI / 2).mult(0.66),
+        };
     }
 
     public setup(p: p5): void {
@@ -65,19 +80,19 @@ export class WolfensteinSketch implements ProcessingSketch {
         const deltaY = this.player.direction.y * moveSpeed;
         if (this.p5js.keyIsDown(this.p5js.UP_ARROW)) {
         // move forward if no wall in front of you
-            if (this.getLevelMap(posX + deltaX, posY) === 0) {
+            if (this.isFreeCell(posX + deltaX, posY)) {
                 this.player.position.x += deltaX;
             }
-            if (this.getLevelMap(posX, posY + deltaY) === 0) {
+            if (this.isFreeCell(posX, posY + deltaY)) {
                 this.player.position.y += deltaY;
             }
         }
         if (this.p5js.keyIsDown(this.p5js.DOWN_ARROW)) {
             // move backwards if no wall behind you
-            if (this.getLevelMap(posX - deltaX, posY) === 0) {
+            if (this.isFreeCell(posX - deltaX, posY)) {
                 this.player.position.x -= deltaX;
             }
-            if (this.getLevelMap(posX, posY - deltaY) === 0) {
+            if (this.isFreeCell(posX, posY - deltaY)) {
                 this.player.position.y -= deltaY;
             }
         }
@@ -86,21 +101,23 @@ export class WolfensteinSketch implements ProcessingSketch {
     private drawScreen(): void {
         this.p5js.noStroke();
 
-        // Ceilling
-        setFillColor(this.p5js, COLORS.Black);
+        // Ceiling
+        setFillColor(this.p5js, this.properties.ceilingColor);
         this.p5js.rect(0, 0, WIDTH, HEIGHT / 2);
         // Floor
-        setFillColor(this.p5js, COLORS.DarkGray);
+        setFillColor(this.p5js, this.properties.floorColor);
         this.p5js.rect(0, HEIGHT / 2, WIDTH, HEIGHT / 2);
 
         for (let j = 0; j < WIDTH; j++) {
             const projection = this.computeProjection(j);
-            setFillColor(this.p5js, projection.pixelColor);
-            this.p5js.rect(j, projection.top, 1, projection.bottom - projection.top);
+            if (projection) {
+                setFillColor(this.p5js, projection.pixelColor);
+                this.p5js.rect(j, projection.top, 1, projection.bottom - projection.top);
+            }
         }
     }
 
-    private computeProjection(j: number): RayCastingProjection {
+    private computeProjection(j: number): RayCastingProjection | null {
         const posX = this.player.position.x;
         const posY = this.player.position.y;
         const dirX = this.player.direction.x;
@@ -164,7 +181,7 @@ export class WolfensteinSketch implements ProcessingSketch {
             }
 
             // Check if ray has hit a wall
-            if (this.levelMap[mapX][mapY] > 0) {
+            if (!this.isFreeCell(mapX, mapY)) {
                 break;
             };
         } 
@@ -188,11 +205,15 @@ export class WolfensteinSketch implements ProcessingSketch {
             drawEnd = HEIGHT - 1;
         }
 
-        const wallI = mapY;
-        const wallJ = mapX;
-        let color = this.getSurfaceColor(wallI, wallJ);
-        // give x and y sides different brightness
-        if (isVerticalSurface) {
+        let color = this.cellColor(mapX, mapY);
+        if (color === null) {
+            return null;
+        }
+
+        if (color === undefined) {
+            color = this.properties.ceilingColor;
+        } else if (isVerticalSurface) {
+            // give x and y sides different brightness
             color = getColorBetween(color, COLORS.Black); // division by 2
         }
 
@@ -204,46 +225,11 @@ export class WolfensteinSketch implements ProcessingSketch {
         }
     }
 
-    private getSurfaceColor(i: number, j: number): Color {
-        switch (this.getLevelMap(i, j)) {
-            case 1:  return COLORS.Red;
-            case 2:  return COLORS.Green;
-            case 3:  return COLORS.Blue;
-            case 4:  return COLORS.White;
-            default: return COLORS.Yellow;
-        }
+    private isFreeCell(i: number, j: number): boolean {
+        return this.cellColor(i, j) === null;
     }
 
-    private getLevelMap(i: number, j: number): number {
-        return this.levelMap[Math.floor(i)][Math.floor(j)];
-    }
-
-    private get levelMap(): number[][] {
-        return [
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 0, 0, 1 ],
-            [ 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 1 ],
-            [ 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 0, 0, 0, 0, 0, 2, 2, 0, 2, 2, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 0, 0, 1 ],
-            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 4, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 4, 0, 0, 0, 0, 5, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 4, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 4, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ]
-          ];
+    private cellColor(i: number, j: number): Color | null | undefined {
+        return this.properties.getCellColorOrNullIfEmpty(Math.floor(i), Math.floor(j));
     }
 }
