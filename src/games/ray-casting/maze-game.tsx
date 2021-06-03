@@ -50,12 +50,12 @@ export class MazeGame extends ProcessingComponent<RayCastingSketch> {
 
     private loadMaze() {
         readBlackAndWhiteImage('/data/maze.png')
-            .then(matrix => {
-                this.matrix = matrix;
+            .then((matrix: boolean[][]) => {
                 this.sketch.player.position = createVector(
-                    this.matrix.length / 6,
-                    this.matrix[0].length / 6,
+                    matrix.length / 6,
+                    matrix[0].length / 6,
                 );
+                this.matrix = matrix;
             });
     }
 }
