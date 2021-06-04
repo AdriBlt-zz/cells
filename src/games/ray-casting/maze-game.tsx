@@ -26,7 +26,7 @@ export class MazeGame extends ProcessingComponent<RayCastingSketch> {
     }
     
     protected renderInfoSection(): JSX.Element {
-        return <div />;
+        return <span>{this.strings.rayCasting.controls}</span>;
     }
 
     private getCellColor = (i: number, j: number): Color | null | undefined => {

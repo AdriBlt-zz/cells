@@ -93,6 +93,9 @@ const strings = {
     threeStateLabel: "3 states Turmite",
     threeStateTooltip: "Whether the turmite has 2 or 3 different states",
   },
+  rayCasting: {
+    controls: "Arrows to move, shift to run.",
+  },
   shared: {
     newGame: "New Game (R)",
     playPause: "Play/Pause",
