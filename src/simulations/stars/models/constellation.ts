@@ -1,3 +1,4 @@
+import { Asset, getAssetPath } from "../../../assets";
 import { parseFileLines } from "../../../utils/file";
 
 export const KnownConstellationsFamilies: string[] = [
@@ -108,18 +109,20 @@ export function loadConstellationListFamilies(
 function loadConstellationList(
   constellationFamily: string
 ): Promise<Constellation[]> {
+  const constellationDefinitionFormat = getAssetPath(Asset.ConstellationsDefinitionFileFormat);
+  const constellationNameFormat = getAssetPath(Asset.ConstellationsNameFileFormat);
   return Promise.all([
     parseFileLines<ConstellationEdges>(
-      `/data/stars/${constellationFamily}/constellationship.fab.txt`,
+      constellationDefinitionFormat.replace('{0}', constellationFamily),
       parseConstellation,
       false,
-      "#"
+      "#",
     ),
     parseFileLines<ConstellationName>(
-      `/data/stars/${constellationFamily}/constellation_names.eng.fab.txt`,
+      constellationNameFormat.replace('{0}', constellationFamily),
       parseConstellationName,
       false,
-      "#"
+      "#",
     ),
   ]).then(
     ([constellations, constellationNames]: [

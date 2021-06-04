@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Asset, getAssetPath } from "../../assets";
 import { ProcessingComponent } from "../../shared/processing-component";
 import { Color, COLORS } from "../../utils/color";
 import { readBlackAndWhiteImage } from "../../utils/image-helper";
@@ -49,7 +50,7 @@ export class MazeGame extends ProcessingComponent<RayCastingSketch> {
     }
 
     private loadMaze() {
-        readBlackAndWhiteImage('/data/maze.png')
+        readBlackAndWhiteImage(getAssetPath(Asset.MazeImage))
             .then((matrix: boolean[][]) => {
                 this.sketch.player.position = createVector(
                     matrix.length / 6,

@@ -71,6 +71,7 @@
  * 36: var_max
  */
 
+import { Asset, getAssetPath } from "../../../assets";
 import { parseFileLines } from "../../../utils/file";
 
 export interface Star {
@@ -96,6 +97,6 @@ function parseStarLine(line: string): Star {
   };
 }
 
-export function loadStarsList(): Promise<Star[]> {
-  return parseFileLines("/data/stars/hygdata_v3.csv", parseStarLine, true);
+export function loadStarsList(): Promise<Star[]> {  
+  return parseFileLines(getAssetPath(Asset.StarsFile), parseStarLine, true);
 }
