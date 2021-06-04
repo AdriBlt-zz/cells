@@ -31,6 +31,7 @@ export class WolfensteinGame extends ProcessingComponent<RayCastingSketch> {
 
         return {
             color: this.getCellColor(i, j),
+            // tslint:disable-next-line:no-console
             onEnteringCell: this.levelMap[i][j] === 5 ? () => console.log('WIN') : undefined,
             canGoThroughOverwrite: this.levelMap[i][j] === 5 ? true : undefined,
         };
