@@ -1,6 +1,6 @@
 import * as p5 from "p5";
 import { ProcessingSketch } from "../../services/processing.service";
-import { Color, COLORS, getColorBetween, setFillColor } from "../../utils/color";
+import { Color, COLORS, getColorBetween, setFillColor, setStrokeColor } from "../../utils/color";
 import { isStatisticallyNull } from "../../utils/numbers";
 import { Vector } from "../../utils/vector";
 
@@ -20,13 +20,24 @@ interface Player {
     plane: Vector;
 }
 
+export interface CellProperties {
+    color?: Color;
+    canGoThroughOverwrite?: boolean;
+    onEnteringCell?: () => void;
+    isOutOfBound?: boolean;
+}
+
+interface CellPropertiesWithCoordinates extends CellProperties {
+    i: number;
+    j: number;
+}
+
 interface RayCastingGameProps {
     playerInitialPosition: Vector,
     playerInitialDirection: Vector,
-    getCellColorOrNullIfEmpty: (i: number, j: number) => Color | null | undefined,
+    getCellProperties: (i: number, j: number) => CellProperties,
     ceilingColor: Color;
     floorColor: Color;
-
 }
 
 const WIDTH = 1200;
@@ -65,6 +76,11 @@ export class RayCastingSketch implements ProcessingSketch {
         const rotSpeed = isRunning ? ROT_SPEED / 2 : ROT_SPEED;
         const moveSpeed = isRunning ? MOVE_SPEED * 2 : MOVE_SPEED;
 
+        const currentCell = this.cellProps(
+            this.player.position.x,
+            this.player.position.y,
+        );
+
         if (this.p5js.keyIsDown(this.p5js.LEFT_ARROW)) {
             this.player.direction = this.player.direction.rotate(rotSpeed);
             this.player.plane = this.player.plane.rotate(rotSpeed);
@@ -80,21 +96,34 @@ export class RayCastingSketch implements ProcessingSketch {
         const deltaY = this.player.direction.y * moveSpeed;
         if (this.p5js.keyIsDown(this.p5js.UP_ARROW)) {
         // move forward if no wall in front of you
-            if (this.isFreeCell(posX + deltaX, posY)) {
+            if (this.canGoThroughCell(posX + deltaX, posY)) {
                 this.player.position.x += deltaX;
             }
-            if (this.isFreeCell(posX, posY + deltaY)) {
+
+            if (this.canGoThroughCell(posX, posY + deltaY)) {
                 this.player.position.y += deltaY;
             }
         }
         if (this.p5js.keyIsDown(this.p5js.DOWN_ARROW)) {
             // move backwards if no wall behind you
-            if (this.isFreeCell(posX - deltaX, posY)) {
+            if (this.canGoThroughCell(posX - deltaX, posY)) {
                 this.player.position.x -= deltaX;
             }
-            if (this.isFreeCell(posX, posY - deltaY)) {
+
+            if (this.canGoThroughCell(posX, posY - deltaY)) {
                 this.player.position.y -= deltaY;
             }
+        }
+        
+        const updatedCell = this.cellProps(
+            this.player.position.x,
+            this.player.position.y,
+        );
+
+        if (updatedCell.onEnteringCell
+            && currentCell.i !== updatedCell.i
+            && currentCell.j !== updatedCell.j) {
+            updatedCell.onEnteringCell();
         }
     }
 
@@ -115,6 +144,11 @@ export class RayCastingSketch implements ProcessingSketch {
                 this.p5js.rect(j, projection.top, 1, projection.bottom - projection.top);
             }
         }
+
+        this.p5js.strokeWeight(1);
+        this.p5js.noFill();
+        setStrokeColor(this.p5js, COLORS.Black);
+        this.p5js.rect(0, 0, WIDTH, HEIGHT);
     }
 
     private computeProjection(j: number): RayCastingProjection | null {
@@ -180,8 +214,9 @@ export class RayCastingSketch implements ProcessingSketch {
                 isVerticalSurface = true;
             }
 
+            const cellProps = this.cellProps(mapX, mapY);
             // Check if ray has hit a wall
-            if (!this.isFreeCell(mapX, mapY)) {
+            if (!!cellProps.color || cellProps.isOutOfBound) {
                 break;
             };
         } 
@@ -205,14 +240,12 @@ export class RayCastingSketch implements ProcessingSketch {
             drawEnd = HEIGHT - 1;
         }
 
-        let color = this.cellColor(mapX, mapY);
-        if (color === null) {
+        let color = this.cellProps(mapX, mapY).color;
+        if (!color) {
             return null;
         }
 
-        if (color === undefined) {
-            color = this.properties.ceilingColor;
-        } else if (isVerticalSurface) {
+        if (isVerticalSurface) {
             // give x and y sides different brightness
             color = getColorBetween(color, COLORS.Black); // division by 2
         }
@@ -225,11 +258,21 @@ export class RayCastingSketch implements ProcessingSketch {
         }
     }
 
-    private isFreeCell(i: number, j: number): boolean {
-        return this.cellColor(i, j) === null;
+    private canGoThroughCell(i: number, j: number): boolean {
+        const props = this.cellProps(i, j);
+
+        if (props.canGoThroughOverwrite !== undefined) {
+            return props.canGoThroughOverwrite;
+        }
+
+        return !props.isOutOfBound && !props.color;
     }
 
-    private cellColor(i: number, j: number): Color | null | undefined {
-        return this.properties.getCellColorOrNullIfEmpty(Math.floor(i), Math.floor(j));
+    private cellProps(i: number, j: number): CellPropertiesWithCoordinates {
+        return {
+            i,
+            j,
+            ...this.properties.getCellProperties(Math.floor(i), Math.floor(j)),
+        };
     }
 }

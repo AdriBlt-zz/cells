@@ -3,14 +3,14 @@ import { ProcessingComponent } from "../../shared/processing-component";
 import { Color, COLORS } from "../../utils/color";
 import { isOutOfBounds } from "../../utils/numbers";
 import { createVector } from "../../utils/vector";
-import { RayCastingSketch } from "./ray-casting-sketch";
+import { CellProperties, RayCastingSketch } from "./ray-casting-sketch";
 
 export class WolfensteinGame extends ProcessingComponent<RayCastingSketch> {
     protected createSketch(): RayCastingSketch {
         return new RayCastingSketch({
             playerInitialPosition: createVector(22, 12),
             playerInitialDirection: createVector(-1, 0),
-            getCellColorOrNullIfEmpty: (i: number, j: number) => this.getCellColor(i, j),
+            getCellProperties: (i: number, j: number) => this.getCellProperties(i, j),
             ceilingColor: COLORS.Black,
             floorColor: COLORS.DarkGray,
         });
@@ -24,13 +24,21 @@ export class WolfensteinGame extends ProcessingComponent<RayCastingSketch> {
         return <span>{this.strings.rayCasting.controls}</span>;
     }
 
-    private getCellColor = (i: number, j: number): Color | null => {
+    private getCellProperties = (i: number, j: number): CellProperties => {
         if (isOutOfBounds(i, 0, this.levelMap.length) || isOutOfBounds(j, 0, this.levelMap[0].length)) {
-            return COLORS.Yellow;
+            return { isOutOfBound: true };
         }
 
+        return {
+            color: this.getCellColor(i, j),
+            onEnteringCell: this.levelMap[i][j] === 5 ? () => console.log('WIN') : undefined,
+            canGoThroughOverwrite: this.levelMap[i][j] === 5 ? true : undefined,
+        };
+    }
+
+    private getCellColor(i: number, j: number): Color | undefined {
         switch (this.levelMap[i][j]) {
-            case 0:  return null;
+            case 0:  return undefined;
             case 1:  return COLORS.Red;
             case 2:  return COLORS.Green;
             case 3:  return COLORS.Blue;
