@@ -17,7 +17,7 @@ class App extends React.Component {
   private renderMenu(menu: Menu): JSX.Element {
     return (
       <Navbar expand="lg" bg="dark" variant="dark">
-        <Navbar.Brand href={menu.route}>{menu.name}</Navbar.Brand>
+        <Navbar.Brand href={'#' + menu.route}>{menu.name}</Navbar.Brand>
         <Nav className="mr-auto">
           {menu.categories.map((category: Category) => (
             <NavDropdown
