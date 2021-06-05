@@ -1,6 +1,6 @@
+import { observable } from "mobx";
 import * as p5 from "p5";
 
-import { observable } from "mobx";
 import { ProcessingSketch } from "../../services/processing.service";
 import {
   color,

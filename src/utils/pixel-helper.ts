@@ -1,4 +1,5 @@
 import * as p5 from 'p5';
+
 import { Color } from './color';
 
 export function setPixel(image: p5.Image, i: number, j: number, color: Color) {

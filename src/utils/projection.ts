@@ -17,7 +17,7 @@ export class ProjectionToPlan {
         private halfWidth: number,
         private halfHeight: number,
     ) {}
-    
+
     public getPointOnScreen(
         point: Point3D,
         viewPoint: ViewPoint,

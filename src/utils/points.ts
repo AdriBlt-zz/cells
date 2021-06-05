@@ -8,7 +8,7 @@ export interface Extremum {
   max: Point;
 }
 
-export function findExtremum(points: Point[]): Extremum {  
+export function findExtremum(points: Point[]): Extremum {
   return findExtremumMatrix([points]);
 }
 

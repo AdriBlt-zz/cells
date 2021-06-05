@@ -45,7 +45,7 @@ class App extends React.Component {
     renders the first one that matches the current URL. */
     return (
       <Switch>
-        {menu.categories.map((category: Category) => 
+        {menu.categories.map((category: Category) =>
           category.pages.map((page: Page) => (
             <Route
               key={page.route}

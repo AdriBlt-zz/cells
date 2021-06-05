@@ -143,7 +143,7 @@ export class RayCastingSketch implements ProcessingSketch {
 
     private computeProjection(column: number): RayCastingProjection | null {
         const { position, direction } = this.player
-        
+
         // calculate ray position and direction
         const cameraX = 2 * column / WIDTH - 1; // x-coordinate in camera space
         const projectionPlane = direction.copy().rotate(-Math.PI / 2).mult(0.66);

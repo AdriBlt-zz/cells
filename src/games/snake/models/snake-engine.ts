@@ -112,7 +112,7 @@ export class SnakeEngine {
             if (!head) {
                 throw new Error('head should not be null');
             }
-            
+
             const next = this.getNextCell(head, direction);
 
             // TODO HANDLE HEAD TO TAIL

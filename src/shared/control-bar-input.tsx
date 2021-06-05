@@ -14,7 +14,7 @@ export interface ControlBarInputProps {
 
 export class ControlBarInput extends React.Component<ControlBarInputProps> {
   public render(): JSX.Element {
-    return (      
+    return (
         <ButtonGroup>
           {this.props.resetCallback && renderButton(
             <Icon.ArrowCounterclockwise />,

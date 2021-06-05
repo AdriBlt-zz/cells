@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import { Asset, getAssetPath } from "../../assets";
 import { ProcessingComponent } from "../../shared/processing-component";
 import { COLORS } from "../../utils/color";
@@ -20,11 +21,11 @@ export class MazeGame extends ProcessingComponent<RayCastingSketch> {
             floorColor: COLORS.Maroon,
         });
     }
-    
+
     protected renderCommands(): JSX.Element {
         return <div />;
     }
-    
+
     protected renderInfoSection(): JSX.Element {
         return <span>{this.strings.rayCasting.controls}</span>;
     }
@@ -37,15 +38,15 @@ export class MazeGame extends ProcessingComponent<RayCastingSketch> {
         }
 
         return {
-            color: this.matrix[3 * i][3 * j] 
-            || this.matrix[3 * i + 1][3 * j] 
-            || this.matrix[3 * i + 2][3 * j] 
-            || this.matrix[3 * i][3 * j + 1] 
-            || this.matrix[3 * i + 1][3 * j + 1] 
-            || this.matrix[3 * i + 2][3 * j + 1] 
-            || this.matrix[3 * i][3 * j + 2] 
-            || this.matrix[3 * i + 1][3 * j + 2] 
-            || this.matrix[3 * i + 2][3 * j + 2] 
+            color: this.matrix[3 * i][3 * j]
+            || this.matrix[3 * i + 1][3 * j]
+            || this.matrix[3 * i + 2][3 * j]
+            || this.matrix[3 * i][3 * j + 1]
+            || this.matrix[3 * i + 1][3 * j + 1]
+            || this.matrix[3 * i + 2][3 * j + 1]
+            || this.matrix[3 * i][3 * j + 2]
+            || this.matrix[3 * i + 1][3 * j + 2]
+            || this.matrix[3 * i + 2][3 * j + 2]
             ? COLORS.DarkOliveGreen
             : undefined,
         };

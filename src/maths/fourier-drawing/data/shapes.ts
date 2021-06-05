@@ -17,7 +17,7 @@ export function getSquare(n: number): Point[] {
     }
     return points;
 }
-  
+
 export function getTriangle(n: number): Point[] {
     const points: Point[] = [];
     const base = 100;
@@ -32,4 +32,3 @@ export function getTriangle(n: number): Point[] {
     }
     return points;
 }
-  

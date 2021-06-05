@@ -36,7 +36,7 @@ export abstract class CellularAutomatonGame<
   private getCommonButtons(): JSX.Element {
     return (
       <div>
-        <ControlBarInput 
+        <ControlBarInput
           strings={this.strings}
           resetCallback={this.sketch.resetGrid}
           playPauseCallback={this.sketch.pause}

@@ -97,6 +97,6 @@ function parseStarLine(line: string): Star {
   };
 }
 
-export function loadStarsList(): Promise<Star[]> {  
+export function loadStarsList(): Promise<Star[]> {
   return parseFileLines(getAssetPath(Asset.StarsFile), parseStarLine, true);
 }

@@ -225,12 +225,12 @@ export class FourierDrawingSketch implements ProcessingSketch {
     if (isStatisticallyNull(parameter.amplitude)) {
       return center;
     }
-    
+
     const point = Vector.fromAngle(
       parameter.frequency * this.time + parameter.phase,
       parameter.amplitude
       ).add(center);
-    
+
     if (!skipEllipse) {
       this.p5js.noFill();
       this.p5js.stroke(100, 100);
@@ -241,7 +241,7 @@ export class FourierDrawingSketch implements ProcessingSketch {
         center.y,
         2 * parameter.amplitude
       );
-      
+
       this.p5js.strokeWeight(3);
       this.p5js.line(center.x, center.y, point.x, point.y);
     }

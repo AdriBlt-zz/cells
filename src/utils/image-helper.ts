@@ -1,6 +1,6 @@
 
 export function readBlackAndWhiteImage(path: string): Promise<boolean[][]> {
-    return new Promise<boolean[][]>((resolve, reject) => {        
+    return new Promise<boolean[][]>((resolve, reject) => {
         const img = new Image();
         img.src = path;
         img.onload = (ev => {
@@ -8,10 +8,10 @@ export function readBlackAndWhiteImage(path: string): Promise<boolean[][]> {
                 reject("readBlackAndWhiteImage: No dimensions");
                 return;
             }
-            
+
             const imgWidth = ev.currentTarget.width;
             const imgHeight = ev.currentTarget.height;
-        
+
             const canvas = document.createElement('canvas');
             canvas.width = imgWidth;
             canvas.height = imgHeight;
@@ -37,7 +37,7 @@ export function readBlackAndWhiteImage(path: string): Promise<boolean[][]> {
 
             resolve(matrix);
         });
-    });    
+    });
 }
 
 interface Dimension extends EventTarget {

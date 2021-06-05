@@ -98,7 +98,7 @@ export class LinkedList<T> {
       this.head = node;
     }
   }
-  
+
   public clear(): void {
     this.head = undefined;
     this.tail = undefined;

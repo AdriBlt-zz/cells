@@ -1,6 +1,6 @@
+import { Observer } from "mobx-react";
 import * as React from "react";
 
-import { Observer } from "mobx-react";
 import { ProcessingComponent } from "../../shared/processing-component";
 import { StarsSketch } from "./stars-sketch";
 

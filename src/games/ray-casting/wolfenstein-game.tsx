@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import { ProcessingComponent } from "../../shared/processing-component";
 import { Color, COLORS } from "../../utils/color";
 import { isOutOfBounds } from "../../utils/numbers";
@@ -15,11 +16,11 @@ export class WolfensteinGame extends ProcessingComponent<RayCastingSketch> {
             floorColor: COLORS.DarkGray,
         });
     }
-    
+
     protected renderCommands(): JSX.Element {
         return <div />;
     }
-    
+
     protected renderInfoSection(): JSX.Element {
         return <span>{this.strings.rayCasting.controls}</span>;
     }

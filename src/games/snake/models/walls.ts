@@ -42,7 +42,7 @@ function getCross(w: number, h: number): Cell[] {
 
 const collection: Array<((w: number, h: number) => Cell[]) > = [
     getEmpty,
-    getCorners, 
+    getCorners,
     // getCross,
 ];
 

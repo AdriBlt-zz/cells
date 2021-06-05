@@ -8,7 +8,7 @@ export function parseSvg(filePath: string): Promise<Point[][]> {
         const doc = parser.parseFromString(data, "image/svg+xml");
 
         const shapes: Point[][] = [];
-        
+
         const polygons = doc.getElementsByTagName("polygon")
         for (let i = 0; i < polygons.length; i++) {
             const points = polygons[i].getAttribute("points");
@@ -63,7 +63,7 @@ function parsePath(d: string): Point[][] {
         .split(" ")
         .map(value => value.trim())
         .filter(value => !!value);
-    
+
     let currentShape: Point[] = [];
     let lastPoint: Point = { x: 0, y: 0 };
     for (let i = 0; i < parts.length; i++) {
@@ -74,7 +74,7 @@ function parsePath(d: string): Point[][] {
         }
 
         let newPoint: Point;
-        
+
         if (node === 'M') {
             currentShape = [];
             const x = +parts[++i];

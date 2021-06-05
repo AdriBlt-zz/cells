@@ -2,7 +2,6 @@ import { observable } from "mobx";
 import * as p5 from "p5";
 
 import { ProcessingSketch } from "../../services/processing.service";
-
 import { getKeyFromCode, KeyBoard } from "../../utils/keyboard";
 import { getCellCoordinate } from "../../utils/mouse";
 import { Move } from "./models/ai-opponent";

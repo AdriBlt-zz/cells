@@ -1,5 +1,4 @@
 import { LinkedList } from '../../../utils/linked-list';
-
 import { Cell } from './cell';
 import { Direction } from './direction';
 
@@ -13,10 +12,10 @@ export class Snake {
 
         const oldTail = this.body.popTail();
 
-        if (!oldTail) { 
-            throw new Error('oldTail should not be null'); 
+        if (!oldTail) {
+            throw new Error('oldTail should not be null');
         }
-        
+
         oldTail.isSnake = false;
         return oldTail;
     }

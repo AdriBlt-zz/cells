@@ -1,4 +1,5 @@
 import * as p5 from "p5";
+
 import { isMouseWheelEvent } from "./processing-contracts";
 
 export interface ProcessingSketch {

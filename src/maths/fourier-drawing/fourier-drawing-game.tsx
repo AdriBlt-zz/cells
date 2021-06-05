@@ -21,7 +21,7 @@ export class FourierDrawingGame extends ProcessingComponent<
         <NumberInput {...this.getNumberOfCirclesProps()} />
         <CheckboxInput {...this.showOriginalProps()} />
         <div>
-          <ControlBarInput 
+          <ControlBarInput
             strings={this.strings}
             resetCallback={this.sketch.restart}
             playPauseCallback={this.sketch.pause}
