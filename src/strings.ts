@@ -21,6 +21,7 @@ const strings = {
     stars: "Night Sky Stars",
     wolfenstein: "Wolfenstein",
     alixMaze: "Alix's Maze",
+    mazeGeneration: "Maze Generation",
   },
   minesweeper: {
     difficulty: "Difficulty",
@@ -105,6 +106,7 @@ const strings = {
     victory: "VICTORY!!!",
     failure: "LO-OO-SER!!!",
     timeLabel_format: "Step: {0}",
+    skipForward: "Skip forward"
   },
 };
 

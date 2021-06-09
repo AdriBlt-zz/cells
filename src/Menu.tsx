@@ -12,6 +12,7 @@ import { WolfensteinGame } from "./games/ray-casting/wolfenstein-game";
 import { SnakeGame } from "./games/snake/snake-game";
 import { FourierDrawingGame } from "./maths/fourier-drawing/fourier-drawing-game";
 import { FourierSignalGame } from "./maths/fourier-signal/fourier-signal-game";
+import { MazeGenerationGame } from "./maths/maze-generation/maze-generation-game";
 import { MultiplicationCircleGame } from "./maths/multiplication-circle/multiplication-circle-game";
 import { FlockGame } from "./simulations/flock/flock-game";
 import { StarsGame } from "./simulations/stars/stars-game";
@@ -123,6 +124,11 @@ const mathsPages: Page[] = [
     route: "multiplication-circle",
     component: <MultiplicationCircleGame />,
   },
+  {
+    name: strings.menu.mazeGeneration,
+    route: 'maze-generation',
+    component: <MazeGenerationGame />,
+  }
   // TODO: SPACE FILLING CURVE (HILBERT)
   // TODO: CIRCLE AND ELIPSE?
 ];

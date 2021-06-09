@@ -10,6 +10,7 @@ export interface ControlBarInputProps {
     playPauseCallback?: () => void;
     oneStepCallback?: () => void;
     randomCallback?: () => void;
+    skipFastForwardCallback?: () => void;
 }
 
 export class ControlBarInput extends React.Component<ControlBarInputProps> {
@@ -37,6 +38,11 @@ export class ControlBarInput extends React.Component<ControlBarInputProps> {
             <Icon.Shuffle />,
             this.props.strings.shared.randomize,
             this.props.randomCallback,
+          )}
+          {this.props.skipFastForwardCallback && renderButton(
+            <Icon.SkipForwardFill />,
+            this.props.strings.shared.skipForward,
+            this.props.skipFastForwardCallback,
           )}
         </ButtonGroup>
     );
