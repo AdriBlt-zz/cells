@@ -3,8 +3,22 @@ import * as p5 from "p5";
 import { ProcessingSketch } from "../../services/processing.service";
 import { Color, COLORS, setBackground, setFillColor } from "../../utils/color";
 import { Point } from "../../utils/points";
+import { DepthExplorationAlgorithm } from "./algorithms/depth-exploration-algorithm";
+import { KruskalAlgorithm } from "./algorithms/kruskal-algorithm";
 import { RandomTraversalAlgorithm } from "./algorithms/random-traversal-algorithm";
-import { Cell, Direction, GenerationStatus, MazeGenerationAlgorithm, MazePath, PathStatus } from "./model";
+import { RandomizedPrimAlgorithm } from "./algorithms/randomized-prim-algorithm";
+import { RecursiveSubdivisionAlgorithm } from "./algorithms/recursive-subdivision-algorithm";
+import { WilsonAlgorithm } from "./algorithms/wilson-algorithm";
+import { Cell, Direction, GenerationStatus, MazeGenerationAlgorithm, MazePath, Status } from "./model";
+
+export enum MazeAlgorithmType {
+    RecursiveSubdivision,
+    DepthExploration,
+    Kruskal,
+    RandomTraversal,
+    RandomizedPrim,
+    Wilson,
+}
 
 const NB_COLUMNS = 80;
 const NB_ROWS = 50;
@@ -19,25 +33,27 @@ export class MazeGenerationSketch implements ProcessingSketch {
 
     private isRunningGeneration = false;
 
+    constructor(private selectedAlgorithmType: MazeAlgorithmType) {}
+
     public setup(p: p5): void {
         this.p5js = p;
         this.p5js.createCanvas(WIDTH, HEIGHT);
         setBackground(this.p5js, COLORS.Black);
         this.p5js.noLoop();
 
-        this.algorithm = new RandomTraversalAlgorithm(
-            NB_COLUMNS,
-            NB_ROWS,
-            (cell) => this.onUpdateCell(cell),
-            (path) => this.onUpdatePath(path),
-        );
-
+        this.algorithm = this.createAlgorithmGenerator();
+        this.reset();
         this.startGeneration();
     }
 
     public reset = (): void => {
-        this.stopGeneration();
         setBackground(this.p5js, COLORS.Black);
+        if (this.algorithm.isStartingEmpty) {
+            this.p5js.noStroke();
+            setFillColor(this.p5js, COLORS.White);
+            this.p5js.rect(CELL_SIDE, CELL_SIDE, CELL_SIDE * (2 * NB_COLUMNS - 1), CELL_SIDE * (2 * NB_ROWS - 1));
+        }
+
         this.algorithm.initialize();
     }
 
@@ -65,8 +81,19 @@ export class MazeGenerationSketch implements ProcessingSketch {
         }
 
         while (this.algorithm.getGenerationStatus() === GenerationStatus.Ongoing) {
-            this.algorithm.computeOneStep();
+            this.algorithm.computeOneGenerationIteration();
         }
+    }
+
+    public setAlgorithmType = (type: MazeAlgorithmType): void => {
+        if (this.selectedAlgorithmType === type) {
+            return;
+        }
+
+        this.selectedAlgorithmType = type;
+        this.algorithm = this.createAlgorithmGenerator();
+        this.reset();
+        this.startGeneration();
     }
 
     public draw(): void {
@@ -75,11 +102,11 @@ export class MazeGenerationSketch implements ProcessingSketch {
                 this.algorithm.initialize();
                 return;
             case GenerationStatus.Ongoing:
-                this.algorithm.computeOneStep();
+                this.algorithm.computeOneGenerationIteration();
                 return;
             case GenerationStatus.Completed:
                 console.log("FINISHED");
-                this.isRunningGeneration = false;
+                this.stopGeneration();
                 return;
             case GenerationStatus.Error:
             default:
@@ -99,12 +126,23 @@ export class MazeGenerationSketch implements ProcessingSketch {
         this.p5js.noLoop();
     }
 
-    private onUpdateCell(cell: Cell): void {
-        this.drawCellOrPath(this.getCellCoordinates(cell), this.getCellColor(cell));
+    private onUpdateCell = (cell: Cell): void => {
+        this.drawCellOrPath(this.getCellCoordinates(cell), this.getColor(cell.status));
     }
 
-    private onUpdatePath(path: MazePath): void {
-        this.drawCellOrPath(this.getPathCoordinates(path), this.getPathColor(path));
+    private onUpdatePath = (path: MazePath, updateDeadWalls?: boolean): void => {
+        const coordinates = this.getPathCoordinates(path);
+        this.drawCellOrPath(coordinates, this.getColor(path.status));
+
+        if (updateDeadWalls) {
+            if (path.direction === Direction.Right) {
+                this.drawCellOrPath({ x: coordinates.x, y: coordinates.y - 1 }, COLORS.Black);
+                this.drawCellOrPath({ x: coordinates.x, y: coordinates.y + 1 }, COLORS.Black);
+            } else if (path.direction === Direction.Bottom) {
+                this.drawCellOrPath({ x: coordinates.x - 1, y: coordinates.y }, COLORS.Black);
+                this.drawCellOrPath({ x: coordinates.x + 1, y: coordinates.y }, COLORS.Black);
+            }
+        }
     }
 
     private drawCellOrPath(point: Point, color: Color): void {
@@ -120,10 +158,6 @@ export class MazeGenerationSketch implements ProcessingSketch {
         };
     }
 
-    private getCellColor(cell: Cell): Color {
-        return cell.isExplored ? COLORS.White : COLORS.Black;
-    }
-
     private getPathCoordinates(path: MazePath): Point {
         const { x, y } = this.getCellCoordinates(path.cell);
         return {
@@ -132,16 +166,47 @@ export class MazeGenerationSketch implements ProcessingSketch {
         };
     }
 
-    private getPathColor(path: MazePath): Color {
-        switch (path.status) {
-            case PathStatus.Empty:
+    private getColor(status: Status): Color {
+        switch (status) {
+            case Status.Empty:
                 return COLORS.White;
-            case PathStatus.Focused:
+            case Status.Focused:
                 return COLORS.Red;
-            case PathStatus.Filled:
+            case Status.Filled:
                 return COLORS.Black;
             default:
                 throw new Error("Unknown color");
+        }
+    }
+
+    private createAlgorithmGenerator(): MazeGenerationAlgorithm {
+        switch (this.selectedAlgorithmType) {
+            case MazeAlgorithmType.RecursiveSubdivision:
+                return new RecursiveSubdivisionAlgorithm(
+                    NB_COLUMNS, NB_ROWS, this.onUpdateCell, this.onUpdatePath,
+                );
+            case MazeAlgorithmType.DepthExploration:
+                return new DepthExplorationAlgorithm(
+                    NB_COLUMNS, NB_ROWS, this.onUpdateCell, this.onUpdatePath,
+                );
+            case MazeAlgorithmType.Kruskal:
+                return new KruskalAlgorithm(
+                    NB_COLUMNS, NB_ROWS, this.onUpdateCell, this.onUpdatePath,
+                );
+            case MazeAlgorithmType.RandomTraversal:
+                return new RandomTraversalAlgorithm(
+                    NB_COLUMNS, NB_ROWS, this.onUpdateCell, this.onUpdatePath,
+                );
+            case MazeAlgorithmType.RandomizedPrim:
+                return new RandomizedPrimAlgorithm(
+                    NB_COLUMNS, NB_ROWS, this.onUpdateCell, this.onUpdatePath,
+                );
+            case MazeAlgorithmType.Wilson:
+                return new WilsonAlgorithm(
+                    NB_COLUMNS, NB_ROWS, this.onUpdateCell, this.onUpdatePath,
+                );
+            default:
+                throw new Error("Unknown type: " + this.selectedAlgorithmType);
         }
     }
 }

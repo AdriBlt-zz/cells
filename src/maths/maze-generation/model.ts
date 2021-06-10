@@ -1,7 +1,7 @@
 export interface Cell {
     row: number;
     column: number;
-    isExplored: boolean;
+    status: Status;
 }
 
 export enum Direction {
@@ -9,16 +9,16 @@ export enum Direction {
     Bottom,
 }
 
-export enum PathStatus {
-    Filled,
-    Focused,
-    Empty,
+export enum Status {
+    Filled = 'Filled',
+    Focused = 'Focused',
+    Empty = 'Empty',
 }
 
 export interface MazePath {
     cell: Cell;
     direction: Direction;
-    status: PathStatus;
+    status: Status;
 }
 
 export interface CellPaths {
@@ -35,7 +35,8 @@ export enum GenerationStatus {
 }
 
 export interface MazeGenerationAlgorithm {
+    isStartingEmpty?: boolean;
     getGenerationStatus(): GenerationStatus;
     initialize(): void;
-    computeOneStep(): void;
+    computeOneGenerationIteration(): void;
 }

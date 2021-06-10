@@ -1,3 +1,5 @@
+import { randomInt } from "./random";
+
 export function shuffleList<T>(list: T[]): void {
     for (let i = list.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -17,4 +19,27 @@ export function createDefaultMatrix<T>(width: number, height: number, getDefault
         matrix.push(line);
     }
     return matrix;
+}
+
+export function removeRandomElement<T>(list: T[]): T {
+    const index = randomInt(0, list.length);
+    return list.splice(index, 1)[0];
+}
+
+export function peekRandomElement<T>(list: T[]): T {
+    const index = randomInt(0, list.length);
+    return list[index];
+}
+
+export function peekLast<T>(list: T[]): T {
+    return list[list.length - 1];
+}
+
+export function addIfNotNull<T>(list: T[], element: T | null): boolean {
+    if (!element) {
+        return false;
+    }
+
+    list.push(element);
+    return true;
 }

@@ -1,14 +1,18 @@
-import { removeRandomElement } from "../../../utils/list-helpers";
+
+import { Heap } from "src/utils/heap";
+
 import { randomInt } from "../../../utils/random";
 import { BaseMazeGenerationAlgorithm } from "../base-maze-generation-algorithm";
 import { Cell, GenerationStatus, MazePath, Status } from "../model";
 
-export class RandomTraversalAlgorithm extends BaseMazeGenerationAlgorithm {
-    private pathsToExplore: MazePath[] = [];
+type WeightedMazePath = MazePath & { weight: number };
+
+export class RandomizedPrimAlgorithm extends BaseMazeGenerationAlgorithm {
+    private pathsToExplore: Heap<WeightedMazePath> = new Heap(value => value.weight);
 
     public initialize(): void {
         this.resetPaths();
-        this.pathsToExplore = [];
+        this.pathsToExplore.clear();
         this.exploreCell(this.paths[randomInt(this.height)][randomInt(this.width)].cell);
         this.status = GenerationStatus.Ongoing;
     }
@@ -19,7 +23,7 @@ export class RandomTraversalAlgorithm extends BaseMazeGenerationAlgorithm {
             return true;
         }
 
-        const exploredPath: MazePath = removeRandomElement(this.pathsToExplore);
+        const exploredPath: MazePath = this.pathsToExplore.pop()!;
 
         const cell1 = exploredPath.cell;
         const cell2 = this.getDestinationCell(exploredPath);
@@ -53,8 +57,8 @@ export class RandomTraversalAlgorithm extends BaseMazeGenerationAlgorithm {
     }
 
     private addPathToExplore = (path: MazePath): void => {
-        if (path.status === Status.Filled) {
-            this.pathsToExplore.push(path);
+        if (path && path.status === Status.Filled) {
+            this.pathsToExplore.push({ ...path, weight: randomInt(100)});
             path.status = Status.Focused;
             this.onUpdatePath(path);
         }
