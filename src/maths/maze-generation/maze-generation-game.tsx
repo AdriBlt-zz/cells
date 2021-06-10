@@ -1,8 +1,9 @@
 import * as React from "react";
-import { ControlBarInput } from "src/shared/control-bar-input";
-import { SelectInput, SelectInputProps } from "src/shared/select-input";
 
+import { ControlBarInput } from "../../shared/control-bar-input";
+import { InfoBox } from "../../shared/info-box";
 import { ProcessingComponent } from "../../shared/processing-component";
+import { SelectInput, SelectInputProps } from "../../shared/select-input";
 import { MazeAlgorithmType, MazeGenerationSketch } from "./maze-generation-sketch";
 
 interface MazeGenerationGameState {
@@ -17,7 +18,7 @@ const ALGORITHM_LIST: Array<{ type: MazeAlgorithmType; name: string; }> = [
     { type: MazeAlgorithmType.RecursiveSubdivision, name: "Recursive Subdivision" },
     { type: MazeAlgorithmType.Wilson, name: "Wilson" },
 ];
-const DEFAULT_ALGORITHM_INDEX = 4;
+const DEFAULT_ALGORITHM_INDEX = 0;
 
 export class MazeGenerationGame extends ProcessingComponent<MazeGenerationSketch, MazeGenerationGameState> {
     public state: MazeGenerationGameState = { selectedAlgorithmIndex: DEFAULT_ALGORITHM_INDEX };
@@ -42,22 +43,42 @@ export class MazeGenerationGame extends ProcessingComponent<MazeGenerationSketch
     }
 
     protected renderInfoSection(): JSX.Element {
-        return <div />;
+        const description = this.getDescription();
+        return description ? (<InfoBox title={this.strings.mazeGeneration.infoTitle} text={description}/>) : <div/> ;
     }
 
     private getAlgorithmProps(): SelectInputProps {
-      return {
-        label: 'Algorithm',
-        options: ALGORITHM_LIST.map((algorithm) => algorithm.name),
-        selectedOption: ALGORITHM_LIST[this.state.selectedAlgorithmIndex].name,
-        onOptionChanged: (selectedAlgorithm: string) => {
-            const index = ALGORITHM_LIST.findIndex((a) => a.name === selectedAlgorithm);
-            if (index >= 0) {
-                const algorithm = ALGORITHM_LIST[index];
-                this.sketch.setAlgorithmType(algorithm.type);
-                this.setState({ selectedAlgorithmIndex: index });
-          }
-        },
-      };
+        return {
+            label: 'Algorithm',
+            options: ALGORITHM_LIST.map((algorithm) => algorithm.name),
+            selectedOption: ALGORITHM_LIST[this.state.selectedAlgorithmIndex].name,
+            onOptionChanged: (selectedAlgorithm: string) => {
+                const index = ALGORITHM_LIST.findIndex((a) => a.name === selectedAlgorithm);
+                if (index >= 0) {
+                    const algorithm = ALGORITHM_LIST[index];
+                    this.sketch.setAlgorithmType(algorithm.type);
+                    this.setState({ selectedAlgorithmIndex: index });
+                }
+            },
+        };
+    }
+
+    private getDescription(): string |  null {
+        switch (ALGORITHM_LIST[this.state.selectedAlgorithmIndex].type) {
+            case MazeAlgorithmType.RecursiveSubdivision:
+                return this.strings.mazeGeneration.description.recursiveSubdivision;
+            case MazeAlgorithmType.DepthExploration:
+                return this.strings.mazeGeneration.description.depthExploration;
+            case MazeAlgorithmType.Kruskal:
+                return this.strings.mazeGeneration.description.kruskal;
+            case MazeAlgorithmType.RandomTraversal:
+                return this.strings.mazeGeneration.description.randomTraversal;
+            case MazeAlgorithmType.RandomizedPrim:
+                return this.strings.mazeGeneration.description.randomizedPrim;
+            case MazeAlgorithmType.Wilson:
+                return this.strings.mazeGeneration.description.wilson;
+            default:
+                return null;
+        }
     }
 }

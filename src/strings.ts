@@ -97,6 +97,17 @@ const strings = {
   rayCasting: {
     controls: "Arrows to move, shift to run.",
   },
+  mazeGeneration: {
+    infoTitle: "Algorithm description",
+    description: {
+      randomTraversal: "Randomly explores one path (in red) around the maze.",
+      kruskal: "Randomly selects two adjacent cells and add the path between them to the maze if there is not yet one that connects them.",
+      randomizedPrim: "Explores paths (in red) around the maze, in order of their weight, that has been randomly computed.",
+      depthExploration: "Explores the maze from the last explored cell, then backtracks when stuck.",
+      recursiveSubdivision: "Splits the empty maze in four, with three openings connecting the sections, then repeat the process in each section.",
+      wilson: "Initializes the maze as one cell, then grows a line that randomly searches for the maze. If the line loops back on itself, it cuts the loop.",
+    },
+  },
   shared: {
     newGame: "New Game (R)",
     playPause: "Play/Pause",
