@@ -17,6 +17,10 @@ function getRayCastingGameProps(): RayCastingGameProps {
         getCellProperties: (i: number, j: number) => getCellProperties(i, j),
         ceilingColor: COLORS.Black,
         floorColor: COLORS.DarkGray,
+        showMapInfo: {
+            nbRows: levelMap.length,
+            nbCols: levelMap[0].length,
+        }
     };
 }
 

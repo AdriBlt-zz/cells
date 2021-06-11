@@ -36,6 +36,10 @@ export class MazeGame extends React.Component<MazeGameProps, MazeGameState> {
                         getCellProperties: (i: number, j: number) => this.getCellProperties(i, j),
                         ceilingColor: COLORS.Cyan,
                         floorColor: COLORS.Maroon,
+                        showMapInfo: {
+                            nbRows: this.matrix.length,
+                            nbCols: this.matrix[0].length,
+                        },
                     }
                 });
             });

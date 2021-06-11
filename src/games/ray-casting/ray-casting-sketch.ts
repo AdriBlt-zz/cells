@@ -30,10 +30,13 @@ export interface RayCastingGameProps {
     getCellProperties: (i: number, j: number) => CellProperties,
     ceilingColor: Color;
     floorColor: Color;
+    showMapInfo?: { nbRows: number, nbCols: number };
 }
 
 const WIDTH = 1200;
 const HEIGHT = 800;
+
+const MAP_CELL_SIDE = 5;
 
 const FRAME_TIME = 0.01;
 const MOVE_SPEED = 5 * FRAME_TIME; // the constant value is in squares/second
@@ -42,6 +45,7 @@ const ROT_SPEED = 3 * FRAME_TIME; // the constant value is in radians/second
 export class RayCastingSketch implements ProcessingSketch {
     private p5js: p5;
     private previousPosition: { i: number, j: number } | null;
+    private mapColor: Color[][] = [];
 
     constructor(
         public properties: RayCastingGameProps,
@@ -55,6 +59,8 @@ export class RayCastingSketch implements ProcessingSketch {
     public draw(): void {
         this.updatePosition();
         this.drawScreen();
+
+        this.drawMap();
     }
 
     private updatePosition(): void {
@@ -245,5 +251,71 @@ export class RayCastingSketch implements ProcessingSketch {
         const i = Math.floor(x);
         const j = Math.floor(y);
         return { i, j, ...this.properties.getCellProperties(i, j) };
+    }
+
+    private drawMap(): void {
+        if (!this.properties.showMapInfo) {
+            return;
+        }
+
+        if (this.mapColor.length === 0) {
+            this.mapColor = this.getMap();
+
+            this.p5js.noStroke();
+            setFillColor(this.p5js, COLORS.White);
+            this.p5js.rect(0, HEIGHT, WIDTH, HEIGHT);
+
+            for (let i = 0; i < this.mapColor.length; i++) {
+                for (let j = 0; j < this.mapColor[i].length; j++) {
+                    this.drawCellFromMap(i, j);
+                }
+            }
+        } else if (this.previousPosition) {
+            const { i, j } = this.previousPosition;
+            this.mapColor[i][j] = this.getCellColor(i, j);
+            this.drawCellFromMap(i, j);
+
+            const playerI = Math.floor(this.properties.playerPosition.x);
+            const playerJ = Math.floor(this.properties.playerPosition.y);
+            this.mapColor[playerI][playerJ] = COLORS.Red;
+            this.drawCellFromMap(playerI, playerJ);
+        }
+    }
+
+    private drawCellFromMap(i: number, j: number): void {
+        this.p5js.noStroke();
+        setFillColor(this.p5js, this.mapColor[i][j]);
+        this.p5js.rect(
+            j * MAP_CELL_SIDE,
+            HEIGHT + MAP_CELL_SIDE + i * MAP_CELL_SIDE,
+            MAP_CELL_SIDE,
+            MAP_CELL_SIDE
+        );
+    }
+
+    private getMap(): Color[][] {
+        if (!this.properties.showMapInfo) {
+            return [];
+        }
+
+        const map: Color[][] = [];
+        for (let i = 0; i < this.properties.showMapInfo.nbRows; i++) {
+            const line: Color[] = [];
+            for (let j = 0; j < this.properties.showMapInfo.nbCols; j++) {
+                line.push(this.getCellColor(i, j));
+            }
+            map.push(line);
+        }
+
+        const playerI = Math.floor(this.properties.playerPosition.x);
+        const playerJ = Math.floor(this.properties.playerPosition.y);
+        map[playerI][playerJ] = COLORS.Red;
+
+        return map;
+    }
+
+    private getCellColor(i: number, j: number): Color {
+        const cellProps = this.properties.getCellProperties(i, j);
+        return cellProps && cellProps.color || this.properties.floorColor;
     }
 }
