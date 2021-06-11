@@ -6,8 +6,9 @@ import {
   ProcessingSketch,
 } from "../services/processing.service";
 import { getStrings, LocalizedStrings } from "../strings";
+import { newGuid } from "../utils/guid";
 
-const PROCESSING_CONTAINER_ID = "processingContainer";
+const PROCESSING_CONTAINER_ID_FORMAT = "processing-container-";
 
 export abstract class ProcessingComponent<
   T extends ProcessingSketch,
@@ -17,9 +18,10 @@ export abstract class ProcessingComponent<
   protected readonly sketch: T = this.createSketch(); ;
   protected readonly strings: LocalizedStrings = getStrings();
   private readonly processingService = new ProcessingService();
+  private readonly processingContainerId: string = PROCESSING_CONTAINER_ID_FORMAT + newGuid();
 
   public componentDidMount(): void {
-    this.processingService.sketch(this.sketch, PROCESSING_CONTAINER_ID);
+    this.processingService.sketch(this.sketch, this.processingContainerId);
   }
 
   public componentWillUnmount(): void {
@@ -36,7 +38,7 @@ export abstract class ProcessingComponent<
         )} */}
         <Row>
           <Col sm={9}>
-            <div id={PROCESSING_CONTAINER_ID} />
+            <div id={this.processingContainerId} />
           </Col>
           <Col sm={3}>
             {this.renderCommands()}
