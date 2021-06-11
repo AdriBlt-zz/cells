@@ -5,7 +5,7 @@ export type CellNeighbor = { cell: Cell, path: MazePath };
 
 export abstract class BaseMazeGenerationAlgorithm implements MazeGenerationAlgorithm {
     protected status: GenerationStatus = GenerationStatus.Uninitialized;
-    protected paths: CellPaths[][] = [];
+    public paths: CellPaths[][] = [];
 
     constructor(
         protected width: number,
@@ -90,8 +90,4 @@ export abstract class BaseMazeGenerationAlgorithm implements MazeGenerationAlgor
         }
         return neighbors;
     }
-}
-
-export function areCellsEqual(a: Cell, b: Cell): boolean {
-    return a.row === b.row && a.column === b.column;
 }

@@ -34,7 +34,7 @@ export class RecursiveSubdivisionAlgorithm extends BaseMazeGenerationAlgorithm {
 
         // One cell/column/row only, nothing to do
         if (iMax - iMin === 1 || jMax - jMin === 1) {
-            return true;
+            return false;
         }
 
         const iCut = computeCut(iMin, iMax);
@@ -48,17 +48,16 @@ export class RecursiveSubdivisionAlgorithm extends BaseMazeGenerationAlgorithm {
 
         // 3 of the 4 separation (between A/C, B/D, A/B and C/D) will have a path
         // The last one will not.
-
         const openings: number[] = [
             randomInt(iMin, iCut), // i, between A and C
             randomInt(iCut, iMax), // i, between B and D
             randomInt(jMin, jCut), // j, between A and B
             randomInt(jCut, jMax), // j, between C and D
         ];
-
         const closedOpeningIndex = randomInt(0, 4);
         openings[closedOpeningIndex] = -1;
 
+        // Updating the paths between the sections
         for (let i = iMin; i < iMax; i++) {
             const path = this.paths[i][jCut - 1].right;
             if (path) {

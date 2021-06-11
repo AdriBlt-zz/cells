@@ -1,6 +1,7 @@
 import { peekLast, peekRandomElement } from "../../../utils/list-helpers";
 import { randomInt } from "../../../utils/random";
-import { areCellsEqual, BaseMazeGenerationAlgorithm, CellNeighbor } from "../base-maze-generation-algorithm";
+import { BaseMazeGenerationAlgorithm, CellNeighbor } from "../base-maze-generation-algorithm";
+import { areCellsEqual } from "../maze-helpers";
 import { Cell, GenerationStatus, MazePath, Status } from "../model";
 
 export class WilsonAlgorithm extends BaseMazeGenerationAlgorithm {

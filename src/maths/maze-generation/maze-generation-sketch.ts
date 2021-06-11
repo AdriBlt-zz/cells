@@ -3,12 +3,7 @@ import * as p5 from "p5";
 import { ProcessingSketch } from "../../services/processing.service";
 import { Color, COLORS, setBackground, setFillColor } from "../../utils/color";
 import { Point } from "../../utils/points";
-import { DepthExplorationAlgorithm } from "./algorithms/depth-exploration-algorithm";
-import { KruskalAlgorithm } from "./algorithms/kruskal-algorithm";
-import { RandomTraversalAlgorithm } from "./algorithms/random-traversal-algorithm";
-import { RandomizedPrimAlgorithm } from "./algorithms/randomized-prim-algorithm";
-import { RecursiveSubdivisionAlgorithm } from "./algorithms/recursive-subdivision-algorithm";
-import { WilsonAlgorithm } from "./algorithms/wilson-algorithm";
+import { createMazeGenerationAlgorithm } from "./maze-helpers";
 import { Cell, Direction, GenerationStatus, MazeGenerationAlgorithm, MazePath, Status } from "./model";
 
 export enum MazeAlgorithmType {
@@ -180,33 +175,6 @@ export class MazeGenerationSketch implements ProcessingSketch {
     }
 
     private createAlgorithmGenerator(): MazeGenerationAlgorithm {
-        switch (this.selectedAlgorithmType) {
-            case MazeAlgorithmType.RecursiveSubdivision:
-                return new RecursiveSubdivisionAlgorithm(
-                    NB_COLUMNS, NB_ROWS, this.onUpdateCell, this.onUpdatePath,
-                );
-            case MazeAlgorithmType.DepthExploration:
-                return new DepthExplorationAlgorithm(
-                    NB_COLUMNS, NB_ROWS, this.onUpdateCell, this.onUpdatePath,
-                );
-            case MazeAlgorithmType.Kruskal:
-                return new KruskalAlgorithm(
-                    NB_COLUMNS, NB_ROWS, this.onUpdateCell, this.onUpdatePath,
-                );
-            case MazeAlgorithmType.RandomTraversal:
-                return new RandomTraversalAlgorithm(
-                    NB_COLUMNS, NB_ROWS, this.onUpdateCell, this.onUpdatePath,
-                );
-            case MazeAlgorithmType.RandomizedPrim:
-                return new RandomizedPrimAlgorithm(
-                    NB_COLUMNS, NB_ROWS, this.onUpdateCell, this.onUpdatePath,
-                );
-            case MazeAlgorithmType.Wilson:
-                return new WilsonAlgorithm(
-                    NB_COLUMNS, NB_ROWS, this.onUpdateCell, this.onUpdatePath,
-                );
-            default:
-                throw new Error("Unknown type: " + this.selectedAlgorithmType);
-        }
+        return createMazeGenerationAlgorithm(this.selectedAlgorithmType, NB_COLUMNS, NB_ROWS, this.onUpdateCell, this.onUpdatePath);
     }
 }

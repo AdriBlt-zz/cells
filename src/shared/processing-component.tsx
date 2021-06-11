@@ -11,9 +11,10 @@ const PROCESSING_CONTAINER_ID = "processingContainer";
 
 export abstract class ProcessingComponent<
   T extends ProcessingSketch,
-  S = {}
-> extends React.Component<{}, S> {
-  protected readonly sketch: T = this.createSketch();
+  S = {},
+  P = {}
+> extends React.Component<P, S> {
+  protected readonly sketch: T = this.createSketch(); ;
   protected readonly strings: LocalizedStrings = getStrings();
   private readonly processingService = new ProcessingService();
 

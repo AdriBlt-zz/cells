@@ -35,6 +35,7 @@ export enum GenerationStatus {
 }
 
 export interface MazeGenerationAlgorithm {
+    paths: CellPaths[][];
     isStartingEmpty?: boolean;
     getGenerationStatus(): GenerationStatus;
     initialize(): void;
