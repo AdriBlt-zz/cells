@@ -3,25 +3,27 @@ import * as React from "react";
 import { Color, COLORS } from "../../utils/color";
 import { isOutOfBounds } from "../../utils/numbers";
 import { createVector } from "../../utils/vector";
-import { CellProperties, RayCastingGameProps } from "./ray-casting-sketch";
-import { RayCastingWalkerGame } from "./ray-casting-walker";
+import { CellProperties } from "./ray-casting-sketch";
+import { RayCastingWalkerGame, RayCastingWalkerGameProps } from "./ray-casting-walker";
 
 export function WolfensteinGame() {
-    return <RayCastingWalkerGame {...getRayCastingGameProps()} />;
+    return <RayCastingWalkerGame {...getRayCastingWalkerGameProps()} />;
 }
 
-function getRayCastingGameProps(): RayCastingGameProps {
+function getRayCastingWalkerGameProps(): RayCastingWalkerGameProps {
     return {
-        playerPosition: createVector(22, 12),
-        playerDirection: createVector(-1, 0),
-        getCellProperties: (i: number, j: number) => getCellProperties(i, j),
-        ceilingColor: COLORS.Black,
-        floorColor: COLORS.DarkGray,
-        showMapInfo: {
+        rayCastingProps: {
+            playerPosition: createVector(22, 12),
+            playerDirection: createVector(-1, 0),
+            getCellProperties: (i: number, j: number) => getCellProperties(i, j),
+            ceilingColor: COLORS.Black,
+            floorColor: COLORS.DarkGray,
+        },
+        miniMapInfo: {
             nbRows: levelMap.length,
             nbCols: levelMap[0].length,
-        }
-    };
+        },
+    }
 }
 
 function getCellProperties(i: number, j: number): CellProperties {

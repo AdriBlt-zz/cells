@@ -96,6 +96,7 @@ const strings = {
   },
   rayCasting: {
     controls: "Arrows to move, shift to run.",
+    miniMap: "Mini-map!"
   },
   mazeGeneration: {
     infoTitle: "Algorithm description",
@@ -117,7 +118,8 @@ const strings = {
     victory: "VICTORY!!!",
     failure: "LO-OO-SER!!!",
     timeLabel_format: "Step: {0}",
-    skipForward: "Skip forward"
+    skipForward: "Skip forward",
+    controls: "Controls",
   },
 };
 
