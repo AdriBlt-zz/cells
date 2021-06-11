@@ -17,7 +17,11 @@ export class RayCastingWalkerGame extends ProcessingComponent<RayCastingSketch, 
     }
 
     protected renderCommands(): JSX.Element {
-        return <InfoBox title={this.strings.rayCasting.miniMap} contend={<WalkerMiniMap {...this.props} />} />;
+        return <InfoBox
+            title={this.strings.rayCasting.miniMap}
+            contend={<WalkerMiniMap {...this.props} />}
+            collapsibleProps={{ isOpenAtStart: false }}
+        />;
     }
 
     protected renderInfoSection(): JSX.Element {

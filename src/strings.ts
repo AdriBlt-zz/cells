@@ -96,7 +96,7 @@ const strings = {
   },
   rayCasting: {
     controls: "Arrows to move, shift to run.",
-    miniMap: "Mini-map!"
+    miniMap: "Mini-map (only if you're stuck!)"
   },
   mazeGeneration: {
     infoTitle: "Algorithm description",
