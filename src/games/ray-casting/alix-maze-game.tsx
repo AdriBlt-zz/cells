@@ -18,9 +18,10 @@ function fetchMazeData(): Promise<MazeGameData> {
                 matrix: getReducedMatrix(matrix),
                 playerInitialPosition: createVector(
                     matrix.length / MAP_RATIO / 2,
-                    matrix[0].length / MAP_RATIO / 2,
+                    matrix.length / MAP_RATIO / 2,
                 ),
                 playerInitialDirection: createVector(0, -1),
+                mapCellSide: 2,
             };
         });
 }
@@ -28,11 +29,15 @@ function fetchMazeData(): Promise<MazeGameData> {
 function getReducedMatrix(matrix: boolean[][]): boolean[][] {
     const reducedHeight = Math.ceil(matrix.length / MAP_RATIO);
     const reducedWidth = Math.ceil(matrix[0].length / MAP_RATIO);
+
+    const deltaWidthHeight = reducedWidth - reducedHeight;
+    const startingColPosition = Math.floor(deltaWidthHeight / 2)
+
     const reducedMatrix: boolean[][] = [];
     for (let i = 0; i < reducedHeight; i++) {
         const line: boolean[] = [];
-        for (let j = 0; j < reducedWidth; j++) {
-            line.push(getReducedValue(matrix, i, j));
+        for (let j = 0; j < reducedHeight; j++) {
+            line.push(getReducedValue(matrix, i, startingColPosition + j));
         }
         reducedMatrix.push(line);
     }

@@ -7,8 +7,8 @@ import { createVector } from "../../utils/vector";
 import { MazeGame, MazeGameData } from "./maze-game";
 
 const MAP_RATIO = 1;
-const NB_MAZE_ROW = 10;
-const NB_MAZE_COL = 10;
+const NB_MAZE_ROW = 20;
+const NB_MAZE_COL = 20;
 const NB_MATRIX_ROW = 2 * NB_MAZE_ROW + 1;
 const NB_MATRIX_COL = 2 * NB_MAZE_COL + 1;
 const MATRIX_HEIGHT = MAP_RATIO * NB_MATRIX_ROW;
