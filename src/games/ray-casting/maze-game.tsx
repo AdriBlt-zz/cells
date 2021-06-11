@@ -1,14 +1,10 @@
 import * as React from "react";
 
-import { ProcessingComponent } from "../../shared/processing-component";
 import { COLORS } from "../../utils/color";
 import { isOutOfBounds } from "../../utils/numbers";
-import { createVector, Vector } from "../../utils/vector";
-import { CellProperties, RayCastingSketch } from "./ray-casting-sketch";
-
-export interface MazeGameProps {
-    fetchMazeData: () => Promise<MazeGameData>;
-}
+import { Vector } from "../../utils/vector";
+import { CellProperties, RayCastingGameProps } from "./ray-casting-sketch";
+import { RayCastingWalkerGame } from "./ray-casting-walker";
 
 export interface MazeGameData {
     matrix: boolean[][];
@@ -16,32 +12,37 @@ export interface MazeGameData {
     playerInitialDirection: Vector,
 }
 
-export class MazeGame extends ProcessingComponent<RayCastingSketch, {}, MazeGameProps> {
+export interface MazeGameProps {
+    fetchMazeData: () => Promise<MazeGameData>;
+}
 
+interface MazeGameState {
+    rayCastingProperties: RayCastingGameProps | null;
+}
+
+export class MazeGame extends React.Component<MazeGameProps, MazeGameState> {
+    public state: MazeGameState = { rayCastingProperties: null };
     private matrix: boolean[][] | null = null;
 
-    protected createSketch(): RayCastingSketch {
+    public componentDidMount() {
         this.props.fetchMazeData()
             .then((data: MazeGameData) => {
-                this.sketch.player.position = data.playerInitialPosition;
-                this.sketch.player.direction = data.playerInitialDirection;
                 this.matrix = data.matrix;
+
+                this.setState({
+                    rayCastingProperties: {
+                        playerPosition: data.playerInitialPosition,
+                        playerDirection: data.playerInitialDirection,
+                        getCellProperties: (i: number, j: number) => this.getCellProperties(i, j),
+                        ceilingColor: COLORS.Cyan,
+                        floorColor: COLORS.Maroon,
+                    }
+                });
             });
-        return new RayCastingSketch({
-            playerInitialPosition: createVector(22, 12),
-            playerInitialDirection: createVector(0, -1),
-            getCellProperties: (i: number, j: number) => this.getCellProperties(i, j),
-            ceilingColor: COLORS.Cyan,
-            floorColor: COLORS.Maroon,
-        });
     }
 
-    protected renderCommands(): JSX.Element {
-        return <div />;
-    }
-
-    protected renderInfoSection(): JSX.Element {
-        return <span>{this.strings.rayCasting.controls}</span>;
+    public render() {
+        return this.state.rayCastingProperties && (<RayCastingWalkerGame {...this.state.rayCastingProperties} />);
     }
 
     private getCellProperties = (i: number, j: number): CellProperties => {

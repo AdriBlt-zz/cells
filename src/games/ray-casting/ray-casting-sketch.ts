@@ -12,13 +12,6 @@ interface RayCastingProjection {
     pixelColor: Color;
 }
 
-interface Player {
-    // x and y start position
-    position: Vector;
-    // initial direction vector
-    direction: Vector;
-}
-
 export interface CellProperties {
     color?: Color;
     canGoThroughOverwrite?: boolean;
@@ -31,9 +24,9 @@ interface CellPropertiesWithCoordinates extends CellProperties {
     j: number;
 }
 
-interface RayCastingGameProps {
-    playerInitialPosition: Vector,
-    playerInitialDirection: Vector,
+export interface RayCastingGameProps {
+    playerPosition: Vector,
+    playerDirection: Vector,
     getCellProperties: (i: number, j: number) => CellProperties,
     ceilingColor: Color;
     floorColor: Color;
@@ -47,21 +40,16 @@ const MOVE_SPEED = 5 * FRAME_TIME; // the constant value is in squares/second
 const ROT_SPEED = 3 * FRAME_TIME; // the constant value is in radians/second
 
 export class RayCastingSketch implements ProcessingSketch {
-    public player: Player;
     private p5js: p5;
+    private previousPosition: { i: number, j: number } | null;
 
     constructor(
-        private properties: RayCastingGameProps,
-    ) {
-        this.player = {
-            position: this.properties.playerInitialPosition.copy(),
-            direction: this.properties.playerInitialDirection.copy(),
-        };
-    }
+        public properties: RayCastingGameProps,
+    ) {}
 
     public setup(p: p5): void {
         this.p5js = p;
-        this.p5js.createCanvas(WIDTH, HEIGHT);
+        this.p5js.createCanvas(WIDTH, 2 * HEIGHT);
     }
 
     public draw(): void {
@@ -74,45 +62,45 @@ export class RayCastingSketch implements ProcessingSketch {
         const rotSpeed = isRunning ? ROT_SPEED / 2 : ROT_SPEED;
         const moveSpeed = isRunning ? MOVE_SPEED * 2 : MOVE_SPEED;
 
-        const { position, direction } = this.player;
+        const { playerPosition, playerDirection } = this.properties;
 
-        const currentCell = this.cellProps(position.x, position.y);
+        this.previousPosition = this.cellProps(playerPosition.x, playerPosition.y);
 
         if (this.p5js.keyIsDown(this.p5js.LEFT_ARROW)) {
-            this.player.direction = direction.rotate(rotSpeed);
+            playerDirection.rotate(rotSpeed);
         }
         if (this.p5js.keyIsDown(this.p5js.RIGHT_ARROW)) {
-            this.player.direction = direction.rotate(-rotSpeed);
+            playerDirection.rotate(-rotSpeed);
         }
 
-        const deltaX = direction.x * moveSpeed;
-        const deltaY = direction.y * moveSpeed;
+        const deltaX = playerDirection.x * moveSpeed;
+        const deltaY = playerDirection.y * moveSpeed;
         if (this.p5js.keyIsDown(this.p5js.UP_ARROW)) {
             // move forward if no wall in front of you
-            if (this.canGoThroughCell(position.x + deltaX, position.y)) {
-                position.x += deltaX;
+            if (this.canGoThroughCell(playerPosition.x + deltaX, playerPosition.y)) {
+                playerPosition.x += deltaX;
             }
 
-            if (this.canGoThroughCell(position.x, position.y + deltaY)) {
-                position.y += deltaY;
+            if (this.canGoThroughCell(playerPosition.x, playerPosition.y + deltaY)) {
+                playerPosition.y += deltaY;
             }
         }
         if (this.p5js.keyIsDown(this.p5js.DOWN_ARROW)) {
             // move backwards if no wall behind you
-            if (this.canGoThroughCell(position.x - deltaX, position.y)) {
-                position.x -= deltaX;
+            if (this.canGoThroughCell(playerPosition.x - deltaX, playerPosition.y)) {
+                playerPosition.x -= deltaX;
             }
 
-            if (this.canGoThroughCell(position.x, position.y - deltaY)) {
-                position.y -= deltaY;
+            if (this.canGoThroughCell(playerPosition.x, playerPosition.y - deltaY)) {
+                playerPosition.y -= deltaY;
             }
         }
 
-        const updatedCell = this.cellProps(position.x, position.y);
+        const updatedCell = this.cellProps(playerPosition.x, playerPosition.y);
 
         if (updatedCell.onEnteringCell
-            && currentCell.i !== updatedCell.i
-            && currentCell.j !== updatedCell.j) {
+            && this.previousPosition.i !== updatedCell.i
+            && this.previousPosition.j !== updatedCell.j) {
             updatedCell.onEnteringCell();
         }
     }
@@ -142,16 +130,16 @@ export class RayCastingSketch implements ProcessingSketch {
     }
 
     private computeProjection(column: number): RayCastingProjection | null {
-        const { position, direction } = this.player
+        const { playerPosition, playerDirection } = this.properties
 
         // calculate ray position and direction
         const cameraX = 2 * column / WIDTH - 1; // x-coordinate in camera space
-        const projectionPlane = direction.copy().rotate(-Math.PI / 2).mult(0.66);
-        const rayDirection = projectionPlane.mult(cameraX).add(direction);
+        const projectionPlane = playerDirection.copy().rotate(-Math.PI / 2).mult(0.66);
+        const rayDirection = projectionPlane.mult(cameraX).add(playerDirection);
 
         // which box of the map we're in
-        let mapX = Math.floor(position.x);
-        let mapY = Math.floor(position.y);
+        let mapX = Math.floor(playerPosition.x);
+        let mapY = Math.floor(playerPosition.y);
 
         // length of ray from one x or y-side to next x or y-side
         const isNullRayDirX = isStatisticallyNull(rayDirection.x);
@@ -170,18 +158,18 @@ export class RayCastingSketch implements ProcessingSketch {
         // calculate step and initial sideDist
         if (rayDirection.x < 0) {
             stepX = -1;
-            sideDistX = (position.x - mapX) * deltaDistX;
+            sideDistX = (playerPosition.x - mapX) * deltaDistX;
         } else {
             stepX = 1;
-            sideDistX = (mapX + 1.0 - position.x) * deltaDistX;
+            sideDistX = (mapX + 1.0 - playerPosition.x) * deltaDistX;
         }
 
         if (rayDirection.y < 0) {
             stepY = -1;
-            sideDistY = (position.y - mapY) * deltaDistY;
+            sideDistY = (playerPosition.y - mapY) * deltaDistY;
         } else {
             stepY = 1;
-            sideDistY = (mapY + 1.0 - position.y) * deltaDistY;
+            sideDistY = (mapY + 1.0 - playerPosition.y) * deltaDistY;
         }
 
         let isVerticalSurface: boolean; // was a NS or a EW wall hit?
@@ -208,8 +196,8 @@ export class RayCastingSketch implements ProcessingSketch {
 
         // Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
         const perpWallDist = (isVerticalSurface)
-            ? (mapY - position.y + (1 - stepY) / 2) / rayDirection.y
-            : (mapX - position.x + (1 - stepX) / 2) / rayDirection.x;
+            ? (mapY - playerPosition.y + (1 - stepY) / 2) / rayDirection.y
+            : (mapX - playerPosition.x + (1 - stepX) / 2) / rayDirection.x;
 
         // Calculate height of line to draw on screen
         const lineHeight = Math.floor(HEIGHT / perpWallDist);
