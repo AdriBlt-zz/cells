@@ -70,6 +70,10 @@ export class TurmiteRule extends React.Component<TurmiteRuleProps>
     this.drawRule();
   }
 
+  public draw(): void {
+    // NOOP
+  }
+
   public mouseClicked(): void {
     const coord = getCellCoordinate(
       this.p5js.mouseX,
