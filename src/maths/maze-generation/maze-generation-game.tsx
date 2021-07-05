@@ -44,7 +44,7 @@ export class MazeGenerationGame extends ProcessingComponent<MazeGenerationSketch
 
     protected renderInfoSection(): JSX.Element {
         const description = this.getDescription();
-        return description ? (<InfoBox title={this.strings.mazeGeneration.infoTitle} contend={description}/>) : <div/> ;
+        return description ? (<InfoBox title={this.strings.mazeGeneration.infoTitle}>{description}</InfoBox>) : <div/> ;
     }
 
     private getAlgorithmProps(): SelectInputProps {

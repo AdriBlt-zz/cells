@@ -17,14 +17,21 @@ export class RayCastingWalkerGame extends ProcessingComponent<RayCastingSketch, 
     }
 
     protected renderCommands(): JSX.Element {
-        return <InfoBox
-            title={this.strings.rayCasting.miniMap}
-            contend={<WalkerMiniMap {...this.props} />}
-            collapsibleProps={{ isOpenAtStart: false }}
-        />;
+        return (
+            <InfoBox
+                title={this.strings.rayCasting.miniMap}
+                collapsibleProps={{ isOpenAtStart: false }}
+            >
+                <WalkerMiniMap {...this.props} />
+            </InfoBox>
+        );
     }
 
     protected renderInfoSection(): JSX.Element {
-        return <InfoBox title={this.strings.shared.controls} contend={this.strings.rayCasting.controls} />;
+        return (
+            <InfoBox title={this.strings.shared.controls}>
+                {this.strings.rayCasting.controls}
+            </InfoBox>
+        );
     }
 }

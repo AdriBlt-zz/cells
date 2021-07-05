@@ -5,7 +5,7 @@ import * as Icon from "react-bootstrap-icons";
 
 export interface InfoBoxProps {
     title?: string;
-    contend: React.ReactNode;
+    children: React.ReactNode;
     collapsibleProps?: { isOpenAtStart: boolean };
 }
 
@@ -27,7 +27,7 @@ export function InfoBox(props: InfoBoxProps): JSX.Element {
                 </Alert.Heading>)}
 
             <Collapse in={open}>
-                <div>{props.contend}</div>
+                <div>{props.children}</div>
             </Collapse>
         </Alert>
     );
