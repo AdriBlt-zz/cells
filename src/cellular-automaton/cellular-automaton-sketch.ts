@@ -1,6 +1,6 @@
 import * as p5 from "p5";
 
-import { ProcessingSketch } from "../services/processing.service";
+import { PlayableSketch } from "../services/playable-sketch";
 import { COLORS, setFillColor, setStrokeColor } from "../utils/color";
 import { getKeyFromCode, KeyBoard } from "../utils/keyboard";
 import { getCellCoordinate } from "../utils/mouse";
@@ -24,19 +24,19 @@ const MARGIN_TOP = 20;
 
 export class CellularAutomatonSketch<
   Matrix extends AutomatonMatrix<AutomatonCell, AutomatonParameters>
-> implements ProcessingSketch {
+> extends PlayableSketch {
   private get cellSize(): number {
     return this.interfaceSize.getCellSize();
   }
 
-  public isPaused: boolean = false;
   public time: number = 0;
-  private p5js: p5;
 
   constructor(
     public matrix: Matrix,
     private interfaceSize: AutomatonInterfaceSize
-  ) {}
+  ) {
+    super();
+  }
 
   public setup(p: p5): void {
     this.p5js = p;
@@ -110,23 +110,6 @@ export class CellularAutomatonSketch<
     }
   };
 
-  public pause = (): void => {
-    if (this.isPaused) {
-      this.p5js.loop();
-    } else {
-      this.p5js.noLoop();
-    }
-
-    this.isPaused = !this.isPaused;
-  };
-
-  public playOneStep = (): void => {
-    if (!this.isPaused) {
-      this.pause();
-    }
-    this.runOneStep();
-  };
-
   private runOneStep = (): void => {
     const update = this.matrix.nextStep();
     this.updateCells(update);
@@ -136,14 +119,14 @@ export class CellularAutomatonSketch<
   private updateCells(gridUpdate: NextStateGridUpdate): void {
     switch (gridUpdate.update) {
       case GridUpdate.ALL:
-        this.updateAllCells();
-        break;
+           this.updateAllCells();
+           break;
       case GridUpdate.BLOCK:
-        this.updateBlock(gridUpdate.x, gridUpdate.y);
-        break;
+           this.updateBlock(gridUpdate.x, gridUpdate.y);
+           break;
       case GridUpdate.CELL:
-        this.updateCell(gridUpdate.x, gridUpdate.y);
-        break;
+           this.updateCell(gridUpdate.x, gridUpdate.y);
+           break;
       case GridUpdate.NONE:
       default:
     }

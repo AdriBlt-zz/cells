@@ -1,7 +1,7 @@
 import { observable } from "mobx";
 import * as p5 from "p5";
 
-import { ProcessingSketch } from "../../services/processing.service";
+import { PlayableSketch } from "../../services/playable-sketch";
 import { getKeyFromCode, KeyBoard } from "../../utils/keyboard";
 import { createVector, Vector } from "../../utils/vector";
 
@@ -11,13 +11,10 @@ const RADIUS = 350;
 const DOT_PADDING = 5;
 const TEXT_MARGIN = 100;
 
-export class MultiplicationCircleSketch implements ProcessingSketch {
+export class MultiplicationCircleSketch extends PlayableSketch {
   @observable public numberOfPoints: number = 250;
   @observable public multiplicator: number = 0;
   @observable public multiplicatorIncrement: number = 0.005;
-
-  private p5js: p5;
-  private isPaused: boolean = false;
 
   public setup(p: p5): void {
     this.p5js = p;
@@ -28,16 +25,6 @@ export class MultiplicationCircleSketch implements ProcessingSketch {
     this.drawCircle();
     this.multiplicator += this.multiplicatorIncrement;
   }
-
-  public pause = (): void => {
-    if (this.isPaused) {
-      this.p5js.loop();
-    } else {
-      this.p5js.noLoop();
-    }
-
-    this.isPaused = !this.isPaused;
-  };
 
   public previousInt = (): void => {
     this.setMultiplicatorValue(Math.ceil(this.multiplicator - 1));

@@ -2,7 +2,7 @@ import { computed, observable } from "mobx";
 import * as p5 from "p5";
 
 import { Complex } from "../../numbers/Complex";
-import { ProcessingSketch } from "../../services/processing.service";
+import { PlayableSketch } from "../../services/playable-sketch";
 import { getKeyFromCode, KeyBoard } from "../../utils/keyboard";
 import { LinkedList } from "../../utils/linked-list";
 import { clamp, isStatisticallyNull } from "../../utils/numbers";
@@ -19,18 +19,16 @@ const MARGIN = 10;
 const CENTER: Vector = createVector(WIDTH / 2, HEIGHT / 2);
 
 const COORDINATES: Point[][] = GeoCoordinates;
-export class FourierDrawingSketch implements ProcessingSketch {
+export class FourierDrawingSketch extends PlayableSketch {
   @observable public numberOfCircles: number;
   @observable public showOriginal: boolean = false;
   @computed public get maxNumberOfFrequencies() { return this.points.length; }
 
-  private p5js: p5;
   private time: number = 0;
   private shape: LinkedList<Point> = new LinkedList<Point>();
   private frequencies: FourierParameter[] = [];
   @observable private points: Complex[] = [];
   private timeIncrement: number = 0;
-  private isPaused: boolean = false;
   private currentlySelectedIndex = 0;
   private speed = 1;
 
@@ -46,23 +44,6 @@ export class FourierDrawingSketch implements ProcessingSketch {
   public draw(): void {
     this.runOneStep();
   }
-
-  public pause = (): void => {
-    if (this.isPaused) {
-      this.p5js.loop();
-    } else {
-      this.p5js.noLoop();
-    }
-
-    this.isPaused = !this.isPaused;
-  };
-
-  public playOneStep = (): void => {
-    if (!this.isPaused) {
-      this.pause();
-    }
-    this.runOneStep();
-  };
 
   public restart = (): void => {
     this.time = 0;
