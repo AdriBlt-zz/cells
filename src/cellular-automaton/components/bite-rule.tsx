@@ -65,6 +65,10 @@ export class BiteRule extends React.Component<BiteRuleProps>
     this.drawCell(1, 1, this.props.value);
   }
 
+  public draw(): void {
+    // NOOP
+  }
+
   public mouseClicked(): void {
     const coord = getCellCoordinate(
       this.p5js.mouseX,

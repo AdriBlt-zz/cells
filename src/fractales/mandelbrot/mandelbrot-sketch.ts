@@ -42,6 +42,10 @@ export class MandelbrotSketch implements ProcessingSketch {
     this.resetFractale();
   }
 
+  public draw(): void {
+    // NOOP
+  }
+
   public mouseWheel(delta: number): void {
     if (delta < 0) {
       this.deltaPixel *= 0.9;

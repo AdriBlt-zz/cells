@@ -4,7 +4,7 @@ import { isMouseWheelEvent } from "./processing-contracts";
 
 export interface ProcessingSketch {
   setup(p: p5): void;
-  draw?(): void;
+  draw(): void;
   keyPressed?(): void;
   mousePressed?(): void;
   mouseReleased?(): void;

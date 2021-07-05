@@ -54,6 +54,10 @@ export class AntDirectionRule extends React.Component<AntDirectionRuleProps>
     this.drawCell();
   }
 
+  public draw(): void {
+    // NOOP
+  }
+
   public mouseClicked(): void {
     const coord = getCellCoordinate(
       this.p5js.mouseX,
