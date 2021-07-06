@@ -16,6 +16,7 @@ import { FourierSignalGame } from "./maths/fourier-signal/fourier-signal-game";
 import { MazeGenerationGame } from "./maths/maze-generation/maze-generation-game";
 import { MultiplicationCircleGame } from "./maths/multiplication-circle/multiplication-circle-game";
 import { FlockGame } from "./simulations/flock/flock-game";
+import { NBodiesGame } from "./simulations/n-bodies/n-bodies-game";
 import { StarsGame } from "./simulations/stars/stars-game";
 import { getStrings, LocalizedStrings } from "./strings";
 
@@ -101,6 +102,11 @@ const simulationsPages: Page[] = [
     name: strings.menu.stars,
     route: "stars",
     component: <StarsGame />,
+  },
+  {
+    name: strings.menu.nBodiesSimulation,
+    route: "n-bodies",
+    component: <NBodiesGame />,
   },
 ];
 const fractalesPages: Page[] = [

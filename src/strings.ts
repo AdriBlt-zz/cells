@@ -22,6 +22,7 @@ const strings = {
     wolfenstein: "Wolfenstein",
     alixMaze: "Alix's Maze",
     mazeGeneration: "Maze Generation",
+    nBodiesSimulation: "n Bodies simulation",
   },
   minesweeper: {
     difficulty: "Difficulty",
@@ -108,6 +109,22 @@ const strings = {
       recursiveSubdivision: "Splits the empty maze in four, with three openings connecting the sections, then repeat the process in each section.",
       wilson: "Initializes the maze as one cell, then grows a line that randomly searches for the maze. If the line loops back on itself, it cuts the loop.",
     },
+  },
+  nBodies: {
+    cameraModeSelect: 'Camera mode',
+    focusedBodySelect: 'Focused body',
+    bodiesNames: {
+      sun: 'Sun',
+      earth: 'Earth',
+      moon: 'Moon',
+    },
+    cameraModeNames: {
+      free: 'Free' ,
+      lockOnBarycenter: 'Lock On Barycenter' ,
+      lockOnBody: 'Lock On Body' ,
+      viewFromBarycenter: 'View From Barycenter' ,
+      viewFromBody: 'View From Body' ,
+    }
   },
   shared: {
     newGame: "New Game (R)",
