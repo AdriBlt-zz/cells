@@ -6,7 +6,7 @@ import { LinkedList } from "../../utils/linked-list";
 import { Point } from "../../utils/points";
 import { createVector, Vector } from "../../utils/vector";
 import { G } from "./models/data";
-import { Body, BodyInfo, CameraMode, ViewMode } from "./models/models";
+import { Body, BodyInfo, CameraMode, NBodiesSimulationInputs, ViewMode } from "./models/models";
 
 const WIDTH = 1300;
 const HEIGHT = 800;
@@ -15,6 +15,7 @@ const HALF_HEIGHT = HEIGHT / 2;
 
 const DELTA_T = 0.1;
 const TAIL_LENGTH = 100000;
+const SKIP_FORWARD = 1000;
 
 export class NBodiesSketch extends PlayableSketch {
   private bodies: Body[] = [];
@@ -23,14 +24,13 @@ export class NBodiesSketch extends PlayableSketch {
 
   private zoom: number = 0.000001;
 
-  constructor(private getDefaultInputs: () => BodyInfo[]) {
+  constructor(private getDefaultInputs: () => NBodiesSimulationInputs) {
     super();
   }
 
   public setup(p: p5): void {
     this.p5js = p;
     this.p5js.createCanvas(WIDTH, HEIGHT);
-    this.p5js.loop();
     this.reset();
   }
 
@@ -51,8 +51,17 @@ export class NBodiesSketch extends PlayableSketch {
 
   public reset = (): void => {
     const inputs = this.getDefaultInputs();
-    this.bodies = inputs.map(createBody);
+    this.cameraMode = inputs.viewMode;
+    this.bodies = inputs.bodies.map(createBody);
   };
+
+  public skipForward = (): void => {
+    for (let t = 0; t < SKIP_FORWARD; t++) {
+      this.updateBodies();
+    }
+
+    this.drawBodies();
+  }
 
   private updateBodies(): void {
     // Reset acceleration
@@ -73,7 +82,7 @@ export class NBodiesSketch extends PlayableSketch {
     this.barycenter = createVector();
     let totalMass = 0;
 
-    // Update Speed and Position
+    // Update Speed and Position + compute barycenter
     this.bodies.forEach(p => {
       p.speed.add(p.acceleration.copy().mult(DELTA_T));
       p.position.add(p.speed.copy().mult(DELTA_T));
@@ -84,16 +93,18 @@ export class NBodiesSketch extends PlayableSketch {
 
     this.barycenter.mult(1 / totalMass);
 
+    // translate if camera mode "ViewFrom"
     if (this.cameraMode.type === CameraMode.ViewFromBarycenter
       || this.cameraMode.type === CameraMode.ViewFromBody) {
         const offset = (this.cameraMode.type === CameraMode.ViewFromBody
             && this.cameraMode.bodyIndex >= 0
             && this.cameraMode.bodyIndex < this.bodies.length)
-          ? this.bodies[this.cameraMode.bodyIndex].position
+          ? this.bodies[this.cameraMode.bodyIndex].position.copy()
           : this.barycenter;
         this.bodies.forEach(p => p.position.sub(offset));
     }
 
+    // Update tail
     this.bodies.forEach(p => {
       p.tail.insertTail({ x: p.position.x, y: p.position.y });
       if (p.tail.count > TAIL_LENGTH) {
@@ -111,7 +122,7 @@ export class NBodiesSketch extends PlayableSketch {
         offset = (this.cameraMode.type === CameraMode.LockOnBody
             && this.cameraMode.bodyIndex >= 0
             && this.cameraMode.bodyIndex < this.bodies.length)
-          ? this.bodies[this.cameraMode.bodyIndex].position
+          ? this.bodies[this.cameraMode.bodyIndex].position.copy()
           : this.barycenter;
     }
 
