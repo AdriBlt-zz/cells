@@ -1,6 +1,5 @@
 import { Color } from "../../../utils/color";
 import { LinkedList } from "../../../utils/linked-list";
-import { Point } from "../../../utils/points";
 import { Vector } from "../../../utils/vector";
 
 export interface BodyInfo {
@@ -17,7 +16,7 @@ export interface Body {
     position: Vector;
     speed: Vector;
     acceleration: Vector;
-    tail: LinkedList<Point>;
+    tail: LinkedList<Vector>;
 }
 
 export enum CameraMode {

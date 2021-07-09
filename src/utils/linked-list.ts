@@ -115,4 +115,15 @@ export class LinkedList<T> {
 
     return list;
   }
+
+  public toReversedList(): T[] {
+    const list = [];
+    let node = this.tail;
+    while (node !== undefined) {
+      list.push(node.value);
+      node = node.previous;
+    }
+
+    return list;
+  }
 }

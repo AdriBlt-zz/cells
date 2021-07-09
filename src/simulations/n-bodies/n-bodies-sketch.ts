@@ -3,28 +3,25 @@ import * as p5 from "p5";
 import { PlayableSketch } from "../../services/playable-sketch";
 import { COLORS, setBackground, setFillColor, setStrokeColor } from "../../utils/color";
 import { LinkedList } from "../../utils/linked-list";
-import { Point } from "../../utils/points";
+import { isOutOfBounds } from "../../utils/numbers";
 import { createVector, Vector } from "../../utils/vector";
-import { G } from "./models/data";
-import { Body, BodyInfo, CameraMode, NBodiesSimulationInputs, ViewMode } from "./models/models";
+import { NBodiesEngine } from "./models/engine";
+import { CameraMode, NBodiesSimulationInputs, ViewMode } from "./models/models";
 
 const WIDTH = 1300;
 const HEIGHT = 800;
 const HALF_WIDTH = WIDTH / 2;
 const HALF_HEIGHT = HEIGHT / 2;
 
-const DELTA_T = 0.1;
-const TAIL_LENGTH = 100000;
 const SKIP_FORWARD = 1000;
 
 export class NBodiesSketch extends PlayableSketch {
-  private bodies: Body[] = [];
-  private barycenter: Vector = createVector();
-  private cameraMode: ViewMode = { type: CameraMode.LockOnBarycenter }; // { type: CameraMode.LockOnBody, bodyIndex: 1 };
+  private engine: NBodiesEngine = new NBodiesEngine();
+  private cameraMode: ViewMode = { type: CameraMode.LockOnBarycenter };
 
   private zoom: number = 0.000001;
 
-  constructor(private getDefaultInputs: () => NBodiesSimulationInputs) {
+  constructor(private getInputs: () => NBodiesSimulationInputs) {
     super();
   }
 
@@ -35,126 +32,105 @@ export class NBodiesSketch extends PlayableSketch {
   }
 
   public draw(): void {
-    this.updateBodies();
-    this.drawBodies();
+    this.engine.computeOneStep();
+    this.updateSketch();
+  }
+
+  public skipForward = (): void => {
+    for (let t = 0; t < SKIP_FORWARD; t++) {
+      this.engine.computeOneStep();
+    }
+
+    this.updateSketch();
   }
 
   public mouseWheel(delta: number): void {
-    if (delta < 0) {
+    if (delta > 0) {
       this.zoom *= 0.9;
     } else {
       this.zoom /= 0.9;
     }
 
-    this.drawBodies();
+    this.updateSketch();
   }
 
   public reset = (): void => {
-    const inputs = this.getDefaultInputs();
+    const inputs = this.getInputs();
     this.cameraMode = inputs.viewMode;
-    this.bodies = inputs.bodies.map(createBody);
+    this.engine.setInputs(inputs.bodies);
   };
 
-  public skipForward = (): void => {
-    for (let t = 0; t < SKIP_FORWARD; t++) {
-      this.updateBodies();
-    }
+  private updateSketch(): void {
+    setBackground(this.p5js, COLORS.Black);
 
+    this.drawTails();
     this.drawBodies();
   }
 
-  private updateBodies(): void {
-    // Reset acceleration
-    this.bodies.forEach(p => p.acceleration = createVector());
-
-    // Update acceleration
-    for (let i = 0; i < this.bodies.length; i++) {
-      for (let j = i + 1; j < this.bodies.length; j++) {
-        const distance = this.bodies[i].position.copy().sub(this.bodies[j].position);
-        const squareDist = distance.copy().magSq();
-        const direction = distance.copy().normalize();
-        const deltaAcc = direction.copy().mult(G / squareDist);
-        this.bodies[j].acceleration.add(deltaAcc.copy().mult(this.bodies[i].info.mass));
-        this.bodies[i].acceleration.sub(deltaAcc.copy().mult(this.bodies[j].info.mass));
-      }
-    }
-
-    this.barycenter = createVector();
-    let totalMass = 0;
-
-    // Update Speed and Position + compute barycenter
-    this.bodies.forEach(p => {
-      p.speed.add(p.acceleration.copy().mult(DELTA_T));
-      p.position.add(p.speed.copy().mult(DELTA_T));
-
-      this.barycenter.add(p.position.copy().mult(p.info.mass));
-      totalMass += p.info.mass;
-    })
-
-    this.barycenter.mult(1 / totalMass);
-
-    // translate if camera mode "ViewFrom"
-    if (this.cameraMode.type === CameraMode.ViewFromBarycenter
-      || this.cameraMode.type === CameraMode.ViewFromBody) {
-        const offset = (this.cameraMode.type === CameraMode.ViewFromBody
-            && this.cameraMode.bodyIndex >= 0
-            && this.cameraMode.bodyIndex < this.bodies.length)
-          ? this.bodies[this.cameraMode.bodyIndex].position.copy()
-          : this.barycenter;
-        this.bodies.forEach(p => p.position.sub(offset));
-    }
-
-    // Update tail
-    this.bodies.forEach(p => {
-      p.tail.insertTail({ x: p.position.x, y: p.position.y });
-      if (p.tail.count > TAIL_LENGTH) {
-        p.tail.popHead();
-      }
+  private drawTails(): void {
+    const offsetFunction = this.getTailOffsetFunction();
+    this.p5js.noFill();
+    this.p5js.strokeWeight(2);
+    this.engine.bodies.forEach(planet => {
+      setStrokeColor(this.p5js, planet.info.color);
+      this.p5js.beginShape();
+      planet.tail.toList().forEach((point, i) => {
+        const offset = offsetFunction(i);
+        this.p5js.vertex(
+          HALF_WIDTH + this.zoom * (point.x - offset.x),
+          HALF_HEIGHT + this.zoom * (point.y - offset.y),
+        );
+      });
+      this.p5js.endShape();
     });
   }
 
   private drawBodies(): void {
-    setBackground(this.p5js, COLORS.Black);
-
-    let offset = createVector(0, 0);
-    if (this.cameraMode.type === CameraMode.LockOnBarycenter
-      || this.cameraMode.type === CameraMode.LockOnBody) {
-        offset = (this.cameraMode.type === CameraMode.LockOnBody
-            && this.cameraMode.bodyIndex >= 0
-            && this.cameraMode.bodyIndex < this.bodies.length)
-          ? this.bodies[this.cameraMode.bodyIndex].position.copy()
-          : this.barycenter;
-    }
-
-    this.p5js.noFill();
-    this.p5js.strokeWeight(2);
-    this.bodies.forEach(planet => {
-      setStrokeColor(this.p5js, planet.info.color);
-      this.p5js.beginShape();
-      planet.tail.toList().forEach(point => this.p5js.vertex(
-        HALF_WIDTH + this.zoom * (point.x - offset.x),
-        HALF_HEIGHT + this.zoom * (point.y - offset.y),
-      ));
-      this.p5js.endShape();
-    })
-
+    const offset = this.getBodiesOffset();
     this.p5js.noStroke();
-    this.bodies.forEach(planet => {
+    this.engine.bodies.forEach(planet => {
       setFillColor(this.p5js, planet.info.color);
       const x = HALF_WIDTH + this.zoom * (planet.position.x - offset.x);
       const y = HALF_HEIGHT + this.zoom * (planet.position.y - offset.y);
       const r = Math.max(2, Math.log(planet.info.radius)); // this.zoom * planet.info.radius;
       this.p5js.ellipse(x, y, r, r);
-    })
+    });
   }
-}
 
-function createBody(info: BodyInfo): Body {
-  return {
-    info,
-    position: info.initialPosition.copy(),
-    speed: info.initialSpeed.copy(),
-    acceleration: createVector(0, 0, 0),
-    tail: new LinkedList<Point>(),
-  };
+  private getTailOffsetFunction(): (i: number) => Vector {
+    const zero = createVector(0, 0);
+
+    if (this.cameraMode.type === CameraMode.LockOnBarycenter
+      || this.cameraMode.type === CameraMode.LockOnBody) {
+        const offset = this.getSelectedBody().peekTail() || zero;
+        return () => offset;
+    }
+
+    if (this.cameraMode.type === CameraMode.ViewFromBarycenter
+      || this.cameraMode.type === CameraMode.ViewFromBody) {
+        const tail = this.getSelectedBody().toList();
+        return (i: number) => {
+          return isOutOfBounds(i, 0, tail.length) ? zero : tail[i];
+        }
+    }
+
+    return () => zero; // TODO: current offset
+  }
+
+  private getBodiesOffset(): Vector {
+    if (this.cameraMode.type === CameraMode.Free) {
+        return createVector(0, 0);
+    }
+
+    return this.getSelectedBody().peekTail() || createVector(0, 0);
+  }
+
+  private getSelectedBody(): LinkedList<Vector> {
+    return (this.cameraMode.type === CameraMode.LockOnBody
+      || this.cameraMode.type === CameraMode.ViewFromBody)
+      && this.cameraMode.bodyIndex >= 0
+      && this.cameraMode.bodyIndex < this.engine.bodies.length
+      ? this.engine.bodies[this.cameraMode.bodyIndex].tail
+      : this.engine.barycenterList;
+  }
 }
