@@ -4,7 +4,7 @@ import { ControlBarInput } from "../../shared/control-bar-input";
 import { InfoBox } from "../../shared/info-box";
 import { ProcessingComponent } from "../../shared/processing-component";
 import { SelectInput, SelectInputProps } from "../../shared/select-input";
-import { getSolarSystemData } from "./models/data";
+import { getSolarSystemInfo } from "./models/data";
 import { BodyInfo, CameraMode, NBodiesSimulationInputs } from "./models/models";
 import { NBodiesSketch } from "./n-bodies-sketch";
 
@@ -19,7 +19,7 @@ export class NBodiesGame extends ProcessingComponent<
   NBodiesGameProps
 > {
   public state: NBodiesGameProps = {
-    bodies: getSolarSystemData(),
+    bodies: getSolarSystemInfo(),
     cameraMode: CameraMode.LockOnBarycenter,
     selectedBodyIndex: 0,
   };

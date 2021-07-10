@@ -1,7 +1,8 @@
 import { LinkedList } from "../../../utils/linked-list";
 import { createVector, Vector } from "../../../utils/vector";
-import { G } from "../models/data";
 import { Body, BodyInfo } from "../models/models";
+
+const G = 6.6742e-11;
 
 const DELTA_T = 0.1;
 const TAIL_LENGTH = 100000;
@@ -11,17 +12,11 @@ export class NBodiesEngine {
     public barycenterList: LinkedList<Vector> = new LinkedList<Vector>();
 
     public setInputs(inputBodies: BodyInfo[]) {
-        this.bodies = inputBodies.map(createBody);
-
-        this.barycenterList.clear();
-        const barycenter = createVector();
-        let totalMass = 0;
-        this.bodies.forEach(p => {
-            barycenter.add(p.position.copy().mult(p.info.mass));
-            totalMass += p.info.mass;
-        });
-        barycenter.mult(1 / totalMass);
-        this.barycenterList.insertTail(barycenter);
+        this.bodies = [];
+        for (const data of inputBodies) {
+            const parent = this.bodies.find(b => b.info.name === data.parent);
+            this.bodies.push(createBody(data, parent));
+        }
     }
 
     public computeOneStep(): void {
@@ -68,11 +63,19 @@ export class NBodiesEngine {
     }
 }
 
-function createBody(info: BodyInfo): Body {
+function createBody(info: BodyInfo, parent: Body | undefined): Body {
+    const d = info.semiMajorAxis * (1 + info.eccentricity);
+    const position = createVector(d, 0);
+    let speed = createVector(0, 0, 0);
+    if (parent) {
+        position.add(parent.position);
+        const v = Math.sqrt(G * parent.info.mass * (2 / info.semiMajorAxis - 1 / d));
+        speed = createVector(0, v).add(parent.speed);
+    }
     return {
         info,
-        position: info.initialPosition.copy(),
-        speed: info.initialSpeed.copy(),
+        position,
+        speed,
         acceleration: createVector(0, 0, 0),
         tail: new LinkedList<Vector>(),
     };

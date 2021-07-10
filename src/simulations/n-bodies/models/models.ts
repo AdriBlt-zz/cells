@@ -7,8 +7,9 @@ export interface BodyInfo {
     mass: number;
     radius: number;
     color: Color;
-    initialPosition: Vector;
-    initialSpeed: Vector;
+    semiMajorAxis: number;
+    eccentricity: number;
+    parent: string;
 }
 
 export interface Body {
@@ -25,7 +26,7 @@ export enum CameraMode {
     LockOnBody,
     ViewFromBarycenter,
     ViewFromBody,
-  }
+}
 
 export type ViewMode =
     | { type: CameraMode.Free; }

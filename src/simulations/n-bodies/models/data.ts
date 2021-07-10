@@ -1,12 +1,29 @@
-import { getStrings } from "../../../strings";
-import { COLORS } from "../../../utils/color";
-import { createVector } from "../../../utils/vector";
+import { Color, COLORS } from "../../../utils/color";
+import { BodyData } from "./bodies-data-parser";
 import { BodyInfo } from "./models";
 
-export const G = 6.6742e-11;
+export function getSolarSystemInfo(): BodyInfo[] {
+    const bodyColors = {
+        'Sun': COLORS.Orange,
+        'Earth': COLORS.Blue,
+        'Moon': COLORS.Gray,
+    };
+    return getSolarSystemData().map((d: BodyData) => {
+        const color: Color = bodyColors[d.name] || COLORS.White;
+        return {
+            name: d.name,
+            mass: d.mass,
+            radius: d.diameter / 2,
+            semiMajorAxis: d.semiMajorAxis,
+            eccentricity: d.eccentricity,
+            parent: d.parent,
+            color,
+        };
+    })
+}
 
 // mass in kg, radius and distance in km
-export function getSolarSystemData(): BodyInfo[] {
+function getSolarSystemData(): BodyData[] {
     const mSun = 1.989e+30;
     const rSun = 696340;
 
@@ -18,35 +35,30 @@ export function getSolarSystemData(): BodyInfo[] {
     const rMoon = 1737;
     const dMoon = 384400;
 
-    const speedEarth = Math.sqrt(mSun * G / dEarth);
-    const speedMoon = Math.sqrt(mEarth * G / dMoon);
-
-    const strings = getStrings().nBodies.bodiesNames;
-
     return [
         {
-            name: strings.sun,
+            name: 'Sun',
             mass: mSun,
-            radius: rSun,
-            initialPosition: createVector(0, 0),
-            initialSpeed: createVector(0, 0),
-            color: COLORS.Orange,
+            diameter: 2 * rSun,
+            eccentricity: 0,
+            parent: '',
+            semiMajorAxis: 0,
         },
         {
-            name: strings.earth,
+            name: 'Earth',
             mass: mEarth,
-            radius: rEarth,
-            initialPosition: createVector(dEarth, 0),
-            initialSpeed: createVector(0, speedEarth),
-            color: COLORS.Blue,
+            diameter: 2 * rEarth,
+            eccentricity: 0,
+            parent: 'Sun',
+            semiMajorAxis: dEarth,
         },
         {
-            name: strings.moon,
+            name: 'Moon',
             mass: mMoon,
-            radius: rMoon,
-            initialPosition: createVector(dEarth + dMoon, 0),
-            initialSpeed: createVector(0, speedEarth + speedMoon),
-            color: COLORS.Gray,
+            diameter: 2 * rMoon,
+            eccentricity: 0,
+            parent: 'Earth',
+            semiMajorAxis: dMoon,
         },
-    ]
+    ];
 };
