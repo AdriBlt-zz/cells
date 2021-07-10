@@ -19,12 +19,13 @@ export class NBodiesGame extends ProcessingComponent<
   NBodiesGameProps
 > {
   public state: NBodiesGameProps = {
-    bodies: getSolarSystemInfo(),
+    bodies: [],
     cameraMode: CameraMode.LockOnBarycenter,
     selectedBodyIndex: 0,
   };
 
   protected createSketch(): NBodiesSketch {
+    getSolarSystemInfo().then(bodies => this.setState({ bodies }));
     return new NBodiesSketch(() => this.simulationInputs);
   }
 

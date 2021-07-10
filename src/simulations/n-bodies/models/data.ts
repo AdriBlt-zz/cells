@@ -2,28 +2,29 @@ import { Color, COLORS } from "../../../utils/color";
 import { BodyData } from "./bodies-data-parser";
 import { BodyInfo } from "./models";
 
-export function getSolarSystemInfo(): BodyInfo[] {
+export function getSolarSystemInfo(): Promise<BodyInfo[]> {
     const bodyColors = {
         'Sun': COLORS.Orange,
         'Earth': COLORS.Blue,
         'Moon': COLORS.Gray,
     };
-    return getSolarSystemData().map((d: BodyData) => {
-        const color: Color = bodyColors[d.name] || COLORS.White;
-        return {
-            name: d.name,
-            mass: d.mass,
-            radius: d.diameter / 2,
-            semiMajorAxis: d.semiMajorAxis,
-            eccentricity: d.eccentricity,
-            parent: d.parent,
-            color,
-        };
-    })
+    return getSolarSystemData()
+        .then(bodies => bodies.map((d: BodyData) => {
+            const color: Color = bodyColors[d.name] || COLORS.White;
+            return {
+                name: d.name,
+                mass: d.mass,
+                radius: d.diameter / 2,
+                semiMajorAxis: d.semiMajorAxis,
+                eccentricity: d.eccentricity,
+                parent: d.parent,
+                color,
+            };
+        }));
 }
 
 // mass in kg, radius and distance in km
-function getSolarSystemData(): BodyData[] {
+function getSolarSystemData(): Promise<BodyData[]> {
     const mSun = 1.989e+30;
     const rSun = 696340;
 
@@ -35,7 +36,7 @@ function getSolarSystemData(): BodyData[] {
     const rMoon = 1737;
     const dMoon = 384400;
 
-    return [
+    return Promise.resolve([
         {
             name: 'Sun',
             mass: mSun,
@@ -60,5 +61,5 @@ function getSolarSystemData(): BodyData[] {
             parent: 'Earth',
             semiMajorAxis: dMoon,
         },
-    ];
+    ]);
 };
