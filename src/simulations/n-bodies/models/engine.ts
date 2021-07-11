@@ -1,3 +1,5 @@
+import { random } from "src/utils/random";
+
 import { LinkedList } from "../../../utils/linked-list";
 import { createVector, Vector } from "../../../utils/vector";
 import { Body, BodyInfo } from "../models/models";
@@ -78,13 +80,22 @@ function createBodies(inputBodies: BodyInfo[]): Body[] {
 }
 
 function createBody(info: BodyInfo, parent: Body | undefined): Body {
-    const d = info.semiMajorAxis * (1 + info.eccentricity);
-    const position = createVector(d, 0);
+    let position = createVector(0, 0, 0);
     let speed = createVector(0, 0, 0);
     if (parent) {
-        position.add(parent.position);
-        const v = Math.sqrt(G * parent.info.mass * (2 / info.semiMajorAxis - 1 / d));
-        speed = createVector(0, v).add(parent.speed);
+        // TODO: random place in ellipse
+        const ellipseOrientation = random(0, 2 * Math.PI);
+        const ra = info.semiMajorAxis * (1 + info.eccentricity);
+        const v = Math.sqrt(G * parent.info.mass * (2 / ra - 1 / info.semiMajorAxis));
+
+        position = createVector(
+                ra * Math.cos(ellipseOrientation),
+                ra * Math.sin(ellipseOrientation),
+            ).add(parent.position);
+        speed = createVector(
+                v * Math.sin(ellipseOrientation),
+                -v * Math.cos(ellipseOrientation),
+            ).add(parent.speed);
     }
     return {
         info,
