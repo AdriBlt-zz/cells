@@ -11,15 +11,15 @@ export class NBodiesEngine {
     public bodies: Body[] = [];
     public barycenterList: LinkedList<Vector> = new LinkedList<Vector>();
 
-    public setInputs(inputBodies: BodyInfo[]) {
-        this.bodies = [];
-        for (const data of inputBodies) {
-            const parent = this.bodies.find(b => b.info.name === data.parent);
-            this.bodies.push(createBody(data, parent));
-        }
+    public setInputs = (inputBodies: BodyInfo[]) => {
+        this.bodies = createBodies(inputBodies);
     }
 
     public computeOneStep(): void {
+        if (this.bodies.length === 0) {
+            return;
+        }
+
         // Reset acceleration
         this.bodies.forEach(p => p.acceleration = createVector());
 
@@ -61,6 +61,16 @@ export class NBodiesEngine {
             }
         });
     }
+}
+
+function createBodies(inputBodies: BodyInfo[]): Body[] {
+    const bodies: Body[] = [];
+    for (const data of inputBodies) {
+        const parent = bodies.find(b => b.info.name === data.parent);
+        bodies.push(createBody(data, parent));
+    }
+
+    return bodies;
 }
 
 function createBody(info: BodyInfo, parent: Body | undefined): Body {

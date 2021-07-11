@@ -25,7 +25,7 @@ export class NBodiesGame extends ProcessingComponent<
   };
 
   protected createSketch(): NBodiesSketch {
-    getSolarSystemInfo().then(bodies => this.setState({ bodies }));
+    getSolarSystemInfo().then(bodies => this.setState({ bodies }, this.sketch.reset));
     return new NBodiesSketch(() => this.simulationInputs);
   }
 

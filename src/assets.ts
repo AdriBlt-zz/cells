@@ -4,6 +4,8 @@ export enum Asset {
     ConstellationsNameFileFormat = '/stars/{0}/constellation_names.eng.fab.txt',
 
     MazeImage = '/maze.png',
+
+    PlanetsFile = '/planets.tsv',
 }
 
 export function getAssetPath(asset: Asset): string {
