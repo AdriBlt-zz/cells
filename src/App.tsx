@@ -60,10 +60,6 @@ class App extends React.Component {
   }
 }
 
-const Home = () => (
-  <div>
-    <h1>Hello world!</h1>
-  </div>
-)
+const Home = () => (<div/>);
 
 export default App;

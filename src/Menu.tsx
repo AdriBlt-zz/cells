@@ -76,21 +76,6 @@ const gamesPages: Page[] = [
     route: "battleship",
     component: <BattleshipGame />,
   },
-  {
-    name: strings.menu.wolfenstein,
-    route: "wolfenstein",
-    component: <WolfensteinGame />
-  },
-  {
-    name: strings.menu.alixMaze,
-    route: "alix-maze",
-    component: <AlixMazeGame />
-  },
-  {
-    name: 'Generated Maze',
-    route: "generated-maze",
-    component: <GeneratedMazeGame />
-  },
 ];
 const simulationsPages: Page[] = [
   {
@@ -136,13 +121,30 @@ const mathsPages: Page[] = [
     route: "multiplication-circle",
     component: <MultiplicationCircleGame />,
   },
+  // TODO: SPACE FILLING CURVE (HILBERT)
+  // TODO: CIRCLE AND ELIPSE?
+];
+const mazesPages: Page[] = [
+  {
+    name: strings.menu.wolfenstein,
+    route: "wolfenstein",
+    component: <WolfensteinGame />
+  },
+  {
+    name: strings.menu.alixMaze,
+    route: "alix-maze",
+    component: <AlixMazeGame />
+  },
   {
     name: strings.menu.mazeGeneration,
     route: 'maze-generation',
     component: <MazeGenerationGame />,
-  }
-  // TODO: SPACE FILLING CURVE (HILBERT)
-  // TODO: CIRCLE AND ELIPSE?
+  },
+  {
+    name: 'Generated Maze',
+    route: "generated-maze",
+    component: <GeneratedMazeGame />
+  },
 ];
 
 export const appMenu: Menu = {
@@ -168,6 +170,10 @@ export const appMenu: Menu = {
     {
       name: strings.menu.maths,
       pages: mathsPages,
+    },
+    {
+      name: strings.menu.mazes,
+      pages: mazesPages,
     },
   ],
 };

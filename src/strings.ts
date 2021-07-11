@@ -23,6 +23,7 @@ const strings = {
     alixMaze: "Alix's Maze",
     mazeGeneration: "Maze Generation",
     nBodiesSimulation: "n Bodies simulation",
+    mazes: "Mazes",
   },
   minesweeper: {
     difficulty: "Difficulty",
@@ -113,11 +114,6 @@ const strings = {
   nBodies: {
     cameraModeSelect: 'Camera mode',
     focusedBodySelect: 'Focused body',
-    bodiesNames: {
-      sun: 'Sun',
-      earth: 'Earth',
-      moon: 'Moon',
-    },
     cameraModeNames: {
       free: 'Free' ,
       lockOnBarycenter: 'Lock On Barycenter' ,
