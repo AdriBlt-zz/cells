@@ -14,6 +14,7 @@ const HALF_WIDTH = WIDTH / 2;
 const HALF_HEIGHT = HEIGHT / 2;
 
 const SKIP_FORWARD = 1000;
+const COMPUTES_PER_STEP = 100;
 
 export class NBodiesSketch extends PlayableSketch {
   private engine: NBodiesEngine = new NBodiesEngine();
@@ -28,7 +29,9 @@ export class NBodiesSketch extends PlayableSketch {
   }
 
   public draw(): void {
-    this.engine.computeOneStep();
+    for (let t = 0; t < COMPUTES_PER_STEP; t++) {
+      this.engine.computeOneStep();
+    }
     this.updateSketch();
   }
 
@@ -62,7 +65,7 @@ export class NBodiesSketch extends PlayableSketch {
     this.cameraMode = viewMode;
   }
 
-  private updateSketch(): void {
+  private updateSketch = (): void => {
     setBackground(this.p5js, COLORS.Black);
 
     this.drawTails();

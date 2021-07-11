@@ -5,11 +5,7 @@ import { BodyInfo } from "./models";
 export function getSolarSystemInfo(): Promise<BodyInfo[]> {
     return loadBodiesList()
         .then(bodies => {
-            const bodyColors = {
-                'Sun': COLORS.Orange,
-                'Earth': COLORS.Blue,
-                'Moon': COLORS.Gray,
-            };
+            const bodyColors = getBodyColors();
             return bodies
                 .filter(d => !!bodyColors[d.name])
                 .map((d: BodyData) => {
@@ -25,6 +21,30 @@ export function getSolarSystemInfo(): Promise<BodyInfo[]> {
                     };
                 });
         });
+}
+
+function getBodyColors(): { [name: string]: Color} {
+    // What Color are the Planets?
+    // Mercury – Grey
+    // Venus – Brown and grey
+    // Earth – Blue, brown green and white
+    // Mars – Red, brown and tan
+    // Jupiter – Brown, orange and tan, with white cloud stripes
+    // Saturn – Golden, brown, and blue-grey
+    // Uranus – Blue-green
+    // Neptune – Blue
+    return {
+        'Sun': COLORS.Orange,
+        'Mercury': COLORS.DarkGray,
+        'Venus': COLORS.SandyBrown,
+        'Earth': COLORS.CadetBlue,
+        'Mars': COLORS.Firebrick,
+        // 'Jupiter': COLORS.Tan,
+        // 'Saturn': COLORS.GoldenRod,
+        // 'Uranus': COLORS.LightBlue,
+        // 'Neptune': COLORS.Blue,
+        'Moon': COLORS.LightGray,
+    };
 }
 
 // mass in kg, radius and distance in km
