@@ -34,8 +34,3 @@ export type ViewMode =
     | { type: CameraMode.LockOnBody; bodyIndex: number; }
     | { type: CameraMode.ViewFromBarycenter; }
     | { type: CameraMode.ViewFromBody; bodyIndex: number; };
-
-export interface NBodiesSimulationInputs {
-    bodies: BodyInfo[];
-    viewMode: ViewMode;
-}

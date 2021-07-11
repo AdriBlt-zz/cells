@@ -15,6 +15,10 @@ export class NBodiesEngine {
         this.bodies = createBodies(inputBodies);
     }
 
+    public reset(): void {
+      this.setInputs(this.bodies.map(b => b.info));
+    }
+
     public computeOneStep(): void {
         if (this.bodies.length === 0) {
             return;

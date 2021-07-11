@@ -6,7 +6,7 @@ import { LinkedList } from "../../utils/linked-list";
 import { isOutOfBounds } from "../../utils/numbers";
 import { createVector, Vector } from "../../utils/vector";
 import { NBodiesEngine } from "./models/engine";
-import { CameraMode, NBodiesSimulationInputs, ViewMode } from "./models/models";
+import { BodyInfo, CameraMode, ViewMode } from "./models/models";
 
 const WIDTH = 1300;
 const HEIGHT = 800;
@@ -20,10 +20,6 @@ export class NBodiesSketch extends PlayableSketch {
   private cameraMode: ViewMode = { type: CameraMode.LockOnBarycenter };
 
   private zoom: number = 0.000001;
-
-  constructor(private getInputs: () => NBodiesSimulationInputs) {
-    super();
-  }
 
   public setup(p: p5): void {
     this.p5js = p;
@@ -55,10 +51,16 @@ export class NBodiesSketch extends PlayableSketch {
   }
 
   public reset = (): void => {
-    const inputs = this.getInputs();
-    this.cameraMode = inputs.viewMode;
-    this.engine.setInputs(inputs.bodies);
+    this.engine.reset();
   };
+
+  public setBodies = (bodies: BodyInfo[]): void => {
+    this.engine.setInputs(bodies);
+  }
+
+  public setViewMode = (viewMode: ViewMode): void => {
+    this.cameraMode = viewMode;
+  }
 
   private updateSketch(): void {
     setBackground(this.p5js, COLORS.Black);

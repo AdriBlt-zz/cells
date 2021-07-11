@@ -5,7 +5,7 @@ import { InfoBox } from "../../shared/info-box";
 import { ProcessingComponent } from "../../shared/processing-component";
 import { SelectInput, SelectInputProps } from "../../shared/select-input";
 import { getSolarSystemInfo } from "./models/data";
-import { BodyInfo, CameraMode, NBodiesSimulationInputs } from "./models/models";
+import { BodyInfo, CameraMode } from "./models/models";
 import { NBodiesSketch } from "./n-bodies-sketch";
 
 interface NBodiesGameProps {
@@ -25,8 +25,11 @@ export class NBodiesGame extends ProcessingComponent<
   };
 
   protected createSketch(): NBodiesSketch {
-    getSolarSystemInfo().then(bodies => this.setState({ bodies }, this.sketch.reset));
-    return new NBodiesSketch(() => this.simulationInputs);
+    getSolarSystemInfo().then(bodies => this.setState(
+      { bodies },
+      () => this.sketch.setBodies(this.state.bodies),
+    ));
+    return new NBodiesSketch();
   }
 
   protected renderCommands(): JSX.Element {
@@ -57,7 +60,7 @@ export class NBodiesGame extends ProcessingComponent<
       onOptionChanged: (value: string) => {
         this.setState(
           { cameraMode: this.cameraModeValues.filter(k => k.name === value)[0].type },
-          () => this.sketch.reset(),
+          () => this.setViewMode(),
         );
       },
     };
@@ -71,21 +74,21 @@ export class NBodiesGame extends ProcessingComponent<
       onOptionChanged: (value: string) => {
         this.setState(
           { selectedBodyIndex: this.state.bodies.map(k => k.name).indexOf(value) },
-          () => this.sketch.reset(),
+          () => this.setViewMode(),
         );
       },
     };
   }
 
-  private get showSelectedBodyDropdown(): boolean {
-    return this.state.cameraMode === CameraMode.LockOnBody || this.state.cameraMode === CameraMode.ViewFromBody;
+  private setViewMode = (): void => {
+    this.sketch.setViewMode({
+      type: this.state.cameraMode,
+      bodyIndex: this.state.selectedBodyIndex,
+    });
   }
 
-  private get simulationInputs(): NBodiesSimulationInputs {
-    return {
-      bodies: this.state.bodies,
-      viewMode: { type: this.state.cameraMode, bodyIndex: this.state.selectedBodyIndex },
-    };
+  private get showSelectedBodyDropdown(): boolean {
+    return this.state.cameraMode === CameraMode.LockOnBody || this.state.cameraMode === CameraMode.ViewFromBody;
   }
 
   private get cameraModeValues(): Array<{ type: CameraMode; name: string; }> {
