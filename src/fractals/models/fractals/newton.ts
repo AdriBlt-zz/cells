@@ -1,7 +1,7 @@
-import { ColorSet } from "../../../fractales/colors/ColorSet";
 import { Complex } from "../../../numbers/Complex";
 import { Polynom } from "../../../numbers/Polynom";
 import { Color, COLORS, getColorBetween } from "../../../utils/color";
+import { ColorSet } from "../color-set";
 import { Fractal } from "../fractale";
 import { ConvergenceStatus, FractalResult } from "../models";
 

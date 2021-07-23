@@ -17,7 +17,7 @@ export class JuliaSet implements Fractal {
     let z = z0;
     let squareModuleMax = z.getSquareModule();
     for (let n = 0; n < this.maxIterations; n++) {
-      const zz = this.getIterationComplex(z, z0);
+      const zz = this.getIterationComplex(z);
 
       if (zz.getSquareModule() >= this.maxSquareMod) {
         return {
@@ -52,7 +52,7 @@ export class JuliaSet implements Fractal {
     };
   }
 
-  public getIterationComplex(z: Complex, z0: Complex): Complex {
+  public getIterationComplex(z: Complex): Complex {
     return z.getSquare().add(this.getParameter());
   }
 
