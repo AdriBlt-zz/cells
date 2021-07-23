@@ -1,5 +1,7 @@
 import * as p5 from "p5";
 
+import { clamp } from "./numbers";
+
 export interface Color {
   r: number;
   g: number;
@@ -32,7 +34,7 @@ export function getColorBetween(
   colorB: Color,
   ratio: number = 0.5
 ): Color {
-  const p = ratio > 1 ? 1 : ratio < 0 ? 0 : ratio;
+  const p = clamp(ratio, 0, 1);
   return color(
     getValueBetween(colorA.r, colorB.r, p),
     getValueBetween(colorA.g, colorB.g, p),

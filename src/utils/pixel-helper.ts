@@ -7,5 +7,5 @@ export function setPixel(image: p5.Image, i: number, j: number, color: Color) {
     image.pixels[index + 0] = color.r;
     image.pixels[index + 1] = color.g;
     image.pixels[index + 2] = color.b;
-    image.pixels[index + 3] = color.a || 0;
+    image.pixels[index + 3] = color.a !== undefined ? color.a : 255;
 }

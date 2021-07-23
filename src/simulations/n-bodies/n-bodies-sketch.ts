@@ -99,6 +99,8 @@ export class NBodiesSketch extends PlayableSketch {
       const y = HALF_HEIGHT + this.zoom * (planet.position.y - offset.y);
       const r = Math.max(2, Math.log(planet.info.radius)); // this.zoom * planet.info.radius;
       this.p5js.ellipse(x, y, r, r);
+      this.p5js.textSize(10);
+      this.p5js.text(planet.info.name, x + r, y - r);
     });
   }
 

@@ -1,3 +1,5 @@
+import { Complex } from "../numbers/Complex";
+
 export function isOutOfBounds(
   x: number,
   minIncluded: number,
@@ -26,6 +28,14 @@ export function doSegmentsIntersect(
 const epsilon = 0.0001;
 export function isStatisticallyNull(value: number): boolean {
   return value < epsilon && value > -epsilon;
+}
+
+export function areNumbersStaticticallyEqual(a: number, b: number): boolean {
+  return isStatisticallyNull(a - b);
+}
+
+export function areComplexesStaticticallyEqual(a: Complex, b: Complex): boolean {
+  return isStatisticallyNull(a.getSquareDistanceFrom(b));
 }
 
 export function clamp(value: number, min: number, max: number): number {

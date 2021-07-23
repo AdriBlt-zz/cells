@@ -7,7 +7,7 @@ import { Body, BodyInfo } from "../models/models";
 const G = 6.6742e-11;
 
 const DELTA_T = 0.1;
-const TAIL_LENGTH = 100000;
+const TAIL_LENGTH = 100;
 
 export class NBodiesEngine {
     public bodies: Body[] = [];
@@ -44,10 +44,15 @@ export class NBodiesEngine {
         const barycenter = createVector();
         let totalMass = 0;
 
-        // Update Speed and Position + compute barycenter
+        // Update Speed and Position + tail + compute barycenter
         this.bodies.forEach(p => {
             p.speed.add(p.acceleration.copy().mult(DELTA_T));
             p.position.add(p.speed.copy().mult(DELTA_T));
+
+            p.tail.insertTail(p.position.copy());
+            if (p.tail.count > TAIL_LENGTH) {
+                p.tail.popHead();
+            }
 
             barycenter.add(p.position.copy().mult(p.info.mass));
             totalMass += p.info.mass;
@@ -58,14 +63,6 @@ export class NBodiesEngine {
         if (this.barycenterList.count > TAIL_LENGTH) {
             this.barycenterList.popHead();
         }
-
-        // Update tail
-        this.bodies.forEach(p => {
-            p.tail.insertTail(p.position.copy());
-            if (p.tail.count > TAIL_LENGTH) {
-                p.tail.popHead();
-            }
-        });
     }
 }
 
