@@ -110,8 +110,10 @@ export class FractalEngine {
     }
 
     public zoomOnRectangle(rectangle: { iMin: number; iMax: number; jMin: number; jMax: number; }): void {
-        this.max = this.getPointOnScreen(rectangle.iMax, rectangle.jMax);
-        this.min = this.getPointOnScreen(rectangle.iMin, rectangle.jMin);
+        const min = this.getPointOnScreen(rectangle.iMin, rectangle.jMin);
+        const max = this.getPointOnScreen(rectangle.iMax, rectangle.jMax);
+        this.min = min;
+        this.max = max;
         this.checkScales();
         this.computeFractal();
     }
