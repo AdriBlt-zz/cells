@@ -4,12 +4,12 @@ import { getRoots4 } from "./PolynomHelpers";
 export class Polynom {
   private degre: number;
 
-  private coefs: Map<number, Complex>;
+  private coefs: { [index: number]: Complex };
 
   private roots: Complex[] | null;
 
   constructor(...coefficents: Complex[]) {
-    this.coefs = new Map<number, Complex>();
+    this.coefs = {};
     this.degre = -1;
     this.roots = null;
     const lenght = coefficents.length;
@@ -23,13 +23,15 @@ export class Polynom {
       this.roots = this.getRoots();
     }
 
-    if (this.coefs.size === 0) {
+    if (this.degre < 0) {
       this.addCoef(1, new Complex(1));
       this.addCoef(0, getProduct(-1, root));
     } else {
       const oldCoef = this.coefs;
-      this.coefs = new Map<number, Complex>();
-      for (let degree = 0; degree < this.degre; degree++) {
+      const oldDegre = this.degre;
+      this.coefs = {};
+      this.degre = -1;
+      for (let degree = 0; degree <= oldDegre; degree++) {
         const value = oldCoef[degree];
         if (value) {
           this.addCoef(degree + 1, value);
@@ -74,22 +76,26 @@ export class Polynom {
   public derive(): Polynom {
     const deriv = new Polynom();
 
-    this.coefs.forEach((value: Complex, index: number) => {
-      if (index > 0) {
+    for (let index = 1; index <= this.degre; index++) {
+      const value = this.coefs[index];
+      if (value) {
         const coef = value.multiplyByReal(index);
         deriv.add(index - 1, coef);
       }
-    });
+    }
 
     return deriv;
   }
 
   public integre(valeur0: Complex): Polynom {
     const prim = new Polynom(valeur0);
-    this.coefs.forEach((value: Complex, index: number) => {
-      const coef = value.divideByReal(index + 1);
-      prim.add(index + 1, coef);
-    });
+    for (let index = 0; index <= this.degre; index++) {
+      const value = this.coefs[index];
+      if (value) {
+        const coef = value.divideByReal(index + 1);
+        prim.add(index + 1, coef);
+      }
+    }
 
     return prim;
   }
@@ -167,8 +173,9 @@ export class Polynom {
       return;
     }
 
-    if (this.coefs.has(index)) {
-      const newCoef = this.coefs[index].add(coef);
+    const value = this.coefs[index];
+    if (value) {
+      const newCoef = value.add(coef);
       this.coefs[index] = newCoef;
     } else {
       this.coefs[index] = coef;

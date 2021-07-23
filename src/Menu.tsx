@@ -4,7 +4,10 @@ import { AntGame } from "./cellular-automaton/ant-game";
 import { ElementaryRulesGame } from "./cellular-automaton/elementary-rules-game";
 import { GameOfLifeGame } from "./cellular-automaton/game-of-life-game";
 import { TurmiteGame } from "./cellular-automaton/turmite-game";
-import { MandelbrotGame } from "./fractales/mandelbrot/mandelbrot-game";
+import { BurningShipFractalGame } from "./fractales/burning-ship-fractal-game";
+import { JuliaSetFractalGame } from "./fractales/julia-set-fractal-game";
+import { MandelbrotFractalGame } from "./fractales/mandelbrot-fractal-game";
+import { NewtonFractalGame } from "./fractales/newton-fractal-game";
 import { BattleshipGame } from "./games/battleship/battleship-game";
 import { MinesweeperGame } from "./games/minesweeper/minesweeper-game";
 import { AlixMazeGame } from "./games/ray-casting/alix-maze-game";
@@ -98,7 +101,22 @@ const fractalesPages: Page[] = [
   {
     name: strings.menu.mandelbrot,
     route: "mandelbrot",
-    component: <MandelbrotGame />,
+    component: <MandelbrotFractalGame />,
+  },
+  {
+    name: 'Julia Set',
+    route: "julia-set",
+    component: <JuliaSetFractalGame />,
+  },
+  {
+    name: 'Newton',
+    route: "newton",
+    component: <NewtonFractalGame />,
+  },
+  {
+    name: 'Burning Ship',
+    route: "burning-ship",
+    component: <BurningShipFractalGame />,
   },
   // TODO: MANDELBROT PATH
   // TODO: JULIA SETS

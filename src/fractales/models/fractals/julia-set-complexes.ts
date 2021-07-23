@@ -1,4 +1,4 @@
-import { Complex } from "../../numbers/Complex";
+import { Complex } from "../../../numbers/Complex";
 
 export interface JuliaComplex {
   complex: Complex;

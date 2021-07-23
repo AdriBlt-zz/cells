@@ -171,8 +171,9 @@ export function getUnityRootsPolynom(n: number): Polynom {
   }
 
   for (let k = 1; k < n; k++) {
-    const re = Math.cos((2 * Math.PI * k) / n);
-    const im = Math.sin((2 * Math.PI * k) / n);
+    const theta = 2 * Math.PI * k / n;
+    const re = Math.cos(theta);
+    const im = Math.sin(theta);
     p.addRoot(new Complex(re, im));
   }
 
