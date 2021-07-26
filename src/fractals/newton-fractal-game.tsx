@@ -21,7 +21,7 @@ export class NewtonFractalGame extends ProcessingComponent<FractalSketch, Newton
   }
 
   protected renderCommands(): JSX.Element {
-    return <InfoBox title="Unity root polynom">
+    return <InfoBox title={this.strings.newtonFractal.unityRootPolynom}>
       <NumberInput {...this.unityRootPolynomDegreeInputProps()} />
     </InfoBox>;
   }
@@ -32,7 +32,7 @@ export class NewtonFractalGame extends ProcessingComponent<FractalSketch, Newton
 
   private unityRootPolynomDegreeInputProps(): NumberInputProps {
     return {
-      label: "Degree",
+      label: this.strings.newtonFractal.degree,
       value: this.state.unityRootPolynomDegree,
       min: 1,
       onValueChanged: value => this.setState(

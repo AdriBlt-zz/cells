@@ -104,17 +104,17 @@ const fractalesPages: Page[] = [
     component: <MandelbrotFractalGame />,
   },
   {
-    name: 'Julia Set',
+    name: strings.menu.juliaSet,
     route: "julia-set",
     component: <JuliaSetFractalGame />,
   },
   {
-    name: 'Newton',
+    name:  strings.menu.newton,
     route: "newton",
     component: <NewtonFractalGame />,
   },
   {
-    name: 'Burning Ship',
+    name: strings.menu.burningShip,
     route: "burning-ship",
     component: <BurningShipFractalGame />,
   },
@@ -159,7 +159,7 @@ const mazesPages: Page[] = [
     component: <MazeGenerationGame />,
   },
   {
-    name: 'Generated Maze',
+    name: strings.menu.generatedMaze,
     route: "generated-maze",
     component: <GeneratedMazeGame />
   },

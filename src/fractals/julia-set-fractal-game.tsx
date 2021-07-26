@@ -1,20 +1,50 @@
 import * as React from "react";
 
+import { InfoBox } from "../shared/info-box";
 import { ProcessingComponent } from "../shared/processing-component";
+import { SelectInput, SelectInputProps } from "../shared/select-input";
 import { FractalSketch } from "./fractal-sketch";
 import { JuliaSet } from "./models/fractals/julia-set";
-import { JuliaSetComplexes } from "./models/fractals/julia-set-complexes";
+import { JuliaComplex, JuliaSetComplexes, JuliaSetValues } from "./models/fractals/julia-set-complexes";
 
-export class JuliaSetFractalGame extends ProcessingComponent<FractalSketch> {
+interface JuliaSetGameState {
+  parameter: JuliaComplex;
+}
+
+const DefaultParameter = JuliaSetComplexes.I;
+
+export class JuliaSetFractalGame extends ProcessingComponent<FractalSketch, JuliaSetGameState > {
+  public state = {
+    parameter: DefaultParameter,
+  }
+
   protected createSketch(): FractalSketch {
-    return new FractalSketch(new JuliaSet(JuliaSetComplexes.I.complex));
+    return new FractalSketch(new JuliaSet(DefaultParameter.complex));
   }
 
   protected renderCommands(): JSX.Element {
-    return <div />;
+    return <InfoBox>
+      <SelectInput {...this.parameterInputProps()} />
+    </InfoBox>;
   }
 
   protected renderInfoSection(): JSX.Element {
     return <div />;
+  }
+
+  private parameterInputProps(): SelectInputProps {
+    return {
+      label: this.strings.juliaSetFractal.parameter,
+      options: JuliaSetValues.map(c => c.name),
+      selectedOption: this.state.parameter.name,
+      onOptionChanged: value => {
+        const param = JuliaSetValues.find(c => c.name === value);
+        if (!!param) {
+          this.setState(
+            { parameter: param },
+            () => this.sketch.setFractal(new JuliaSet(this.state.parameter.complex)))
+          }
+        }
+      };
   }
 }

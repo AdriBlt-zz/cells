@@ -24,3 +24,7 @@ export const JuliaSetComplexes = {
   K: makeJuliaComplex(0, 1),
   L: makeJuliaComplex(-1, 0),
 };
+
+export const JuliaSetValues: JuliaComplex[] =
+  Object.keys(JuliaSetComplexes)
+    .map(key => JuliaSetComplexes[key]);

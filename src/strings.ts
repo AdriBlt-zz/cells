@@ -9,6 +9,9 @@ const strings = {
     flock: "Boids Flock",
     fractals: "Fractals",
     mandelbrot: "Mandelbrot",
+    juliaSet: "Julia Set",
+    newton: "Newton",
+    burningShip: "Burning Ship (WIP)",
     maths: "Maths",
     fourierSignal: "Fourier Signal",
     fourierDrawing: "Fourier Drawing",
@@ -22,6 +25,7 @@ const strings = {
     wolfenstein: "Wolfenstein",
     alixMaze: "Alix's Maze",
     mazeGeneration: "Maze Generation",
+    generatedMaze: "Generated Maze",
     nBodiesSimulation: "n Bodies simulation",
     mazes: "Mazes",
   },
@@ -119,8 +123,15 @@ const strings = {
       lockOnBarycenter: 'Lock On Barycenter' ,
       lockOnBody: 'Lock On Body' ,
       viewFromBarycenter: 'View From Barycenter' ,
-      viewFromBody: 'View From Body' ,
+      viewFromBody: 'View From Body',
     }
+  },
+  newtonFractal: {
+    unityRootPolynom: "Unity root polynom",
+    degree: "Degree",
+  },
+  juliaSetFractal: {
+    parameter: "Parameter",
   },
   shared: {
     newGame: "New Game (R)",
