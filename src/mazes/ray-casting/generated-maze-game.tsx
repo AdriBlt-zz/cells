@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import { MazeAlgorithmType } from "../../maths/maze-generation/maze-generation-sketch";
-import { createMazeGenerationAlgorithm } from "../../maths/maze-generation/maze-helpers";
-import { CellPaths, GenerationStatus, MazeGenerationAlgorithm, Status } from "../../maths/maze-generation/model";
 import { createVector } from "../../utils/vector";
+import { MazeAlgorithmType } from "../maze-generation/maze-generation-sketch";
+import { createMazeGenerationAlgorithm } from "../maze-generation/maze-helpers";
+import { CellPaths, GenerationStatus, MazeGenerationAlgorithm, Status } from "../maze-generation/model";
 import { MazeGame, MazeGameData } from "./maze-game";
 
 const MAP_RATIO = 1;
