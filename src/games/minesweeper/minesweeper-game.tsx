@@ -9,7 +9,7 @@ import { SelectInput, SelectInputProps } from "../../shared/select-input";
 import { pluralizeString } from "../../utils/string-formating-utilities";
 import { MinesweeperSketch } from "./minesweeper-sketch";
 import { GameStatus } from "./models/game-status";
-import { LevelDifficultyConst } from "./models/level-difficulty";
+import { LevelDifficulty, LevelDifficultyConst } from "./models/level-difficulty";
 
 @observer
 export class MinesweeperGame extends ProcessingComponent<MinesweeperSketch> {
@@ -64,12 +64,13 @@ export class MinesweeperGame extends ProcessingComponent<MinesweeperSketch> {
     );
   }
 
-  private getDifficultyProps(): SelectInputProps {
+  private getDifficultyProps(): SelectInputProps<LevelDifficulty> {
     return {
       label: this.strings.minesweeper.difficulty,
-      options: LevelDifficultyConst.values.map((difficulty) => difficulty.name),
-      selectedOption: this.sketch.selectedDifficulty.name,
-      onOptionChanged: this.onDifficultyChange,
+      options: LevelDifficultyConst.values,
+      selectedOption: this.sketch.selectedDifficulty,
+      onOptionChanged: difficulty => this.sketch.changeDifficulty(difficulty),
+      getName: difficulty => difficulty.name,
     };
   }
 
@@ -119,14 +120,5 @@ export class MinesweeperGame extends ProcessingComponent<MinesweeperSketch> {
     }
 
     this.sketch.findDifficulty();
-  };
-
-  private onDifficultyChange = (selectedDifficulty: string): void => {
-    const difficulty = LevelDifficultyConst.values.find(
-      (value) => value.name === selectedDifficulty
-    );
-    if (difficulty) {
-      this.sketch.changeDifficulty(difficulty);
-    }
   };
 }

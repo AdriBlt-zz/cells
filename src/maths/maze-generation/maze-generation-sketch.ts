@@ -7,12 +7,12 @@ import { createMazeGenerationAlgorithm } from "./maze-helpers";
 import { Cell, Direction, GenerationStatus, MazeGenerationAlgorithm, MazePath, Status } from "./model";
 
 export enum MazeAlgorithmType {
-    RecursiveSubdivision,
-    DepthExploration,
-    Kruskal,
-    RandomTraversal,
-    RandomizedPrim,
-    Wilson,
+    RecursiveSubdivision = 'RecursiveSubdivision',
+    DepthExploration = 'DepthExploration',
+    Kruskal = 'Kruskal',
+    RandomTraversal = 'RandomTraversal',
+    RandomizedPrim = 'RandomizedPrim',
+    Wilson = 'Wilson',
 }
 
 const NB_COLUMNS = 80;

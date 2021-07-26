@@ -106,6 +106,14 @@ const strings = {
   },
   mazeGeneration: {
     infoTitle: "Algorithm description",
+    algorithm: {
+      randomTraversal: "Random Traversal",
+      kruskal: "Kruskal",
+      randomizedPrim: "Randomized Prim",
+      depthExploration: "Depth Exploration",
+      recursiveSubdivision: "Recursive Subdivision",
+      wilson: "Wilson",
+    },
     description: {
       randomTraversal: "Randomly explores one path (in red) around the maze.",
       kruskal: "Randomly selects two adjacent cells and add the path between them to the maze if there is not yet one that connects them.",

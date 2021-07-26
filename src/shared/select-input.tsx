@@ -1,16 +1,18 @@
 import * as React from "react";
 import { Form, InputGroup } from "react-bootstrap";
 
-export interface SelectInputProps {
+export interface SelectInputProps<T> {
   label: string;
-  options: string[];
-  selectedOption: string;
-  onOptionChanged: (value: string) => void;
+  options: T[];
+  selectedOption: T;
+  onOptionChanged: (value: T) => void;
   appendComponent?: JSX.Element;
+  getName: (item: T) => string;
 }
 
-export class SelectInput extends React.Component<SelectInputProps> {
+export class SelectInput<T> extends React.Component<SelectInputProps<T>> {
   public render(): JSX.Element {
+    const { getName } = this.props;
     return (
       <InputGroup>
         <InputGroup.Prepend>
@@ -19,10 +21,10 @@ export class SelectInput extends React.Component<SelectInputProps> {
         <Form.Control
           as="select"
           onChange={this.onOptionChanged}
-          value={this.props.selectedOption}
+          value={getName(this.props.selectedOption)}
         >
-          {this.props.options.map((name, i) => (
-            <option key={i}>{name}</option>
+          {this.props.options.map((value: T, i: number) => (
+            <option key={i}>{getName(value)}</option>
           ))}
         </Form.Control>
         {this.props.appendComponent && (
@@ -34,7 +36,11 @@ export class SelectInput extends React.Component<SelectInputProps> {
 
   // tslint:disable-next-line:no-any
   private onOptionChanged = (event: any): void => {
-    const selectedValue = event.target.value;
-    this.props.onOptionChanged(selectedValue);
+    const { getName, options } = this.props;
+    const selectedName = event.target.value as string;
+    const selectedValue = options.find(item => getName(item) === selectedName);
+    if (selectedValue) {
+      this.props.onOptionChanged(selectedValue);
+    }
   };
 }

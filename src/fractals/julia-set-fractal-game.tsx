@@ -32,19 +32,17 @@ export class JuliaSetFractalGame extends ProcessingComponent<FractalSketch, Juli
     return <div />;
   }
 
-  private parameterInputProps(): SelectInputProps {
+  private parameterInputProps(): SelectInputProps<JuliaComplex> {
     return {
       label: this.strings.juliaSetFractal.parameter,
-      options: JuliaSetValues.map(c => c.name),
-      selectedOption: this.state.parameter.name,
-      onOptionChanged: value => {
-        const param = JuliaSetValues.find(c => c.name === value);
-        if (!!param) {
-          this.setState(
-            { parameter: param },
-            () => this.sketch.setFractal(new JuliaSet(this.state.parameter.complex)))
-          }
-        }
+      options: JuliaSetValues,
+      selectedOption: this.state.parameter,
+      onOptionChanged: param => {
+        this.setState(
+          { parameter: param },
+          () => this.sketch.setFractal(new JuliaSet(this.state.parameter.complex)))
+        },
+        getName: param => param.name,
       };
   }
 }

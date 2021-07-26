@@ -35,35 +35,32 @@ export class FourierSignalGame extends ProcessingComponent<
     return <div />;
   }
 
-  private getSignalTypeProps = (): SelectInputProps => {
+  private getSignalTypeProps = (): SelectInputProps<SignalType> => {
     const options: SignalType[] = [
       SignalType.SQUARE,
       SignalType.SAWTOOTH,
       SignalType.TRIANGLE,
       SignalType.RANDOM,
     ];
-    const signalTypeName: { [key in SignalType]: string } = {
-      [SignalType.SQUARE]: this.strings.fourierSignal.signalNames.square,
-      [SignalType.SAWTOOTH]: this.strings.fourierSignal.signalNames.sawtooth,
-      [SignalType.TRIANGLE]: this.strings.fourierSignal.signalNames.triangle,
-      [SignalType.RANDOM]: this.strings.fourierSignal.signalNames.random,
-    };
     return {
       label: this.strings.fourierSignal.signal,
-      options: options.map((type) => signalTypeName[type]),
-      selectedOption: signalTypeName[this.sketch.signal.type],
-      onOptionChanged: (value: string) => {
-        let type: SignalType | undefined;
-        for (const option of options) {
-          if (signalTypeName[option] === value) {
-            type = option;
-            break;
-          }
-        }
+      options,
+      selectedOption: this.sketch.signal.type,
+      onOptionChanged: (type: SignalType) => {
         if (type !== undefined && type !== this.sketch.signal.type) {
           this.sketch.changeSignalType(type);
         }
       },
+      getName: (type: SignalType) => {
+        const strings = this.strings.fourierSignal.signalNames;
+        switch (type) {
+          case SignalType.SQUARE: return strings.square;
+          case SignalType.SAWTOOTH: return strings.sawtooth;
+          case SignalType.TRIANGLE: return strings.triangle;
+          case SignalType.RANDOM: return strings.random;
+          default: return '';
+        }
+      }
     };
   };
 

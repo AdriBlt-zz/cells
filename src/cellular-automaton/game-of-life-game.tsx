@@ -8,14 +8,14 @@ import { CellularAutomatonGame } from "./cellular-automaton-game";
 import { CellularAutomatonSketch } from "./cellular-automaton-sketch";
 import { BorderCells } from "./models/BorderCells";
 import { GameOfLifeMatrix } from "./models/game-of-life/GameOfLifeMatrix";
-import { GameOfLifeModesList } from "./models/game-of-life/GameOfLifeMode";
+import { GameOfLifeMode, GameOfLifeModesList } from "./models/game-of-life/GameOfLifeMode";
 import { GameOfLifeParameters } from "./models/game-of-life/GameOfLifeParameters";
 
 interface GameOfLifeState {
-  name: string;
+  mode: GameOfLifeMode;
   isBurning: boolean;
   isColored: boolean;
-  borders: string;
+  borders: BorderCells;
   isHexaGrid: boolean;
 }
 
@@ -34,10 +34,10 @@ export class GameOfLifeGame extends CellularAutomatonGame<
 
   protected getState(rule: GameOfLifeParameters): GameOfLifeState {
     return {
-      name: rule.getMode().name,
+      mode: rule.getMode(),
       isBurning: rule.getMode().burns,
       isColored: rule.isColored(),
-      borders: BorderCells[rule.getBorderType()],
+      borders: rule.getBorderType(),
       isHexaGrid: rule.isHexaGrid(),
     };
   }
@@ -60,19 +60,17 @@ export class GameOfLifeGame extends CellularAutomatonGame<
     return <span>{this.strings.gameOfLife.tips}</span>;
   }
 
-  private getModesProps(): SelectInputProps {
+  private getModesProps(): SelectInputProps<GameOfLifeMode> {
     return {
       label: this.strings.gameOfLife.mode,
-      options: GameOfLifeModesList.map((mode) => mode.name),
-      selectedOption: this.state.name,
-      onOptionChanged: (selectedMode: string) => {
-        const mode = GameOfLifeModesList.find((m) => m.name === selectedMode);
-        if (mode) {
-          this.sketch.matrix.getRules().updateMode(mode);
-          this.updateState();
-          this.sketch.updateAllCells();
-        }
+      options: GameOfLifeModesList,
+      selectedOption: this.state.mode,
+      onOptionChanged: (selectedMode: GameOfLifeMode) => {
+        this.sketch.matrix.getRules().updateMode(selectedMode);
+        this.updateState();
+        this.sketch.updateAllCells();
       },
+      getName: (mode: GameOfLifeMode) => mode.name,
     };
   }
 
@@ -112,10 +110,13 @@ export class GameOfLifeGame extends CellularAutomatonGame<
     };
   }
 
-  private getBordersProps(): SelectInputProps {
-    const borderValues = Object.keys(BorderCells).filter(
-      (k) => typeof BorderCells[k] === "number"
-    );
+  private getBordersProps(): SelectInputProps<BorderCells> {
+    const borderValues = [
+      BorderCells.Torus,
+      BorderCells.Dead,
+      BorderCells.Alive,
+      BorderCells.Mirror,
+    ];
     return {
       label: this.strings.gameOfLife.borders,
       options: borderValues,
@@ -129,6 +130,7 @@ export class GameOfLifeGame extends CellularAutomatonGame<
           this.updateState();
         }
       },
+      getName: (border: BorderCells) => border,
     };
   }
 

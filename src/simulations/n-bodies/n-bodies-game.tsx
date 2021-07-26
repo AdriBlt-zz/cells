@@ -8,6 +8,14 @@ import { getSolarSystemInfo } from "./models/data";
 import { BodyInfo, CameraMode } from "./models/models";
 import { NBodiesSketch } from "./n-bodies-sketch";
 
+const CameraModes = [
+  CameraMode.Free,
+  CameraMode.LockOnBarycenter,
+  CameraMode.LockOnBody,
+  CameraMode.ViewFromBarycenter,
+  CameraMode.ViewFromBody,
+];
+
 interface NBodiesGameProps {
   bodies: BodyInfo[];
   cameraMode: CameraMode;
@@ -52,31 +60,33 @@ export class NBodiesGame extends ProcessingComponent<
     return <div />;
   }
 
-  private cameraModeSelectProps(): SelectInputProps {
+  private cameraModeSelectProps(): SelectInputProps<CameraMode> {
     return {
       label: this.strings.nBodies.cameraModeSelect,
-      options: this.cameraModeValues.map(k => k.name),
-      selectedOption: this.cameraModeValues.filter(k => k.type === this.state.cameraMode)[0].name,
-      onOptionChanged: (value: string) => {
+      options: CameraModes,
+      selectedOption: this.state.cameraMode,
+      onOptionChanged: (value: CameraMode) => {
         this.setState(
-          { cameraMode: this.cameraModeValues.filter(k => k.name === value)[0].type },
+          { cameraMode: value },
           () => this.setViewMode(),
         );
       },
+      getName: mode => this.getCameraModeName(mode),
     };
   }
 
-  private focusedBodySelectProps(): SelectInputProps {
+  private focusedBodySelectProps(): SelectInputProps<BodyInfo> {
     return {
       label: this.strings.nBodies.focusedBodySelect,
-      options: this.state.bodies.map(k => k.name),
-      selectedOption: this.state.bodies[this.state.selectedBodyIndex].name,
-      onOptionChanged: (value: string) => {
+      options: this.state.bodies,
+      selectedOption: this.state.bodies[this.state.selectedBodyIndex],
+      onOptionChanged: (value: BodyInfo) => {
         this.setState(
-          { selectedBodyIndex: this.state.bodies.map(k => k.name).indexOf(value) },
+          { selectedBodyIndex: this.state.bodies.map(k => k.name).indexOf(value.name) },
           () => this.setViewMode(),
         );
       },
+      getName: body => body.name,
     };
   }
 
@@ -91,14 +101,15 @@ export class NBodiesGame extends ProcessingComponent<
     return this.state.cameraMode === CameraMode.LockOnBody || this.state.cameraMode === CameraMode.ViewFromBody;
   }
 
-  private get cameraModeValues(): Array<{ type: CameraMode; name: string; }> {
+  private getCameraModeName(mode: CameraMode): string {
     const strings = this.strings.nBodies.cameraModeNames;
-    return [
-      { type: CameraMode.Free, name: strings.free },
-      { type: CameraMode.LockOnBarycenter, name: strings.lockOnBarycenter },
-      { type: CameraMode.LockOnBody, name: strings.lockOnBody },
-      { type: CameraMode.ViewFromBarycenter, name: strings.viewFromBarycenter },
-      { type: CameraMode.ViewFromBody, name: strings.viewFromBody },
-    ];
+    switch (mode) {
+      case CameraMode.Free: return strings.free;
+      case CameraMode.LockOnBarycenter: return strings.lockOnBarycenter;
+      case CameraMode.LockOnBody: return strings.lockOnBody;
+      case CameraMode.ViewFromBarycenter: return strings.viewFromBarycenter;
+      case CameraMode.ViewFromBody: return strings.viewFromBody;
+      default: return '';
+    }
   }
 }

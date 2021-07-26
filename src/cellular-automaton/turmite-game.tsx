@@ -30,7 +30,7 @@ interface TurmiteState {
 
 interface TurmiteGameState {
   decisions: TurmiteState[];
-  selectedRule: string;
+  selectedBehavior: TurmiteBehavior;
   isThreeStateTurmite: boolean;
 }
 
@@ -66,11 +66,15 @@ export class TurmiteGame extends CellularAutomatonGame<
       decisions.push(getDecision(rule, false, 2), getDecision(rule, true, 2));
     }
 
-    const selectedRule = this.getRuleName(decisions, isThreeStateTurmite);
+    const turmineBehavior: TurmiteBehavior = {
+      decisions,
+      isThreeStateTurmite,
+      name: this.getRuleName(decisions, isThreeStateTurmite),
+    };
     return {
       decisions,
-      selectedRule,
       isThreeStateTurmite,
+      selectedBehavior: turmineBehavior,
     };
   }
 
@@ -104,24 +108,26 @@ export class TurmiteGame extends CellularAutomatonGame<
     return <span>{this.strings.turmite.tips}</span>;
   }
 
-  private getRulesProps = (): SelectInputProps => {
-    const options = this.registeredRules.map((rule) => rule.name);
-    options.push(this.strings.turmite.ruleCustom);
+  private getRulesProps = (): SelectInputProps<TurmiteBehavior> => {
+    const options = this.registeredRules;
+    options.push({
+      decisions: [],
+      isThreeStateTurmite: false,
+      name: this.strings.turmite.ruleCustom,
+    });
     return {
       label: this.strings.turmite.ruleSelector,
       options,
-      selectedOption: this.state.selectedRule,
-      onOptionChanged: (ruleName: string): void => {
-        const selectedRule = this.registeredRules.find(
-          (m) => m.name === ruleName
-        );
-        if (selectedRule) {
+      selectedOption: this.state.selectedBehavior,
+      onOptionChanged: (behavior: TurmiteBehavior): void => {
+        if (behavior.name !== this.strings.turmite.ruleCustom) {
           this.setRule(
-            selectedRule.decisions,
-            selectedRule.isThreeStateTurmite
-          );
-        }
+            behavior.decisions,
+            behavior.isThreeStateTurmite
+            );
+          }
       },
+      getName: behavior => behavior.name,
     };
   };
 

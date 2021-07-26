@@ -1,6 +1,6 @@
 export enum BorderCells {
-  Torus,
-  Dead,
-  Alive,
-  Mirror,
+  Torus = 'Torus',
+  Dead = 'Dead',
+  Alive = 'Alive',
+  Mirror = 'Mirror',
 }

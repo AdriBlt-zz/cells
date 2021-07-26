@@ -6,25 +6,26 @@ import { ProcessingComponent } from "../../shared/processing-component";
 import { SelectInput, SelectInputProps } from "../../shared/select-input";
 import { MazeAlgorithmType, MazeGenerationSketch } from "./maze-generation-sketch";
 
+const ALGORITHM_LIST: MazeAlgorithmType[] = [
+    MazeAlgorithmType.RandomTraversal,
+    MazeAlgorithmType.Kruskal,
+    MazeAlgorithmType.RandomizedPrim,
+    MazeAlgorithmType.DepthExploration,
+    MazeAlgorithmType.RecursiveSubdivision,
+    MazeAlgorithmType.Wilson,
+];
+
 interface MazeGenerationGameState {
-    selectedAlgorithmIndex: number;
+    selectedAlgorithm: MazeAlgorithmType;
 }
 
-const ALGORITHM_LIST: Array<{ type: MazeAlgorithmType; name: string; }> = [
-    { type: MazeAlgorithmType.RandomTraversal, name: "Random Traversal" },
-    { type: MazeAlgorithmType.Kruskal, name: "Kruskal" },
-    { type: MazeAlgorithmType.RandomizedPrim, name: "Randomized Prim" },
-    { type: MazeAlgorithmType.DepthExploration, name: "Depth Exploration" },
-    { type: MazeAlgorithmType.RecursiveSubdivision, name: "Recursive Subdivision" },
-    { type: MazeAlgorithmType.Wilson, name: "Wilson" },
-];
-const DEFAULT_ALGORITHM_INDEX = 0;
+const DEFAULT_ALGORITHM = ALGORITHM_LIST[0];
 
 export class MazeGenerationGame extends ProcessingComponent<MazeGenerationSketch, MazeGenerationGameState> {
-    public state: MazeGenerationGameState = { selectedAlgorithmIndex: DEFAULT_ALGORITHM_INDEX };
+    public state: MazeGenerationGameState = { selectedAlgorithm: DEFAULT_ALGORITHM };
 
     protected createSketch(): MazeGenerationSketch {
-        return new MazeGenerationSketch(ALGORITHM_LIST[DEFAULT_ALGORITHM_INDEX].type);
+        return new MazeGenerationSketch(DEFAULT_ALGORITHM);
     }
 
     protected renderCommands(): JSX.Element {
@@ -43,42 +44,54 @@ export class MazeGenerationGame extends ProcessingComponent<MazeGenerationSketch
     }
 
     protected renderInfoSection(): JSX.Element {
-        const description = this.getDescription();
+        const description = this.getDescription(this.state.selectedAlgorithm);
         return description ? (<InfoBox title={this.strings.mazeGeneration.infoTitle}>{description}</InfoBox>) : <div/> ;
     }
 
-    private getAlgorithmProps(): SelectInputProps {
+    private getAlgorithmProps(): SelectInputProps<MazeAlgorithmType> {
         return {
             label: 'Algorithm',
-            options: ALGORITHM_LIST.map((algorithm) => algorithm.name),
-            selectedOption: ALGORITHM_LIST[this.state.selectedAlgorithmIndex].name,
-            onOptionChanged: (selectedAlgorithm: string) => {
-                const index = ALGORITHM_LIST.findIndex((a) => a.name === selectedAlgorithm);
-                if (index >= 0) {
-                    const algorithm = ALGORITHM_LIST[index];
-                    this.sketch.setAlgorithmType(algorithm.type);
-                    this.setState({ selectedAlgorithmIndex: index });
-                }
+            options: ALGORITHM_LIST,
+            selectedOption: this.state.selectedAlgorithm,
+            onOptionChanged: (algorithm: MazeAlgorithmType) => {
+                this.sketch.setAlgorithmType(algorithm);
+                this.setState({ selectedAlgorithm: algorithm });
             },
+            getName: (type: MazeAlgorithmType) => this.getName(type),
         };
     }
 
-    private getDescription(): string |  null {
-        switch (ALGORITHM_LIST[this.state.selectedAlgorithmIndex].type) {
+    private getName(type: MazeAlgorithmType): string {
+        const strings = this.strings.mazeGeneration.algorithm;
+        switch (type) {
+            case MazeAlgorithmType.RandomTraversal: return strings.randomTraversal;
+            case MazeAlgorithmType.Kruskal: return strings.kruskal;
+            case MazeAlgorithmType.RandomizedPrim: return strings.randomizedPrim;
+            case MazeAlgorithmType.DepthExploration: return strings.depthExploration;
+            case MazeAlgorithmType.RecursiveSubdivision: return strings.recursiveSubdivision;
+            case MazeAlgorithmType.Wilson: return strings.wilson;
+            default: return '';
+        }
+
+    }
+
+    private getDescription(type: MazeAlgorithmType): string {
+        const strings = this.strings.mazeGeneration.description;
+        switch (type) {
             case MazeAlgorithmType.RecursiveSubdivision:
-                return this.strings.mazeGeneration.description.recursiveSubdivision;
+                return strings.recursiveSubdivision;
             case MazeAlgorithmType.DepthExploration:
-                return this.strings.mazeGeneration.description.depthExploration;
+                return strings.depthExploration;
             case MazeAlgorithmType.Kruskal:
-                return this.strings.mazeGeneration.description.kruskal;
+                return strings.kruskal;
             case MazeAlgorithmType.RandomTraversal:
-                return this.strings.mazeGeneration.description.randomTraversal;
+                return strings.randomTraversal;
             case MazeAlgorithmType.RandomizedPrim:
-                return this.strings.mazeGeneration.description.randomizedPrim;
+                return strings.randomizedPrim;
             case MazeAlgorithmType.Wilson:
-                return this.strings.mazeGeneration.description.wilson;
+                return strings.wilson;
             default:
-                return null;
+                return '';
         }
     }
 }
