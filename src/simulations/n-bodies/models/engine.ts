@@ -7,7 +7,7 @@ import { Body, BodyInfo } from "../models/models";
 const G = 6.6742e-11;
 
 const DELTA_T = 0.1;
-const TAIL_LENGTH = 100;
+const TAIL_LENGTH = 1000000;
 
 export class NBodiesEngine {
     public bodies: Body[] = [];

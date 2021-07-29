@@ -68,7 +68,9 @@ export class NBodiesSketch extends PlayableSketch {
   private updateSketch = (): void => {
     setBackground(this.p5js, COLORS.Black);
 
-    this.drawTails();
+    if (this.isPaused) {
+      this.drawTails();
+    }
     this.drawBodies();
   }
 
