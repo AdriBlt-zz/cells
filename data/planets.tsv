@@ -28,7 +28,7 @@ Order	Label	Name	Abs. Magn.	Diameter (km)	Mass (e+16 kg)	Semi-major axis (km)	Or
 10		Hygiea	5.43	407.1	10000	469345000	2029.78	3.842	0.119	Asteroid	Sun
 	☾	Moon		3475	7300000	384000	27.3	5.1	0.055	Moon	Earth
 1	I	Phobos	11.8	21.9	1.07	9377	0.319	1	0.0151	Moon	Mars
-2	II	Déimos	12.89	12.3	0.2244	23460	1	0.93	0.0002	Moon	Mars
+2	II	Deimos	12.89	12.3	0.2244	23460	1	0.93	0.0002	Moon	Mars
 1	XVI	Metis	10.5	43	3.6	128852	0.2988	2.226	0.0077	Inner	Jupiter
 2	XV	Adrastea	12	16.4	0.2	129000	0.3023	2.217	0.0063	Inner	Jupiter
 3	V	Amalthea	7.1	167	208	181366	0.5012	2.565	0.0075	Inner	Jupiter
