@@ -62,4 +62,8 @@ export class UniqueSet<T extends Comparable<T>> {
         this.set.forEach(e => list.push(e));
         return list;
     }
+
+    public clear(): void {
+        this.set.clear();
+    }
 }
