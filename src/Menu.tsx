@@ -14,6 +14,7 @@ import { SnakeGame } from "./games/snake/snake-game";
 import { FourierDrawingGame } from "./maths/fourier-drawing/fourier-drawing-game";
 import { FourierSignalGame } from "./maths/fourier-signal/fourier-signal-game";
 import { MultiplicationCircleGame } from "./maths/multiplication-circle/multiplication-circle-game";
+import { VoronoiGame } from "./maths/voronoi/voronoi-game";
 import { MazeGenerationGame } from "./mazes/maze-generation/maze-generation-game";
 import { AlixMazeGame } from "./mazes/ray-casting/alix-maze-game";
 import { GeneratedMazeGame } from "./mazes/ray-casting/generated-maze-game";
@@ -139,6 +140,11 @@ const mathsPages: Page[] = [
     route: "multiplication-circle",
     component: <MultiplicationCircleGame />,
   },
+  {
+    name: strings.menu.voronoi,
+    route: 'voronoi',
+    component: <VoronoiGame />,
+  }
   // TODO: SPACE FILLING CURVE (HILBERT)
   // TODO: CIRCLE AND ELIPSE?
 ];

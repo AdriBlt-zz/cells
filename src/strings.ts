@@ -28,6 +28,7 @@ const strings = {
     generatedMaze: "Generated Maze",
     nBodiesSimulation: "n Bodies simulation",
     mazes: "Mazes",
+    voronoi: "Voronoï cells",
   },
   minesweeper: {
     difficulty: "Difficulty",
