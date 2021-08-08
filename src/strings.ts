@@ -30,6 +30,7 @@ const strings = {
     mazes: "Mazes",
     voronoi: "Voronoï cells",
     bezier: "Bézier curves",
+    curvedPolygon: "Curved Polygons",
   },
   minesweeper: {
     difficulty: "Difficulty",
