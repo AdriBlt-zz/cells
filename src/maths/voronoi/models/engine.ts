@@ -7,7 +7,7 @@ import { Triangle } from "./triangle";
 export class Engine
 {
     public points: Point[] = [];
-    public delaunayTtriangulation: Triangle[] = [];
+    public delaunayTriangulation: Triangle[] = [];
     public voronoiEdges: Edge[] = [];
 
     constructor(
@@ -39,8 +39,13 @@ export class Engine
 
     public generateVoronoiEdgesFromDelaunay(): void
     {
+        // Removing frame points ?
+        // const framePoints = this.points.splice(0, 4);
+        // this.delaunayTriangulation = this.delaunayTriangulation.filter(triangle =>
+        //     triangle.Vertices.findIndex(p => framePoints.includes(p)) < 0)
+
         this.voronoiEdges = [];
-        this.delaunayTtriangulation.forEach(triangle => {
+        this.delaunayTriangulation.forEach(triangle => {
             triangle.TrianglesWithSharedEdge.forEach(neighbor => {
                 const edge = new Edge(triangle.Circumcenter, neighbor.Circumcenter);
                 this.voronoiEdges.push(edge);
@@ -49,17 +54,17 @@ export class Engine
     }
 
     private generateDelaunayWithBowyerWatson(point: Point): void {
-        const badTriangles = this.findBadTriangles(point, this.delaunayTtriangulation);
+        const badTriangles = this.findBadTriangles(point, this.delaunayTriangulation);
         const polygon = this.findHoleBoundaries(badTriangles);
 
         badTriangles.forEach((triangle: Triangle) => {
             triangle.Vertices.forEach((vertex: Point) => vertex.AdjacentTriangles.delete(triangle));
         });
 
-        this.delaunayTtriangulation = this.delaunayTtriangulation.filter(o => !badTriangles.includes(o));
+        this.delaunayTriangulation = this.delaunayTriangulation.filter(o => !badTriangles.includes(o));
 
         polygon.filter(possibleEdge => possibleEdge.point1 !== point && possibleEdge.point2 !== point)
-            .forEach(edge => this.delaunayTtriangulation.push(new Triangle(point, edge.point1, edge.point2)));
+            .forEach(edge => this.delaunayTriangulation.push(new Triangle(point, edge.point1, edge.point2)));
     }
 
     private findHoleBoundaries(badTriangles: Triangle[]): Edge[]
@@ -88,7 +93,7 @@ export class Engine
 
         const tri1 = new Triangle(pointTL, pointBL, pointBR);
         const tri2 = new Triangle(pointTL, pointBR, pointTR);
-        this.delaunayTtriangulation = [tri1, tri2];
+        this.delaunayTriangulation = [tri1, tri2];
 
         this.voronoiEdges = [];
     }
