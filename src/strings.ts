@@ -29,6 +29,7 @@ const strings = {
     nBodiesSimulation: "n Bodies simulation",
     mazes: "Mazes",
     voronoi: "Voronoï cells",
+    bezier: "Bézier curves",
   },
   minesweeper: {
     difficulty: "Difficulty",

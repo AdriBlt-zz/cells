@@ -11,6 +11,7 @@ import { NewtonFractalGame } from "./fractals/newton-fractal-game";
 import { BattleshipGame } from "./games/battleship/battleship-game";
 import { MinesweeperGame } from "./games/minesweeper/minesweeper-game";
 import { SnakeGame } from "./games/snake/snake-game";
+import { BezierGame } from "./maths/bezier/bezier-game";
 import { FourierDrawingGame } from "./maths/fourier-drawing/fourier-drawing-game";
 import { FourierSignalGame } from "./maths/fourier-signal/fourier-signal-game";
 import { MultiplicationCircleGame } from "./maths/multiplication-circle/multiplication-circle-game";
@@ -144,7 +145,12 @@ const mathsPages: Page[] = [
     name: strings.menu.voronoi,
     route: 'voronoi',
     component: <VoronoiGame />,
-  }
+  },
+  {
+    name: strings.menu.bezier,
+    route: 'bezier',
+    component: <BezierGame />,
+  },
   // TODO: SPACE FILLING CURVE (HILBERT)
   // TODO: CIRCLE AND ELIPSE?
 ];

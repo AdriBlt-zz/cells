@@ -1,6 +1,6 @@
 import * as p5 from "p5";
 
-import { clamp } from "./numbers";
+import { clamp, getValueBetween } from "./numbers";
 
 export interface Color {
   r: number;
@@ -29,6 +29,10 @@ export function color(r: number, g: number, b: number, a?: number): Color {
   return { r, g, b, a };
 }
 
+export function colorWithAlpha(c: Color, a: number): Color {
+  return { ...c, a };
+}
+
 export function getColorBetween(
   colorA: Color,
   colorB: Color,
@@ -41,10 +45,6 @@ export function getColorBetween(
     getValueBetween(colorA.b, colorB.b, p),
     colorA.a && colorB.a && getValueBetween(colorA.a, colorB.a, p)
   );
-}
-
-function getValueBetween(valueA: number, valueB: number, p: number) {
-  return (1 - p) * valueA + p * valueB;
 }
 
 export const COLORS = {
