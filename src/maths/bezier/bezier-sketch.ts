@@ -1,6 +1,6 @@
 import * as p5 from "p5";
 
-import { ProcessingSketch } from "../../services/processing.service";
+import { PlayableSketch } from "../../services/playable-sketch";
 import { COLORS , colorWithAlpha, setBackground, setFillColor, setStrokeColor } from "../../utils/color";
 import { clamp } from "../../utils/numbers";
 import { Point, squaredDistance } from "../../utils/points";
@@ -12,8 +12,7 @@ const NB_POINTS = 100;
 const POINT_RADIUS = 15;
 const SQUARED_RADIUS = POINT_RADIUS * POINT_RADIUS;
 
-export class BezierSketch implements ProcessingSketch {
-  private p5js: p5;
+export class BezierSketch extends PlayableSketch {
   private engine: Engine = new Engine(NB_POINTS);
   private time: number = 0;
 
@@ -33,9 +32,7 @@ export class BezierSketch implements ProcessingSketch {
   }
 
   public draw(): void {
-    setBackground(this.p5js, COLORS.White);
-
-    this.drawCurve(this.engine);
+    this.drawCanvas();
 
     this.time++;
     if (this.time === NB_POINTS) {
@@ -43,7 +40,11 @@ export class BezierSketch implements ProcessingSketch {
     }
   }
 
-  public mousePressed(): void {
+  public restart = (): void => {
+    this.time = 0;
+  }
+
+  public mousePressed = (): void => {
     const mouse = {
       x: this.p5js.mouseX,
       y: this.p5js.mouseY,
@@ -55,15 +56,22 @@ export class BezierSketch implements ProcessingSketch {
     });
   }
 
-  public mouseDragged(): void {
+  public mouseDragged = (): void => {
     if (!!this.selectedPoint) {
       this.selectedPoint.x = clamp(this.p5js.mouseX, 0, WIDTH);
       this.selectedPoint.y = clamp(this.p5js.mouseY, 0, HEIGHT);
       this.engine.computePoints();
+      this.drawCanvas();
     }
   }
-  public mouseReleased(): void {
+
+  public mouseReleased = (): void => {
     this.selectedPoint = null;
+  }
+
+  private drawCanvas(): void {
+    setBackground(this.p5js, COLORS.White);
+    this.drawCurve(this.engine);
   }
 
   private drawCurve(engine: Engine): void {
