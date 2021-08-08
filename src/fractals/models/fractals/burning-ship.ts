@@ -1,6 +1,6 @@
 import { Complex } from "../../../numbers/Complex";
 import { Color, COLORS, getColorBetween } from "../../../utils/color";
-import { Fractal } from "../fractale";
+import { Fractal } from "../fractal";
 import { ConvergenceStatus, FractalResult } from "../models";
 
 export class BurningShip implements Fractal {
@@ -13,7 +13,6 @@ export class BurningShip implements Fractal {
 
     public getConvergenceResult(z0: Complex): FractalResult {
         let z = z0;
-        let squareModuleMax = z.getSquareModule();
         for (let n = 0; n < this.maxIterations; n++) {
             const zz = this.getIterationComplex(z, z0);
 
@@ -22,7 +21,6 @@ export class BurningShip implements Fractal {
                     point: z,
                     iterations: n,
                     status: ConvergenceStatus.Diverged,
-                    squareModuleMax,
                 };
             }
 
@@ -31,22 +29,16 @@ export class BurningShip implements Fractal {
                     point: zz,
                     iterations: n,
                     status: ConvergenceStatus.Converged,
-                    squareModuleMax,
                 };
             }
 
             z = zz;
-            const sqMod = zz.getModule();
-            if (sqMod > squareModuleMax) {
-                squareModuleMax = sqMod;
-            }
         }
 
         return {
             point: z,
             iterations: this.maxIterations,
             status: ConvergenceStatus.Unknown,
-            squareModuleMax,
         };
     }
 

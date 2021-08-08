@@ -2,7 +2,7 @@ import { Complex } from "../../../numbers/Complex";
 import { Polynom } from "../../../numbers/Polynom";
 import { Color, COLORS, getColorBetween } from "../../../utils/color";
 import { ColorSet } from "../color-set";
-import { Fractal } from "../fractale";
+import { Fractal } from "../fractal";
 import { ConvergenceStatus, FractalResult } from "../models";
 
 enum ColorMode {
@@ -59,7 +59,6 @@ export class Newton implements Fractal {
 
     public getConvergenceResult(z0: Complex): FractalResult {
         let z = z0;
-        let squareModuleMax = z.getSquareModule();
         for (let n = 0; n < this.maxIterations; n++) {
             const zz = this.getIterationComplex(z);
 
@@ -68,7 +67,6 @@ export class Newton implements Fractal {
                     point: z,
                     iterations: n,
                     status: ConvergenceStatus.Diverged,
-                    squareModuleMax,
                 };
             }
 
@@ -77,22 +75,16 @@ export class Newton implements Fractal {
                     point: zz,
                     iterations: n,
                     status: ConvergenceStatus.Converged,
-                    squareModuleMax,
                 };
             }
 
             z = zz;
-            const sqMod = zz.getModule();
-            if (sqMod > squareModuleMax) {
-                squareModuleMax = sqMod;
-            }
         }
 
         return {
             point: z,
             iterations: this.maxIterations,
             status: ConvergenceStatus.Unknown,
-            squareModuleMax,
         };
     }
 

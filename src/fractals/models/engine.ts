@@ -1,7 +1,7 @@
 import { Complex } from "../../numbers/Complex";
 import { color, Color } from "../../utils/color";
 import { createDefaultMatrix } from "../../utils/list-helpers";
-import { Fractal } from "./fractale";
+import { Fractal } from "./fractal";
 import { Directions, FractalResult } from "./models";
 
 export class FractalEngine {

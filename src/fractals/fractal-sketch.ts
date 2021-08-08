@@ -7,7 +7,7 @@ import { isOutOfBounds } from "../utils/numbers";
 import { setPixel } from "../utils/pixel-helper";
 import { Point } from "../utils/points";
 import { FractalEngine } from "./models/engine";
-import { Fractal } from "./models/fractale";
+import { Fractal } from "./models/fractal";
 import { Directions } from "./models/models";
 
 const w = 800;

@@ -17,5 +17,4 @@ export interface FractalResult {
   point: Complex;
   iterations: number;
   status: ConvergenceStatus;
-  squareModuleMax: number;
 }
