@@ -1,6 +1,6 @@
 import * as p5 from "p5";
 
-import { ProcessingSketch } from "../../services/processing.service";
+import { PlayableSketch } from "../../services/playable-sketch";
 import { COLORS , setFillColor, setStrokeColor } from "../../utils/color";
 import { getKeyFromCode, KeyBoard } from "../../utils/keyboard";
 import { clamp } from "../../utils/numbers";
@@ -26,10 +26,22 @@ interface SpeedPoint {
   acceleration: Vector;
 }
 
-export class VoronoiSketch implements ProcessingSketch {
-  private p5js: p5;
+export class VoronoiSketch extends PlayableSketch {
   private engine = new Engine(CANVAS_WIDTH, CANVAS_HEIGHT);
   private points: SpeedPoint[];
+
+  private showDelaunayTriangulation = false;
+  private showVoronoiCells = true;
+
+  public setShowDelaunayTriangulation(show: boolean): void {
+    this.showDelaunayTriangulation = show;
+    this.drawCanvas();
+  }
+
+  public setShowVoronoiCells(show: boolean): void {
+    this.showVoronoiCells = show;
+    this.drawCanvas();
+  }
 
   public setup(p: p5): void {
     this.p5js = p;
@@ -46,15 +58,7 @@ export class VoronoiSketch implements ProcessingSketch {
 
   public draw(): void {
     this.updatePointsPositionWithForces();
-
-    setFillColor(this.p5js, COLORS.White);
-    setStrokeColor(this.p5js, COLORS.Black);
-    this.p5js.strokeWeight(2);
-    this.p5js.rect(0, 0, WIDTH, HEIGHT);
-
-    // this.drawTriangulation();
-    this.drawVoronoi();
-    this.drawPoints();
+    this.drawCanvas();
   }
 
   public keyPressed(): void {
@@ -77,28 +81,60 @@ export class VoronoiSketch implements ProcessingSketch {
     });
   }
 
-  // private drawTriangulation() {
-  //   this.p5js.strokeWeight(1);
-  //   setStrokeColor(this.p5js, COLORS.Red);
-  //   this.engine.delaunayTriangulation.forEach(triangle => {
-  //     const v = triangle.Vertices;
-  //     this.p5js.line(CANVAS_MARGIN + v[0].X, CANVAS_MARGIN + v[0].Y, CANVAS_MARGIN + v[1].X, CANVAS_MARGIN + v[1].Y);
-  //     this.p5js.line(CANVAS_MARGIN + v[1].X, CANVAS_MARGIN + v[1].Y, CANVAS_MARGIN + v[2].X, CANVAS_MARGIN + v[2].Y);
-  //     this.p5js.line(CANVAS_MARGIN + v[0].X, CANVAS_MARGIN + v[0].Y, CANVAS_MARGIN + v[2].X, CANVAS_MARGIN + v[2].Y);
-  //   });
-  // }
+  private drawCanvas(): void {
+    setFillColor(this.p5js, COLORS.White);
+    setStrokeColor(this.p5js, COLORS.Black);
+    this.p5js.strokeWeight(2);
+    this.p5js.rect(0, 0, WIDTH, HEIGHT);
 
-  private drawVoronoi() {
+    if (this.showDelaunayTriangulation) {
+      this.drawTriangulation();
+    }
+
+    if (this.showVoronoiCells) {
+      this.drawVoronoi();
+    }
+
+    this.drawPoints();
+  }
+
+  private drawTriangulation(): void {
+    this.p5js.strokeWeight(1);
+    setStrokeColor(this.p5js, COLORS.Red);
+    this.engine.delaunayTriangulation.forEach(triangle => {
+      const v = triangle.Vertices;
+      this.p5js.line(CANVAS_MARGIN + v[0].X, CANVAS_MARGIN + v[0].Y, CANVAS_MARGIN + v[1].X, CANVAS_MARGIN + v[1].Y);
+      this.p5js.line(CANVAS_MARGIN + v[1].X, CANVAS_MARGIN + v[1].Y, CANVAS_MARGIN + v[2].X, CANVAS_MARGIN + v[2].Y);
+      this.p5js.line(CANVAS_MARGIN + v[0].X, CANVAS_MARGIN + v[0].Y, CANVAS_MARGIN + v[2].X, CANVAS_MARGIN + v[2].Y);
+    });
+  }
+
+  private drawVoronoi(): void {
+    this.p5js.noFill();
     this.p5js.strokeWeight(1);
     setStrokeColor(this.p5js, COLORS.Blue);
+
     this.engine.voronoiEdges.forEach(e => {
       this.p5js.line(
         CANVAS_MARGIN + e.point1.X, CANVAS_MARGIN + e.point1.Y,
         CANVAS_MARGIN + e.point2.X, CANVAS_MARGIN + e.point2.Y);
-    });
+      });
+
+    // Curved polygons
+    // this.engine.voronoiCells.forEach((edges, point) => {
+    //   // this.p5js.beginShape();
+    //   // edges.forEach(p => this.p5js.vertex(CANVAS_MARGIN + p.X, CANVAS_MARGIN + p.Y));
+    //   // this.p5js.endShape(this.p5js.CLOSE);
+    //   drawPolygon(
+    //     this.p5js,
+    //     edges.map(p => ({ x: CANVAS_MARGIN + p.X, y: CANVAS_MARGIN + p.Y })),
+    //     100,
+    //     50
+    //   )
+    // });
   }
 
-  private drawPoints() {
+  private drawPoints(): void {
     const pointRadius = 6;
     this.p5js.noStroke();
     setFillColor(this.p5js, COLORS.Black);

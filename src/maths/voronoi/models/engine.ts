@@ -1,5 +1,6 @@
 import { CountingList } from "../../../utils/countingList";
 import { random } from "../../../utils/random";
+import { UniqueSet } from "../../../utils/set";
 import { Edge } from "./edge";
 import { Point } from "./point";
 import { Triangle } from "./triangle";
@@ -9,6 +10,7 @@ export class Engine
     public points: Point[] = [];
     public delaunayTriangulation: Triangle[] = [];
     public voronoiEdges: Edge[] = [];
+    // public voronoiCells: Map<Point, Point[]> = new Map<Point, Point[]>();
 
     constructor(
         private maxX: number,
@@ -17,8 +19,7 @@ export class Engine
         this.resetBaseSquare();
     }
 
-    public addPoint(): void
-    {
+    public addPoint(): void {
         const point = new Point(
             random(0, this.maxX),
             random(0, this.maxY));
@@ -42,16 +43,56 @@ export class Engine
         // Removing frame points ?
         // const framePoints = this.points.splice(0, 4);
         // this.delaunayTriangulation = this.delaunayTriangulation.filter(triangle =>
-        //     triangle.Vertices.findIndex(p => framePoints.includes(p)) < 0)
+        //     triangle.Vertices.findIndex(p => framePoints.includes(p)) < 0);
 
-        this.voronoiEdges = [];
+        // EDGES
+        const edgeSet = new UniqueSet<Edge>();
         this.delaunayTriangulation.forEach(triangle => {
             triangle.TrianglesWithSharedEdge.forEach(neighbor => {
                 const edge = new Edge(triangle.Circumcenter, neighbor.Circumcenter);
-                this.voronoiEdges.push(edge);
+                edgeSet.add(edge);
             });
         });
+        this.voronoiEdges = edgeSet.toList();
     }
+
+    // private generateVoronoiCells(): void {
+    //     this.voronoiCells.clear();
+    //     this.points.forEach(p => {
+    //         const path: Point[] = [];
+    //         const triangles = p.AdjacentTriangles.toList();
+    //         if (triangles.length === 0) {
+    //             return;
+    //         }
+
+    //         const firstTriangle = triangles[0];
+    //         const firstVertex = triangles[0].Vertices.find(v => v.id !== p.id);
+    //         if (!firstVertex) {
+    //             return;
+    //         }
+    //         path.push(triangles[0].Circumcenter);
+    //         let lastTriangle: Triangle = firstTriangle;
+    //         let lastVertex: Point = firstVertex;
+    //         while (true) {
+    //             const nextTriangle = triangles.find(t => t !== lastTriangle && t.Vertices.includes(lastVertex));
+    //             if (!nextTriangle) {
+    //                 return;
+    //             }
+    //             if (nextTriangle === firstTriangle) {
+    //                 break;
+    //             }
+    //             path.push(nextTriangle.Circumcenter);
+    //             const nextVertex = nextTriangle.Vertices.find(v => v.id !== p.id && v.id !== lastVertex.id);
+    //             if (!nextVertex) {
+    //                 return;
+    //             }
+    //             lastTriangle = nextTriangle;
+    //             lastVertex = nextVertex;
+    //         }
+
+    //         this.voronoiCells.set(p, path);
+    //     });
+    // }
 
     private generateDelaunayWithBowyerWatson(point: Point): void {
         const badTriangles = this.findBadTriangles(point, this.delaunayTriangulation);
@@ -96,30 +137,6 @@ export class Engine
         this.delaunayTriangulation = [tri1, tri2];
 
         this.voronoiEdges = [];
+        // this.voronoiCells.clear();
     }
 }
-
-/*
-// pointList is a set of coordinates defining the points to be triangulated
-triangulation := empty triangle mesh data structure
-add super-triangle to triangulation // must be large enough to completely contain all the points in pointList
-for each point in pointList do // add all the points one at a time to the triangulation
-    badTriangles := empty set
-    for each triangle in triangulation do // first find all the triangles that are no longer valid due to the insertion
-        if point is inside circumcircle of triangle
-            add triangle to badTriangles
-    polygon := empty set
-    for each triangle in badTriangles do // find the boundary of the polygonal hole
-        for each edge in triangle do
-            if edge is not shared by any other triangles in badTriangles
-            add edge to polygon
-    for each triangle in badTriangles do // remove them from the data structure
-        remove triangle from triangulation
-    for each edge in polygon do // re-triangulate the polygonal hole
-        newTri := form a triangle from edge to point
-        add newTri to triangulation
-for each triangle in triangulation // done inserting points, now clean up
-    if triangle contains a vertex from original super-triangle
-        remove triangle from triangulation
-return triangulation
-*/

@@ -144,6 +144,10 @@ const strings = {
   juliaSetFractal: {
     parameter: "Parameter",
   },
+  voronoi: {
+    showVoronoi: "Show Voronoï cells",
+    showDelaunay: "Show Delaunay triangulation",
+  },
   shared: {
     newGame: "New Game (R)",
     playPause: "Play/Pause",
