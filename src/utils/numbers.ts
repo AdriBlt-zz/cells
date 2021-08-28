@@ -53,3 +53,17 @@ export function clamp(value: number, min: number, max: number): number {
 export function getValueBetween(valueA: number, valueB: number, p: number) {
   return (1 - p) * valueA + p * valueB;
 }
+
+export function findGCD(a: number, b: number): number {
+  let x = Math.floor(Math.max(a, b));
+  let y = Math.floor(Math.min(a, b));
+  if (x <= 0 || y <= 0) {
+    return -1;
+  }
+  while (y > 0) {
+    const tmp = x % y;
+    x = y;
+    y = tmp;
+  }
+  return x;
+}

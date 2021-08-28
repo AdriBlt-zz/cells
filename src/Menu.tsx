@@ -16,6 +16,7 @@ import { CurvedPolygonGame } from "./maths/curved-polygon/curved-polygon-game";
 import { FourierDrawingGame } from "./maths/fourier-drawing/fourier-drawing-game";
 import { FourierSignalGame } from "./maths/fourier-signal/fourier-signal-game";
 import { MultiplicationCircleGame } from "./maths/multiplication-circle/multiplication-circle-game";
+import { RosesGame } from "./maths/roses/roses-game";
 import { VoronoiGame } from "./maths/voronoi/voronoi-game";
 import { MazeGenerationGame } from "./mazes/maze-generation/maze-generation-game";
 import { AlixMazeGame } from "./mazes/ray-casting/alix-maze-game";
@@ -122,8 +123,6 @@ const fractalesPages: Page[] = [
     component: <BurningShipFractalGame />,
   },
   // TODO: MANDELBROT PATH
-  // TODO: JULIA SETS
-  // TODO: NEWTON
   // TODO: BUDDAHBROT
 ];
 const mathsPages: Page[] = [
@@ -141,6 +140,11 @@ const mathsPages: Page[] = [
     name: strings.menu.multiplicationCircle,
     route: "multiplication-circle",
     component: <MultiplicationCircleGame />,
+  },
+  {
+    name: strings.menu.roses,
+    route: "roses",
+    component: <RosesGame />,
   },
   {
     name: strings.menu.voronoi,
@@ -221,6 +225,26 @@ TODO
 
 - Ants & Slime: https://www.youtube.com/watch?v=X-iSQQgOd1A
 
+MATH TODO
+- Math Flower
+- Mandelbrot line
+- Buddahbrot
+- Julia sets
+- space filling curve
+- triangle
+
+- MATH ELIPSE IN CIRCLE
+
+Games
+- Tetris
+- Space invader
+- Pac man
+
+Circle perlin noise
+agar.io
+looping gif https://www.youtube.com/watch?v=c6K-wJQ77yQ
+perlin flow field https://www.youtube.com/watch?v=BjoM9oKOAKY
+
 NOTES
 
 // Elementary rules
@@ -259,9 +283,3 @@ Bifurcation
 Newton
 
 */
-
-/**
- * TODO
- * voronoi
- * ant paths
- */

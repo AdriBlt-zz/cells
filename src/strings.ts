@@ -31,6 +31,7 @@ const strings = {
     voronoi: "Voronoï cells",
     bezier: "Bézier curves",
     curvedPolygon: "Curved Polygons",
+    roses: "Roses",
   },
   minesweeper: {
     difficulty: "Difficulty",
@@ -147,6 +148,13 @@ const strings = {
   voronoi: {
     showVoronoi: "Show Voronoï cells",
     showDelaunay: "Show Delaunay triangulation",
+  },
+  roses: {
+    numerator: "Numerator",
+    denominator: "Denominator",
+    description1: "Draws in polar coordinates the function r(theta) = cos(k * theta).",
+    description2: "With k = numerator / denominator",
+    controls: "Change numerator with left/right and denominator with up/down.",
   },
   shared: {
     newGame: "New Game (R)",
