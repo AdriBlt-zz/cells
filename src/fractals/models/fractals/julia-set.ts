@@ -1,5 +1,5 @@
 import { Complex } from "../../../numbers/Complex";
-import { Color, COLORS, getColorBetween } from "../../../utils/color";
+import { Color, COLORS, lerpColor } from "../../../utils/color";
 import { Fractal } from "../fractal";
 import { ConvergenceStatus, FractalResult } from "../models";
 
@@ -62,6 +62,6 @@ export class JuliaSet implements Fractal {
     }
 
     const p = Math.log2(1 + result.iterations) / Math.log2(1 + this.maxIterations);
-    return getColorBetween(COLORS.DarkBlue, COLORS.White, p);
+    return lerpColor(COLORS.DarkBlue, COLORS.White, p);
   }
 }

@@ -1,6 +1,6 @@
 import { Complex } from "../../../numbers/Complex";
 import { Polynom } from "../../../numbers/Polynom";
-import { Color, COLORS, getColorBetween } from "../../../utils/color";
+import { Color, COLORS, lerpColor } from "../../../utils/color";
 import { ColorSet } from "../color-set";
 import { Fractal } from "../fractal";
 import { ConvergenceStatus, FractalResult } from "../models";
@@ -126,7 +126,7 @@ export class Newton implements Fractal {
         // const p = Math.sqrt(10 * ratio);
         const nbColors = 5;
         const p = (result.iterations % nbColors) / nbColors;
-        return getColorBetween(minColor, COLORS.White, p);
+        return lerpColor(minColor, COLORS.White, p);
     }
 
     public toggleColorMode(): void {

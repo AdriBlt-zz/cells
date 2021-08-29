@@ -1,5 +1,5 @@
 import { Complex } from "../../../numbers/Complex";
-import { Color, COLORS, getColorBetween } from "../../../utils/color";
+import { Color, COLORS, lerpColor } from "../../../utils/color";
 import { Fractal } from "../fractal";
 import { ConvergenceStatus, FractalResult } from "../models";
 
@@ -56,6 +56,6 @@ export class BurningShip implements Fractal {
         }
 
         const p = 1.0 * result.iterations / this.maxIterations;
-        return getColorBetween(COLORS.Red, COLORS.White, p);
+        return lerpColor(COLORS.Red, COLORS.White, p);
     }
 }

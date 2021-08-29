@@ -50,7 +50,7 @@ export function clamp(value: number, min: number, max: number): number {
   return value;
 }
 
-export function getValueBetween(valueA: number, valueB: number, p: number) {
+export function lerp(valueA: number, valueB: number, p: number) {
   return (1 - p) * valueA + p * valueB;
 }
 

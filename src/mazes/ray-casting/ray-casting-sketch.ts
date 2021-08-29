@@ -1,7 +1,7 @@
 import * as p5 from "p5";
 
 import { ProcessingSketch } from "../../services/processing.service";
-import { Color, COLORS, getColorBetween, setFillColor, setStrokeColor } from "../../utils/color";
+import { Color, COLORS, lerpColor, setFillColor, setStrokeColor } from "../../utils/color";
 import { isStatisticallyNull } from "../../utils/numbers";
 import { Vector } from "../../utils/vector";
 
@@ -220,7 +220,7 @@ export class RayCastingSketch implements ProcessingSketch {
 
         if (isVerticalSurface) {
             // give x and y sides different brightness
-            color = getColorBetween(color, COLORS.Black); // division by 2
+            color = lerpColor(color, COLORS.Black); // division by 2
         }
 
         return {

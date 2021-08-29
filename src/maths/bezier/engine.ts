@@ -1,4 +1,4 @@
-import { getValueBetween } from "../../utils/numbers";
+import { lerp } from "../../utils/numbers";
 import { Point } from "../../utils/points";
 
 export class Engine {
@@ -47,7 +47,7 @@ export class Engine {
         const points: Point[] = [];
         let p = 0;
         for (let t = 0; t < this.listLength; t++) {
-            points.push(this.getPointBetween(pointA, pointB, p))
+            points.push(lerpPoint(pointA, pointB, p))
             p += this.deltaTime;
         }
         return points;
@@ -60,16 +60,16 @@ export class Engine {
         const points: Point[] = [];
         let p = 0;
         for (let t = 0; t < this.listLength; t++) {
-            points.push(this.getPointBetween(pointsA[t], pointsB[t], p))
+            points.push(lerpPoint(pointsA[t], pointsB[t], p))
             p += this.deltaTime;
         }
         return points;
     }
+}
 
-    private getPointBetween(pointA: Point, pointB: Point, p: number): Point {
-        return {
-            x: getValueBetween(pointA.x, pointB.x, p),
-            y: getValueBetween(pointA.y, pointB.y, p),
-        };
-    }
+function lerpPoint(pointA: Point, pointB: Point, p: number): Point {
+    return {
+        x: lerp(pointA.x, pointB.x, p),
+        y: lerp(pointA.y, pointB.y, p),
+    };
 }

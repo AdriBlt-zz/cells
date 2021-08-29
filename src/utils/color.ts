@@ -1,6 +1,6 @@
 import * as p5 from "p5";
 
-import { clamp, getValueBetween } from "./numbers";
+import { clamp, lerp } from "./numbers";
 
 export interface Color {
   r: number;
@@ -33,17 +33,17 @@ export function colorWithAlpha(c: Color, a: number): Color {
   return { ...c, a };
 }
 
-export function getColorBetween(
+export function lerpColor(
   colorA: Color,
   colorB: Color,
   ratio: number = 0.5
 ): Color {
   const p = clamp(ratio, 0, 1);
   return color(
-    getValueBetween(colorA.r, colorB.r, p),
-    getValueBetween(colorA.g, colorB.g, p),
-    getValueBetween(colorA.b, colorB.b, p),
-    colorA.a && colorB.a && getValueBetween(colorA.a, colorB.a, p)
+    lerp(colorA.r, colorB.r, p),
+    lerp(colorA.g, colorB.g, p),
+    lerp(colorA.b, colorB.b, p),
+    colorA.a && colorB.a && lerp(colorA.a, colorB.a, p)
   );
 }
 
