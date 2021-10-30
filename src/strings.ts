@@ -12,6 +12,7 @@ const strings = {
     juliaSet: "Julia Set",
     newton: "Newton",
     burningShip: "Burning Ship (WIP)",
+    bransleyFern: "Bransley's Fern",
     maths: "Maths",
     fourierSignal: "Fourier Signal",
     fourierDrawing: "Fourier Drawing",

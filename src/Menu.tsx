@@ -4,6 +4,7 @@ import { AntGame } from "./cellular-automaton/ant-game";
 import { ElementaryRulesGame } from "./cellular-automaton/elementary-rules-game";
 import { GameOfLifeGame } from "./cellular-automaton/game-of-life-game";
 import { TurmiteGame } from "./cellular-automaton/turmite-game";
+import { BransleyFernGame } from "./fractals/bransley-fern-game";
 import { BurningShipFractalGame } from "./fractals/burning-ship-fractal-game";
 import { JuliaSetFractalGame } from "./fractals/julia-set-fractal-game";
 import { MandelbrotFractalGame } from "./fractals/mandelbrot-fractal-game";
@@ -121,6 +122,11 @@ const fractalesPages: Page[] = [
     name: strings.menu.burningShip,
     route: "burning-ship",
     component: <BurningShipFractalGame />,
+  },
+  {
+    name: strings.menu.bransleyFern,
+    route: "bransley-fern",
+    component: <BransleyFernGame />
   },
   // TODO: MANDELBROT PATH
   // TODO: BUDDAHBROT
