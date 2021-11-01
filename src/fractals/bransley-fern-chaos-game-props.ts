@@ -1,40 +1,17 @@
-import * as p5 from "p5";
-
-import { PlayableSketch } from "../services/playable-sketch";
-import { COLORS, setBackground, setStrokeColor } from "../utils/color";
-import { Point } from "../utils/points";
+import { Extremum, Point } from "../utils/points";
 import { random } from "../utils/random";
+import { BransleyChaosGameProps } from "./bransley-choas-game-sketch";
 
-const w = 800;
-const h = 600;
+export class BransleyFernChaosGameProps implements BransleyChaosGameProps {
+    public startingPoint: Point = { x: 0, y: 0 };
 
-export class BransleyFernSketch extends PlayableSketch {
-
-    private currentPoint: Point = { x: 0, y: 0 };
-
-    public setup(p: p5): void {
-        this.p5js = p;
-        this.p5js.createCanvas(w, h);
-        setBackground(this.p5js, COLORS.Black);
+    // −2.1820 < x < 2.6558 and 0 ≤ y < 9.9983.
+    public dimensions: Extremum = {
+        min: { x: -2.2, y: 0 },
+        max: { x: 2.7, y: 10 },
     }
 
-    public draw(): void {
-        for (let i = 0; i < 100; i++) {
-            this.drawPoint(this.currentPoint);
-            this.currentPoint = this.getNextPoint(this.currentPoint);
-        }
-    }
-
-    private drawPoint({ x, y }: Point): void {
-        // −2.1820 < x < 2.6558 and 0 ≤ y < 9.9983.
-        const px = this.p5js.map(x, -2.2, 2.7, 0, w);
-        const py = this.p5js.map(y, 0, 10, h, 0);
-
-        setStrokeColor(this.p5js, COLORS.Green);
-        this.p5js.point(px, py);
-    }
-
-    private getNextPoint(point: Point): Point {
+    public getNextPoint(point: Point): Point {
         const r = random();
         if (r < 0.01) {
             return this.getPointF1(point);
@@ -78,5 +55,4 @@ export class BransleyFernSketch extends PlayableSketch {
             y: 0.26 * x + 0.24 * y + 0.44,
         };
     }
-
 }

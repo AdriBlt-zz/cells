@@ -13,6 +13,7 @@ const strings = {
     newton: "Newton",
     burningShip: "Burning Ship (WIP)",
     bransleyFern: "Bransley's Fern",
+    sirpienskiChaosGame: "Sirpienski chaos game",
     maths: "Maths",
     fourierSignal: "Fourier Signal",
     fourierDrawing: "Fourier Drawing",
