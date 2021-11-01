@@ -15,7 +15,7 @@ import {
 export class FourierSignalGame extends ProcessingComponent<
   FourierSignalSketch
 > {
-  protected createSketch(): FourierSignalSketch {
+  protected createSketch = (): FourierSignalSketch => {
     return new FourierSignalSketch();
   }
 

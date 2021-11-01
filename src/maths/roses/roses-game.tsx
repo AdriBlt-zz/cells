@@ -8,7 +8,7 @@ import { RosesSketch } from "./roses-sketch";
 
 @observer
 export class RosesGame extends ProcessingComponent<RosesSketch> {
-  protected createSketch(): RosesSketch {
+  protected createSketch = (): RosesSketch => {
     return new RosesSketch();
   }
 

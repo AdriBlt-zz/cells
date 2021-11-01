@@ -13,7 +13,7 @@ export class StarsGame extends ProcessingComponent<
 > {
   public state: StarsGameState = {};
 
-  protected createSketch(): StarsSketch {
+  protected createSketch = (): StarsSketch => {
     return new StarsSketch();
   }
 

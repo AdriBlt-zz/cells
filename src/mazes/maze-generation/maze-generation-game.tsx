@@ -24,7 +24,7 @@ const DEFAULT_ALGORITHM = ALGORITHM_LIST[0];
 export class MazeGenerationGame extends ProcessingComponent<MazeGenerationSketch, MazeGenerationGameState> {
     public state: MazeGenerationGameState = { selectedAlgorithm: DEFAULT_ALGORITHM };
 
-    protected createSketch(): MazeGenerationSketch {
+    protected createSketch = (): MazeGenerationSketch => {
         return new MazeGenerationSketch(DEFAULT_ALGORITHM);
     }
 

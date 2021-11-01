@@ -18,7 +18,7 @@ export class JuliaSetFractalGame extends ProcessingComponent<FractalSketch, Juli
     parameter: DefaultParameter,
   }
 
-  protected createSketch(): FractalSketch {
+  protected createSketch = (): FractalSketch => {
     return new FractalSketch(new JuliaSet(DefaultParameter.complex));
   }
 

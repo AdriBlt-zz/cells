@@ -5,7 +5,7 @@ import { FractalSketch } from "./fractal-sketch";
 import { MandelbrotFractal } from "./models/fractals/mandelbrot";
 
 export class MandelbrotFractalGame extends ProcessingComponent<FractalSketch> {
-  protected createSketch(): FractalSketch {
+  protected createSketch = (): FractalSketch => {
     return new FractalSketch(new MandelbrotFractal());
   }
 
