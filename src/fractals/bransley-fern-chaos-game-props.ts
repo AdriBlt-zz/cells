@@ -1,8 +1,12 @@
+import { getStrings } from "../strings";
 import { Extremum, Point } from "../utils/points";
 import { random } from "../utils/random";
 import { BransleyChaosGameProps } from "./bransley-choas-game-sketch";
 
 export class BransleyFernChaosGameProps implements BransleyChaosGameProps {
+    public title = getStrings().bransleyChaosGame.fernTitle;
+    public description = getStrings().bransleyChaosGame.fernDescription;
+
     public startingPoint: Point = { x: 0, y: 0 };
 
     // −2.1820 < x < 2.6558 and 0 ≤ y < 9.9983.

@@ -158,6 +158,12 @@ const strings = {
     description2: "With k = numerator / denominator",
     controls: "Change numerator with left/right and denominator with up/down.",
   },
+  bransleyChaosGame: {
+    fernTitle: "Barnsley Fern Chaos Game",
+    fernDescription: "At each step, a linear transformation is randomly picked among 4 functions and applied to the current point.",
+    sirpienskiTitle: "Sirpienski triangle with Barnsley chaos game",
+    sirpienskiDescription: "Starting with a random point in the triangle, the next one is defined as the middle of the current one and one of the 3 vertices, randomly picked.",
+  },
   shared: {
     newGame: "New Game (R)",
     playPause: "Play/Pause",

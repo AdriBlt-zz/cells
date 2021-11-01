@@ -11,6 +11,8 @@ export interface BransleyChaosGameProps {
     startingPoint: Point;
     dimensions: Extremum;
     getNextPoint: (point: Point) => Point;
+    title: string;
+    description: string;
 }
 
 export class BransleyChoasGameSketch extends PlayableSketch {

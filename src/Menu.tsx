@@ -253,7 +253,6 @@ Games
 - Pong
 
 spirograph
-fractal > siepinsky + fougere
 
 Circle perlin noise
 agar.io

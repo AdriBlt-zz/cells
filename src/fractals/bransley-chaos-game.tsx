@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { InfoBox } from "../shared/info-box";
 import { ProcessingComponent } from "../shared/processing-component";
 import { BransleyChaosGameProps, BransleyChoasGameSketch } from "./bransley-choas-game-sketch";
 import { BransleyFernChaosGameProps } from "./bransley-fern-chaos-game-props";
@@ -19,7 +20,11 @@ export class BransleyChaosGame extends ProcessingComponent<
     }
 
     protected renderInfoSection(): JSX.Element {
-        return <div />;
+        return (
+            <InfoBox title={this.props.gameProps.title}>
+                {this.props.gameProps.description}
+            </InfoBox>
+        );
     }
 }
 
