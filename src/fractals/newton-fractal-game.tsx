@@ -16,7 +16,7 @@ const DefaultPolygonDegree = 3;
 export class NewtonFractalGame extends ProcessingComponent<FractalSketch, NewtonFractalGameState> {
   public state: NewtonFractalGameState = { unityRootPolynomDegree: DefaultPolygonDegree };
 
-  protected createSketch = (): FractalSketch => {
+  protected createSketch(): FractalSketch {
     return new FractalSketch(new Newton(getUnityRootsPolynom(DefaultPolygonDegree)));
   }
 

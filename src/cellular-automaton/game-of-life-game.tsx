@@ -25,7 +25,7 @@ export class GameOfLifeGame extends CellularAutomatonGame<
 > {
   public state: GameOfLifeState = this.getState(new GameOfLifeParameters());
 
-  protected createSketch = (): CellularAutomatonSketch<GameOfLifeMatrix> => {
+  protected createSketch(): CellularAutomatonSketch<GameOfLifeMatrix> {
     return new CellularAutomatonSketch<GameOfLifeMatrix>(
       new GameOfLifeMatrix(),
       GameModes.GAME_OF_LIFE

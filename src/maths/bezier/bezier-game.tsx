@@ -5,7 +5,7 @@ import { ProcessingComponent } from "../../shared/processing-component";
 import { BezierSketch } from "./bezier-sketch";
 
 export class BezierGame extends ProcessingComponent<BezierSketch> {
-  protected createSketch = (): BezierSketch => {
+  protected createSketch(): BezierSketch {
     return new BezierSketch();
   }
 

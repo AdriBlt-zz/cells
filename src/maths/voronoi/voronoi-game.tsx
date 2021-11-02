@@ -15,7 +15,7 @@ export class VoronoiGame extends ProcessingComponent<VoronoiSketch, VoronoiState
     showDelaunayTriangulation: false,
   };
 
-  protected createSketch = (): VoronoiSketch => {
+  protected createSketch(): VoronoiSketch {
     return new VoronoiSketch();
   }
 

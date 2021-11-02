@@ -11,7 +11,7 @@ import { FourierDrawingSketch } from "./fourier-drawing-sketch";
 export class FourierDrawingGame extends ProcessingComponent<
   FourierDrawingSketch
 > {
-  protected createSketch = (): FourierDrawingSketch => {
+  protected createSketch(): FourierDrawingSketch {
     return new FourierDrawingSketch();
   }
 

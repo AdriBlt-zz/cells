@@ -12,7 +12,7 @@ export interface RayCastingWalkerGameProps {
 }
 
 export class RayCastingWalkerGame extends ProcessingComponent<RayCastingSketch, {}, RayCastingWalkerGameProps> {
-    protected createSketch = (): RayCastingSketch => {
+    protected createSketch(): RayCastingSketch {
         return new RayCastingSketch(this.props.rayCastingProps);
     }
 

@@ -28,7 +28,7 @@ const ANT_DIRECTIONS: AntDirections[] = Object.keys(AntDirections)
 export class AntGame extends CellularAutomatonGame<AntMatrix, AntGameState> {
   public state: AntGameState = this.getState(new AntParameters());
 
-  protected createSketch = (): CellularAutomatonSketch<AntMatrix> => {
+  protected createSketch(): CellularAutomatonSketch<AntMatrix> {
     return new CellularAutomatonSketch<AntMatrix>(
       new AntMatrix(),
       GameModes.LANGTONS_ANT

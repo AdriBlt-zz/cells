@@ -4,7 +4,7 @@ import { ProcessingComponent } from "../../shared/processing-component";
 import { SnakeSketch } from "./snake-sketch";
 
 export class SnakeGame extends ProcessingComponent<SnakeSketch> {
-  protected createSketch = (): SnakeSketch => {
+  protected createSketch(): SnakeSketch {
     return new SnakeSketch();
   }
 

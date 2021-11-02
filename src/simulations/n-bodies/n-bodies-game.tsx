@@ -32,7 +32,7 @@ export class NBodiesGame extends ProcessingComponent<
     selectedBodyIndex: 0,
   };
 
-  protected createSketch = (): NBodiesSketch => {
+  protected createSketch(): NBodiesSketch {
     getSolarSystemInfo().then(bodies => this.setState(
       { bodies },
       () => this.sketch.setBodies(this.state.bodies),

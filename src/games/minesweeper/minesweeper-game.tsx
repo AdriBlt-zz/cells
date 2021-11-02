@@ -13,7 +13,7 @@ import { LevelDifficulty, LevelDifficultyConst } from "./models/level-difficulty
 
 @observer
 export class MinesweeperGame extends ProcessingComponent<MinesweeperSketch> {
-  protected createSketch = (): MinesweeperSketch => {
+  protected createSketch(): MinesweeperSketch {
     return new MinesweeperSketch();
   }
 

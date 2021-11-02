@@ -11,7 +11,7 @@ export class BransleyChaosGame extends ProcessingComponent<
     {},
     { gameProps: BransleyChaosGameProps }
 > {
-    protected createSketch = (): BransleyChoasGameSketch => {
+    protected createSketch(): BransleyChoasGameSketch {
         return new BransleyChoasGameSketch(this.props.gameProps);
     }
 

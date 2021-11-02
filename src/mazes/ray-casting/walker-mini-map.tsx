@@ -5,7 +5,7 @@ import { MiniMapSketch } from "./mini-map-sketch";
 import { RayCastingWalkerGameProps } from "./ray-casting-walker";
 
 export class WalkerMiniMap extends ProcessingComponent<MiniMapSketch, {}, RayCastingWalkerGameProps> {
-    protected createSketch = (): MiniMapSketch => {
+    protected createSketch(): MiniMapSketch {
         return new MiniMapSketch(this.props.rayCastingProps, this.props.miniMapInfo);
     }
 

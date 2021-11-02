@@ -10,7 +10,7 @@ import { MultiplicationCircleSketch } from "./multiplication-circle-sketch";
 export class MultiplicationCircleGame extends ProcessingComponent<
   MultiplicationCircleSketch
 > {
-  protected createSketch = (): MultiplicationCircleSketch => {
+  protected createSketch(): MultiplicationCircleSketch {
     return new MultiplicationCircleSketch();
   }
 

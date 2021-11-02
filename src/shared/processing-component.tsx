@@ -15,15 +15,12 @@ export abstract class ProcessingComponent<
   S = {},
   P = {}
 > extends React.Component<P, S> {
-  protected sketch: T;
+  protected readonly sketch: T = this.createSketch(); ;
   protected readonly strings: LocalizedStrings = getStrings();
-
-  protected abstract createSketch: () => T;
   private readonly processingService = new ProcessingService();
   private readonly processingContainerId: string = PROCESSING_CONTAINER_ID_FORMAT + newGuid();
 
   public componentDidMount(): void {
-    this.sketch = this.createSketch();
     this.processingService.sketch(this.sketch, this.processingContainerId);
   }
 
@@ -51,6 +48,8 @@ export abstract class ProcessingComponent<
       </Container>
     );
   }
+
+  protected abstract createSketch(): T;
 
   protected abstract renderCommands(): JSX.Element;
 

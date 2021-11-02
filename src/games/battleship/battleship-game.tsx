@@ -8,7 +8,7 @@ import { GameStatus } from "./models/game-status";
 
 @observer
 export class BattleshipGame extends ProcessingComponent<BattleshipSketch> {
-  protected createSketch = (): BattleshipSketch => {
+  protected createSketch(): BattleshipSketch {
     return new BattleshipSketch();
   }
 

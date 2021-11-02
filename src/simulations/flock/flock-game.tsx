@@ -18,7 +18,7 @@ export class FlockGame extends ProcessingComponent<
 > {
   public state: FlockGameState = this.sketch.flock.traits;
 
-  protected createSketch = (): FlockSketch => {
+  protected createSketch(): FlockSketch {
     return new FlockSketch();
   }
 
