@@ -4,6 +4,7 @@ import { getUnityRootsPolynom } from "../numbers/PolynomHelpers";
 import { InfoBox } from "../shared/info-box";
 import { NumberInput, NumberInputProps } from "../shared/number-input";
 import { ProcessingComponent } from "../shared/processing-component";
+import { getStrings, LocalizedStrings } from "../strings";
 import { FractalSketch } from "./fractal-sketch";
 import { Newton } from "./models/fractals/newton";
 
@@ -13,21 +14,24 @@ interface NewtonFractalGameState {
 
 const DefaultPolygonDegree = 3;
 
-export class NewtonFractalGame extends ProcessingComponent<FractalSketch, NewtonFractalGameState> {
+export class NewtonFractalGame extends React.Component<{}, NewtonFractalGameState> {
   public state: NewtonFractalGameState = { unityRootPolynomDegree: DefaultPolygonDegree };
+  private strings: LocalizedStrings = getStrings();
+  private sketch = new FractalSketch(new Newton(getUnityRootsPolynom(DefaultPolygonDegree)));
 
-  protected createSketch(): FractalSketch {
-    return new FractalSketch(new Newton(getUnityRootsPolynom(DefaultPolygonDegree)));
+  public render() {
+    return (
+      <ProcessingComponent
+        sketch={this.sketch}
+        commandsSection={this.renderCommands()}
+      />
+    );
   }
 
   protected renderCommands(): JSX.Element {
     return <InfoBox title={this.strings.newtonFractal.unityRootPolynom}>
       <NumberInput {...this.unityRootPolynomDegreeInputProps()} />
     </InfoBox>;
-  }
-
-  protected renderInfoSection(): JSX.Element {
-    return <div />;
   }
 
   private unityRootPolynomDegreeInputProps(): NumberInputProps {

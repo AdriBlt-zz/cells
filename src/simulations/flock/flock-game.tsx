@@ -3,6 +3,7 @@ import * as React from "react";
 import { CheckboxInput, CheckboxInputProps } from "../../shared/checkbox-input";
 import { NumberInput, NumberInputProps } from "../../shared/number-input";
 import { ProcessingComponent } from "../../shared/processing-component";
+import { getStrings, LocalizedStrings } from "../../strings";
 import { FlockSketch } from "./flock-sketch";
 
 interface FlockGameState {
@@ -12,14 +13,24 @@ interface FlockGameState {
   isTailVisible: boolean;
 }
 
-export class FlockGame extends ProcessingComponent<
-  FlockSketch,
-  FlockGameState
-> {
-  public state: FlockGameState = this.sketch.flock.traits;
+export class FlockGame extends React.Component<{}, FlockGameState> {
+  public state: FlockGameState;
+  private strings: LocalizedStrings = getStrings();
+  private sketch = new FlockSketch();
 
-  protected createSketch(): FlockSketch {
-    return new FlockSketch();
+  constructor() {
+    super({});
+    this.state = this.sketch.flock.traits;
+  }
+
+  public render() {
+    return (
+      <ProcessingComponent
+        sketch={this.sketch}
+        commandsSection={this.renderCommands()}
+        infoSection={this.renderInfoSection()}
+      />
+    );
   }
 
   protected renderCommands(): JSX.Element {

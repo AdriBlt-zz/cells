@@ -4,6 +4,7 @@ import { ControlBarInput } from "../../shared/control-bar-input";
 import { InfoBox } from "../../shared/info-box";
 import { ProcessingComponent } from "../../shared/processing-component";
 import { SelectInput, SelectInputProps } from "../../shared/select-input";
+import { getStrings, LocalizedStrings } from "../../strings";
 import { MazeAlgorithmType, MazeGenerationSketch } from "./maze-generation-sketch";
 
 const ALGORITHM_LIST: MazeAlgorithmType[] = [
@@ -21,11 +22,19 @@ interface MazeGenerationGameState {
 
 const DEFAULT_ALGORITHM = ALGORITHM_LIST[0];
 
-export class MazeGenerationGame extends ProcessingComponent<MazeGenerationSketch, MazeGenerationGameState> {
+export class MazeGenerationGame extends React.Component<{}, MazeGenerationGameState> {
     public state: MazeGenerationGameState = { selectedAlgorithm: DEFAULT_ALGORITHM };
+    private strings: LocalizedStrings = getStrings();
+    private sketch = new MazeGenerationSketch(DEFAULT_ALGORITHM);
 
-    protected createSketch(): MazeGenerationSketch {
-        return new MazeGenerationSketch(DEFAULT_ALGORITHM);
+    public render() {
+      return (
+        <ProcessingComponent
+          sketch={this.sketch}
+          commandsSection={this.renderCommands()}
+          infoSection={this.renderInfoSection()}
+        />
+      );
     }
 
     protected renderCommands(): JSX.Element {

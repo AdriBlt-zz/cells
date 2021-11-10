@@ -5,14 +5,22 @@ import { CheckboxInput, CheckboxInputProps } from "../../shared/checkbox-input";
 import { ControlBarInput } from "../../shared/control-bar-input";
 import { NumberInput, NumberInputProps } from "../../shared/number-input";
 import { ProcessingComponent } from "../../shared/processing-component";
+import { getStrings, LocalizedStrings } from "../../strings";
 import { FourierDrawingSketch } from "./fourier-drawing-sketch";
 
 @observer
-export class FourierDrawingGame extends ProcessingComponent<
-  FourierDrawingSketch
-> {
-  protected createSketch(): FourierDrawingSketch {
-    return new FourierDrawingSketch();
+export class FourierDrawingGame extends React.Component
+{
+  private strings: LocalizedStrings = getStrings();
+  private sketch = new FourierDrawingSketch();
+
+  public render() {
+      return (
+          <ProcessingComponent
+              sketch={this.sketch}
+              commandsSection={this.renderCommands()}
+          />
+      );
   }
 
   protected renderCommands(): JSX.Element {
@@ -32,10 +40,6 @@ export class FourierDrawingGame extends ProcessingComponent<
     );
   }
 
-  protected renderInfoSection(): JSX.Element {
-    return <div />;
-  }
-
   private getNumberOfCirclesProps = (): NumberInputProps => {
     return {
       min: 1,
@@ -45,6 +49,7 @@ export class FourierDrawingGame extends ProcessingComponent<
       onValueChanged: (value: number) => this.sketch.setNumberOfCircles(value),
     };
   };
+
   private showOriginalProps(): CheckboxInputProps {
     return {
       label: this.strings.fourierDrawing.showOriginal,

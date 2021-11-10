@@ -4,6 +4,7 @@ import { ControlBarInput } from "../../shared/control-bar-input";
 import { InfoBox } from "../../shared/info-box";
 import { ProcessingComponent } from "../../shared/processing-component";
 import { SelectInput, SelectInputProps } from "../../shared/select-input";
+import { getStrings, LocalizedStrings } from "../../strings";
 import { getSolarSystemInfo } from "./models/data";
 import { BodyInfo, CameraMode } from "./models/models";
 import { NBodiesSketch } from "./n-bodies-sketch";
@@ -22,22 +23,31 @@ interface NBodiesGameProps {
   selectedBodyIndex: number;
 }
 
-export class NBodiesGame extends ProcessingComponent<
-  NBodiesSketch,
-  NBodiesGameProps
-> {
+export class NBodiesGame extends React.Component<{}, NBodiesGameProps> {
   public state: NBodiesGameProps = {
     bodies: [],
     cameraMode: CameraMode.LockOnBarycenter,
     selectedBodyIndex: 0,
   };
+  private sketch = new NBodiesSketch();
+  private strings: LocalizedStrings = getStrings();
 
-  protected createSketch(): NBodiesSketch {
-    getSolarSystemInfo().then(bodies => this.setState(
-      { bodies },
-      () => this.sketch.setBodies(this.state.bodies),
-    ));
-    return new NBodiesSketch();
+  public componentDidMount() {
+    getSolarSystemInfo()
+      .then(bodies => this.setState(
+        { bodies },
+        () => this.sketch.setBodies(this.state.bodies),
+      ));
+  }
+
+  public render() {
+    return (
+      <ProcessingComponent
+        sketch={this.sketch}
+        commandsSection={this.renderCommands()}
+        infoSection={this.renderInfoSection()}
+      />
+    );
   }
 
   protected renderCommands(): JSX.Element {

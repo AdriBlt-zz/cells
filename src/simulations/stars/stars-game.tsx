@@ -4,21 +4,17 @@ import * as React from "react";
 import { ProcessingComponent } from "../../shared/processing-component";
 import { StarsSketch } from "./stars-sketch";
 
-// tslint:disable-next-line:no-empty-interface
-interface StarsGameState {}
+export class StarsGame extends React.Component
+{
+  private sketch = new StarsSketch();
 
-export class StarsGame extends ProcessingComponent<
-  StarsSketch,
-  StarsGameState
-> {
-  public state: StarsGameState = {};
-
-  protected createSketch(): StarsSketch {
-    return new StarsSketch();
-  }
-
-  protected renderCommands(): JSX.Element {
-    return <div />;
+  public render() {
+    return (
+      <ProcessingComponent
+        sketch={this.sketch}
+        infoSection={this.renderInfoSection()}
+      />
+    );
   }
 
   protected renderInfoSection(): JSX.Element {

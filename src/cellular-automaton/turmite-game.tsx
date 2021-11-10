@@ -47,12 +47,10 @@ export class TurmiteGame extends CellularAutomatonGame<
   public registeredRules: TurmiteBehavior[] = getRegisteredRules(this.strings);
   public state: TurmiteGameState = this.getState(new TurmiteParameters());
 
-  protected createSketch(): CellularAutomatonSketch<TurmiteMatrix> {
-    return new CellularAutomatonSketch<TurmiteMatrix>(
-      new TurmiteMatrix(),
-      GameModes.LANGTONS_ANT
-    );
-  }
+  protected sketch = new CellularAutomatonSketch<TurmiteMatrix>(
+    new TurmiteMatrix(),
+    GameModes.LANGTONS_ANT
+  );
 
   protected getState(rule: TurmiteParameters): TurmiteGameState {
     const isThreeStateTurmite = rule.isThreeStatesMode();

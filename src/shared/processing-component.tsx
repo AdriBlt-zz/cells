@@ -10,18 +10,22 @@ import { newGuid } from "../utils/guid";
 
 const PROCESSING_CONTAINER_ID_FORMAT = "processing-container-";
 
-export abstract class ProcessingComponent<
-  T extends ProcessingSketch,
-  S = {},
-  P = {}
-> extends React.Component<P, S> {
-  protected readonly sketch: T = this.createSketch(); ;
+export interface ProcessingComponentProps<T extends ProcessingSketch> {
+  sketch: T;
+  commandsSection?: JSX.Element;
+  infoSection?: JSX.Element;
+  // toolBarSection?: JSX.Element;
+}
+
+export class ProcessingComponent<T extends ProcessingSketch>
+  extends React.Component<ProcessingComponentProps<T>>
+{
   protected readonly strings: LocalizedStrings = getStrings();
   private readonly processingService = new ProcessingService();
   private readonly processingContainerId: string = PROCESSING_CONTAINER_ID_FORMAT + newGuid();
 
   public componentDidMount(): void {
-    this.processingService.sketch(this.sketch, this.processingContainerId);
+    this.processingService.sketch(this.props.sketch, this.processingContainerId);
   }
 
   public componentWillUnmount(): void {
@@ -41,19 +45,11 @@ export abstract class ProcessingComponent<
             <div id={this.processingContainerId} />
           </Col>
           <Col sm={3}>
-            {this.renderCommands()}
-            {this.renderInfoSection()}
+            {this.props.commandsSection}
+            {this.props.infoSection}
           </Col>
         </Row>
       </Container>
     );
   }
-
-  protected abstract createSketch(): T;
-
-  protected abstract renderCommands(): JSX.Element;
-
-  protected abstract renderInfoSection(): JSX.Element;
-
-  // protected abstract renderToolBar?(): JSX.Element;
 }

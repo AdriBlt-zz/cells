@@ -3,20 +3,28 @@ import * as React from "react";
 import { CheckboxInput } from "../../shared/checkbox-input";
 import { ControlBarInput } from "../../shared/control-bar-input";
 import { ProcessingComponent } from "../../shared/processing-component";
+import { getStrings, LocalizedStrings } from "../../strings";
 import { VoronoiSketch } from "./voronoi-sketch";
 
 interface VoronoiState {
   showVoronoiCells: boolean;
   showDelaunayTriangulation: boolean;
 }
-export class VoronoiGame extends ProcessingComponent<VoronoiSketch, VoronoiState> {
+export class VoronoiGame extends React.Component<{}, VoronoiState> {
   public state: VoronoiState = {
     showVoronoiCells: true,
     showDelaunayTriangulation: false,
   };
+  private strings: LocalizedStrings = getStrings();
+  private sketch = new VoronoiSketch();
 
-  protected createSketch(): VoronoiSketch {
-    return new VoronoiSketch();
+  public render() {
+    return (
+      <ProcessingComponent
+        sketch={this.sketch}
+        commandsSection={this.renderCommands()}
+      />
+    );
   }
 
   protected renderCommands(): JSX.Element {
@@ -40,9 +48,5 @@ export class VoronoiGame extends ProcessingComponent<VoronoiSketch, VoronoiState
         playPauseCallback={this.sketch.pause}
       />
     </div>;
-  }
-
-  protected renderInfoSection(): JSX.Element {
-    return <div />;
   }
 }

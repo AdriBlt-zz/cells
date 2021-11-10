@@ -34,7 +34,7 @@ function fetchMazeData(): Promise<MazeGameData> {
 function generateMaze(mazeType: MazeAlgorithmType): Promise<CellPaths[][]> {
     return new Promise((resolve) => {
         // tslint:disable-next-line:no-empty
-        const algorithm: MazeGenerationAlgorithm = createMazeGenerationAlgorithm(MazeAlgorithmType.DepthExploration, NB_MAZE_COL, NB_MAZE_ROW, () => {}, () => {});
+        const algorithm: MazeGenerationAlgorithm = createMazeGenerationAlgorithm(mazeType, NB_MAZE_COL, NB_MAZE_ROW, () => {}, () => {});
         algorithm.initialize();
         while (algorithm.getGenerationStatus() === GenerationStatus.Ongoing) {
             algorithm.computeOneGenerationIteration();

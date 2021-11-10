@@ -4,14 +4,21 @@ import { Button } from "react-bootstrap";
 
 import { NumberInput, NumberInputProps } from "../../shared/number-input";
 import { ProcessingComponent } from "../../shared/processing-component";
+import { getStrings, LocalizedStrings } from "../../strings";
 import { MultiplicationCircleSketch } from "./multiplication-circle-sketch";
 
 @observer
-export class MultiplicationCircleGame extends ProcessingComponent<
-  MultiplicationCircleSketch
-> {
-  protected createSketch(): MultiplicationCircleSketch {
-    return new MultiplicationCircleSketch();
+export class MultiplicationCircleGame extends React.Component {
+  private strings: LocalizedStrings = getStrings();
+  private sketch = new MultiplicationCircleSketch();
+
+  public render() {
+    return (
+      <ProcessingComponent
+        sketch={this.sketch}
+        commandsSection={this.renderCommands()}
+      />
+    );
   }
 
   protected renderCommands(): JSX.Element {
@@ -24,10 +31,6 @@ export class MultiplicationCircleGame extends ProcessingComponent<
         </Button>
       </div>
     );
-  }
-
-  protected renderInfoSection(): JSX.Element {
-    return <div />;
   }
 
   private getMultiplicatorProps = (): NumberInputProps => {

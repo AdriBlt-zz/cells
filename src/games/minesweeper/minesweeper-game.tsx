@@ -6,15 +6,26 @@ import { CheckboxInput } from "../../shared/checkbox-input";
 import { NumberInput, NumberInputProps } from "../../shared/number-input";
 import { ProcessingComponent } from "../../shared/processing-component";
 import { SelectInput, SelectInputProps } from "../../shared/select-input";
+import { getStrings, LocalizedStrings } from "../../strings";
 import { pluralizeString } from "../../utils/string-formating-utilities";
 import { MinesweeperSketch } from "./minesweeper-sketch";
 import { GameStatus } from "./models/game-status";
 import { LevelDifficulty, LevelDifficultyConst } from "./models/level-difficulty";
 
 @observer
-export class MinesweeperGame extends ProcessingComponent<MinesweeperSketch> {
-  protected createSketch(): MinesweeperSketch {
-    return new MinesweeperSketch();
+export class MinesweeperGame extends React.Component
+{
+  private strings: LocalizedStrings = getStrings();
+  private sketch = new MinesweeperSketch();
+
+  public render() {
+      return (
+          <ProcessingComponent
+              sketch={this.sketch}
+              commandsSection={this.renderCommands()}
+              infoSection={this.renderInfoSection()}
+          />
+      );
   }
 
   protected renderCommands(): JSX.Element {

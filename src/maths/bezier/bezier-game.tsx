@@ -2,11 +2,21 @@ import * as React from "react";
 
 import { ControlBarInput } from "../../shared/control-bar-input";
 import { ProcessingComponent } from "../../shared/processing-component";
+import { getStrings, LocalizedStrings } from "../../strings";
 import { BezierSketch } from "./bezier-sketch";
 
-export class BezierGame extends ProcessingComponent<BezierSketch> {
-  protected createSketch(): BezierSketch {
-    return new BezierSketch();
+export class BezierGame extends React.Component {
+  private strings: LocalizedStrings = getStrings();
+  private sketch = new BezierSketch();
+
+  public render() {
+    return (
+      <ProcessingComponent
+        sketch={this.sketch}
+        commandsSection={this.renderCommands()}
+        infoSection={this.renderInfoSection()}
+      />
+    );
   }
 
   protected renderCommands(): JSX.Element {

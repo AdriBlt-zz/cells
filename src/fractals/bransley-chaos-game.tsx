@@ -6,20 +6,23 @@ import { BransleyChaosGameProps, BransleyChoasGameSketch } from "./bransley-choa
 import { BransleyFernChaosGameProps } from "./bransley-fern-chaos-game-props";
 import { SirpienskiChaosGameProps } from "./sirpienski-chaos-game-props";
 
-export class BransleyChaosGame extends ProcessingComponent<
-    BransleyChoasGameSketch,
-    {},
+export class BransleyChaosGame extends React.Component<
     { gameProps: BransleyChaosGameProps }
 > {
-    protected createSketch(): BransleyChoasGameSketch {
+    public render() {
+        return (
+            <ProcessingComponent
+                sketch={this.sketch}
+                infoSection={this.infoSection}
+            />
+        );
+    }
+
+    private get sketch(): BransleyChoasGameSketch {
         return new BransleyChoasGameSketch(this.props.gameProps);
     }
 
-    protected renderCommands(): JSX.Element {
-        return <div />;
-    }
-
-    protected renderInfoSection(): JSX.Element {
+    protected get infoSection(): JSX.Element {
         return (
             <InfoBox title={this.props.gameProps.title}>
                 {this.props.gameProps.description}

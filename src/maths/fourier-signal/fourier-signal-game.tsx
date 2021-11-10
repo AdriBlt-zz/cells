@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 import { NumberInput, NumberInputProps } from "../../shared/number-input";
 import { ProcessingComponent } from "../../shared/processing-component";
 import { SelectInput, SelectInputProps } from "../../shared/select-input";
+import { getStrings, LocalizedStrings } from "../../strings";
 import { SignalType } from "../fourier/SignalType";
 import {
   FourierSignalSketch,
@@ -12,11 +13,18 @@ import {
 } from "./fourier-signal-sketch";
 
 @observer
-export class FourierSignalGame extends ProcessingComponent<
-  FourierSignalSketch
-> {
-  protected createSketch(): FourierSignalSketch {
-    return new FourierSignalSketch();
+export class FourierSignalGame extends React.Component
+{
+  private strings: LocalizedStrings = getStrings();
+  private sketch = new FourierSignalSketch();
+
+  public render() {
+      return (
+          <ProcessingComponent
+              sketch={this.sketch}
+              commandsSection={this.renderCommands()}
+          />
+      );
   }
 
   protected renderCommands(): JSX.Element {
@@ -29,10 +37,6 @@ export class FourierSignalGame extends ProcessingComponent<
         </Button>
       </div>
     );
-  }
-
-  protected renderInfoSection(): JSX.Element {
-    return <div />;
   }
 
   private getSignalTypeProps = (): SelectInputProps<SignalType> => {

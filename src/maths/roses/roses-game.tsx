@@ -4,12 +4,22 @@ import * as React from "react";
 import { InfoBox } from "../../shared/info-box";
 import { NumberInput, NumberInputProps } from "../../shared/number-input";
 import { ProcessingComponent } from "../../shared/processing-component";
+import { getStrings, LocalizedStrings } from "../../strings";
 import { RosesSketch } from "./roses-sketch";
 
 @observer
-export class RosesGame extends ProcessingComponent<RosesSketch> {
-  protected createSketch(): RosesSketch {
-    return new RosesSketch();
+export class RosesGame extends React.Component {
+  private strings: LocalizedStrings = getStrings();
+  private sketch = new RosesSketch();
+
+  public render() {
+    return (
+      <ProcessingComponent
+        sketch={this.sketch}
+        commandsSection={this.renderCommands()}
+        infoSection={this.renderInfoSection()}
+      />
+    );
   }
 
   protected renderCommands(): JSX.Element {

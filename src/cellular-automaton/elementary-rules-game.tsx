@@ -29,12 +29,10 @@ export class ElementaryRulesGame extends CellularAutomatonGame<
     new ElementaryRulesParameters()
   );
 
-  protected createSketch(): CellularAutomatonSketch<ElementaryRulesMatrix> {
-    return new CellularAutomatonSketch<ElementaryRulesMatrix>(
-      new ElementaryRulesMatrix(),
-      GameModes.ELEMENTARY_RULES
-    );
-  }
+  protected sketch = new CellularAutomatonSketch<ElementaryRulesMatrix>(
+    new ElementaryRulesMatrix(),
+    GameModes.ELEMENTARY_RULES
+  );
 
   protected getState(rule: ElementaryRulesParameters): ElementaryRulesState {
     return {

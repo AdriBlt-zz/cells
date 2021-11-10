@@ -27,31 +27,35 @@ export class MazeGame extends React.Component<MazeGameProps, MazeGameState> {
 
     public componentDidMount() {
         this.props.fetchMazeData()
-            .then((data: MazeGameData) => {
-                this.matrix = data.matrix;
-
-                this.setState({
-                    rayCastingWalkerProps: {
-                        rayCastingProps: {
-                            playerPosition: data.playerInitialPosition,
-                            playerDirection: data.playerInitialDirection,
-                            getCellProperties: (i: number, j: number) => this.getCellProperties(i, j),
-                            ceilingColor: COLORS.Cyan,
-                            floorColor: COLORS.Maroon,
-                        },
-                        miniMapInfo: {
-                            nbRows: this.matrix.length,
-                            nbCols: this.matrix[0].length,
-                            mapCellSide: data.mapCellSide,
-                        },
-                    }
-                });
-            });
+            .then((data: MazeGameData) => this.readData(data));
     }
 
     public render() {
-        return this.state.rayCastingWalkerProps && (<RayCastingWalkerGame {...this.state.rayCastingWalkerProps} />);
+        return this.state.rayCastingWalkerProps && (
+            <RayCastingWalkerGame {...this.state.rayCastingWalkerProps} />
+        );
     }
+
+    private readData = (data: MazeGameData): void => {
+        this.matrix = data.matrix;
+
+        this.setState({
+            rayCastingWalkerProps: {
+                rayCastingProps: {
+                    playerPosition: data.playerInitialPosition,
+                    playerDirection: data.playerInitialDirection,
+                    getCellProperties: (i: number, j: number) => this.getCellProperties(i, j),
+                    ceilingColor: COLORS.Cyan,
+                    floorColor: COLORS.Maroon,
+                },
+                miniMapInfo: {
+                    nbRows: this.matrix.length,
+                    nbCols: this.matrix[0].length,
+                    mapCellSide: data.mapCellSide,
+                },
+            }
+        });
+    };
 
     private getCellProperties = (i: number, j: number): CellProperties => {
         if (!this.matrix
