@@ -155,11 +155,12 @@ export class GameOfLifeGame extends CellularAutomatonGame<
     getValue: (i: number) => boolean,
     setValue: (i: number, b: boolean) => void
   ): React.ReactNode {
+    const numberOfConditions = this.sketch.matrix.getRules().isHexaGrid() ? 7 : 9;
     return (
       <ButtonToolbar>
         {label}
         <ButtonGroup>
-          {Array.from(Array(9).keys()).map((i) => (
+          {Array.from(Array(numberOfConditions).keys()).map((i) => (
             <Button
               key={i}
               variant={getValue(i) ? "primary" : "secondary"}

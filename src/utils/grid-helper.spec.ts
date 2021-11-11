@@ -1,4 +1,4 @@
-import { getNeighbourCells } from "./GameOfLifeMatrix";
+import { getNeighbourCells } from "./grid-helper";
 
 describe("GameOfLifeMatrix.getNeighbourCells", () => {
   it("compute non Hex neighbours", () => {
