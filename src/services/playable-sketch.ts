@@ -26,4 +26,16 @@ export abstract class PlayableSketch implements ProcessingSketch {
 
         this.draw();
     };
+
+    public stop = (): void => {
+        if (!this.isPaused) {
+            this.pause();
+        }
+    };
+
+    public play = (): void => {
+        if (this.isPaused) {
+            this.pause();
+        }
+    };
 }

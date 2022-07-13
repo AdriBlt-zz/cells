@@ -9,6 +9,7 @@ import { BurningShipFractalGame } from "./fractals/burning-ship-fractal-game";
 import { JuliaSetFractalGame } from "./fractals/julia-set-fractal-game";
 import { MandelbrotFractalGame } from "./fractals/mandelbrot-fractal-game";
 import { NewtonFractalGame } from "./fractals/newton-fractal-game";
+import { SandpileGame } from "./fractals/sandpile-game";
 import { BattleshipGame } from "./games/battleship/battleship-game";
 import { MinesweeperGame } from "./games/minesweeper/minesweeper-game";
 import { SnakeGame } from "./games/snake/snake-game";
@@ -134,6 +135,11 @@ const fractalesPages: Page[] = [
     route: "bransley-fern",
     component: <BransleyFernGame />
   },
+  {
+    name: 'Sand piles',
+    route: 'sandpile',
+    component: <SandpileGame />
+  }
   // TODO: MANDELBROT PATH
   // TODO: BUDDAHBROT
 ];
@@ -233,6 +239,10 @@ export const appMenu: Menu = {
     {
       name: strings.menu.mazes,
       pages: mazesPages,
+    },
+    {
+      name: strings.menu.misc,
+      pages: miscPages,
     },
   ],
 };
