@@ -34,6 +34,8 @@ const strings = {
     bezier: "Bézier curves",
     curvedPolygon: "Curved Polygons",
     roses: "Roses",
+    misc: "Misc.",
+    secretSanta: "Secret Santa",
   },
   minesweeper: {
     difficulty: "Difficulty",

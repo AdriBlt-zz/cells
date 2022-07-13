@@ -23,6 +23,7 @@ import { MazeGenerationGame } from "./mazes/maze-generation/maze-generation-game
 import { AlixMazeGame } from "./mazes/ray-casting/alix-maze-game";
 import { GeneratedMazeGame } from "./mazes/ray-casting/generated-maze-game";
 import { WolfensteinGame } from "./mazes/ray-casting/wolfenstein-game";
+import { SecretSantaGame } from "./misc/secret-santa-game";
 import { FlockGame } from "./simulations/flock/flock-game";
 import { NBodiesGame } from "./simulations/n-bodies/n-bodies-game";
 import { StarsGame } from "./simulations/stars/stars-game";
@@ -194,8 +195,15 @@ const mazesPages: Page[] = [
   {
     name: strings.menu.generatedMaze,
     route: "generated-maze",
-    component: <GeneratedMazeGame />
+    component: <GeneratedMazeGame />,
   },
+];
+const miscPages: Page[] = [
+  {
+    name: strings.menu.secretSanta,
+    route: "secret-santa",
+    component: <SecretSantaGame />,
+  }
 ];
 
 export const appMenu: Menu = {
