@@ -21,7 +21,7 @@ export function setStrokeColor(p: p5, c: Color): void {
   p.stroke(getColor(p, c));
 }
 
-function getColor(p: p5, c: Color): p5.Color {
+export function getColor(p: p5, c: Color): p5.Color {
   return p.color(c.r, c.g, c.b, c.a);
 }
 

@@ -30,6 +30,8 @@ const strings = {
     generatedMaze: "Generated Maze",
     nBodiesSimulation: "n Bodies simulation",
     mazes: "Mazes",
+    generation: "Generation",
+    waveFunctionCollapse: "Wave Function Collapse",
     voronoi: "Voronoï cells",
     bezier: "Bézier curves",
     curvedPolygon: "Curved Polygons",
@@ -165,6 +167,11 @@ const strings = {
     fernDescription: "At each step, a linear transformation is randomly picked among 4 functions and applied to the current point.",
     sirpienskiTitle: "Sirpienski triangle with Barnsley chaos game",
     sirpienskiDescription: "Starting with a random point in the triangle, the next one is defined as the middle of the current one and one of the 3 vertices, randomly picked.",
+  },
+  waveFunctionCollapse: {
+    templates: "Tile template",
+    simpleSquares: "Simple squares",
+    simpleHexagons: "Simple hexagons",
   },
   shared: {
     newGame: "New Game (R)",

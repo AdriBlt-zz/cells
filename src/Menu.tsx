@@ -13,6 +13,7 @@ import { SandpileGame } from "./fractals/sandpile-game";
 import { BattleshipGame } from "./games/battleship/battleship-game";
 import { MinesweeperGame } from "./games/minesweeper/minesweeper-game";
 import { SnakeGame } from "./games/snake/snake-game";
+import { WaveFunctionCollapseGame } from "./generation/wave-function-collapse/wave-function-collapse-game";
 import { BezierGame } from "./maths/bezier/bezier-game";
 import { CurvedPolygonGame } from "./maths/curved-polygon/curved-polygon-game";
 import { FourierDrawingGame } from "./maths/fourier-drawing/fourier-drawing-game";
@@ -204,6 +205,13 @@ const mazesPages: Page[] = [
     component: <GeneratedMazeGame />,
   },
 ];
+const generationPages: Page[] = [
+  {
+    name: strings.menu.waveFunctionCollapse,
+    route: "wave_function-collapse",
+    component: <WaveFunctionCollapseGame />,
+  }
+];
 const miscPages: Page[] = [
   {
     name: strings.menu.secretSanta,
@@ -241,6 +249,10 @@ export const appMenu: Menu = {
       pages: mazesPages,
     },
     {
+      name: strings.menu.generation,
+      pages: generationPages,
+    },
+    {
       name: strings.menu.misc,
       pages: miscPages,
     },
@@ -249,6 +261,9 @@ export const appMenu: Menu = {
 
 /*
 TODO
+
+=> REFACTO RIGHT PANEL
+
 - artillery game
 - math: points on lines: https://www.youtube.com/watch?v=snHKEpCv0Hk
 

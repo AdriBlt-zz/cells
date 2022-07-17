@@ -8,6 +8,15 @@ export function isOutOfBounds(
   return x < minIncluded || x >= maxExcluded;
 }
 
+export function isInGrid(
+  i: number,
+  j: number,
+  nbRows: number,
+  nbCols: number
+): boolean {
+  return !isOutOfBounds(i, 0, nbRows) && !isOutOfBounds(j, 0, nbCols);
+}
+
 export function isBetweenIncluded(
   x: number,
   minIncluded: number,

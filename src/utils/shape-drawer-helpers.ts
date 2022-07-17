@@ -1,5 +1,7 @@
 import * as p5 from "p5";
 
+import { Color, getColor } from "./color";
+
 export function drawArrow(
   p5js: p5,
   x: number,
@@ -102,5 +104,56 @@ export function drawHexagon(
   p5js.vertex(left + delta + side, top + cellSize);
   p5js.vertex(left + delta, top + cellSize);
   p5js.vertex(left, top + cellSize / 2);
-  p5js.endShape();
+  p5js.endShape(p5js.CLOSE);
+}
+
+export function getSquareImage(
+  p5js: p5,
+  cellSize: number,
+  fillColor: Color,
+  strokeColor: Color,
+  strokeWeight: number = 1
+): p5.Graphics {
+  const left = 0;
+  const top = 0;
+  const w = cellSize;
+  const h = cellSize;
+
+  const shape = p5js.createGraphics(w, h);
+  shape.strokeWeight(strokeWeight);
+  shape.stroke(getColor(p5js, strokeColor));
+  shape.fill(getColor(p5js, fillColor));
+  shape.rect(left, top, cellSize, cellSize);
+
+  return shape;
+}
+
+export function getHexagonImage(
+  p5js: p5,
+  cellSize: number,
+  fillColor: Color,
+  strokeColor: Color,
+  strokeWeight: number = 1
+): p5.Graphics {
+  const side = cellSize / Math.sqrt(3);
+  const delta = cellSize / Math.sqrt(12);
+  const left = 0;
+  const top = 0;
+  const w = side + 2 * delta;
+  const h = cellSize;
+
+  const shape = p5js.createGraphics(w, h);
+  shape.strokeWeight(strokeWeight);
+  shape.stroke(getColor(p5js, strokeColor));
+  shape.fill(getColor(p5js, fillColor));
+  shape.beginShape();
+  shape.vertex(left + delta, top);
+  shape.vertex(left + delta + side, top);
+  shape.vertex(left + side + 2 * delta, top + cellSize / 2);
+  shape.vertex(left + delta + side, top + cellSize);
+  shape.vertex(left + delta, top + cellSize);
+  shape.vertex(left, top + cellSize / 2);
+  shape.endShape(p5js.CLOSE);
+
+  return shape;
 }

@@ -25,6 +25,24 @@ export function createDefaultMatrix<T>(
     return matrix;
 }
 
+export function createDefaultFlatMatrix<T>(
+    nbRows: number,
+    nbCols: number,
+    getDefaultValue: (i: number, j: number) => T
+): T[] {
+    const matrix: T[] = [];
+    for (let i = 0; i < nbRows; i++) {
+        for (let j = 0; j < nbCols; j++) {
+            matrix.push(getDefaultValue(i, j));
+        }
+    }
+    return matrix;
+}
+
+export function createDefaultList<T>(length: number, getDefaultValue: (i: number) => T): T[] {
+    return [...Array(length)].map((_, index) => getDefaultValue(index));
+}
+
 export function removeRandomElement<T>(list: T[]): T {
     const index = randomInt(0, list.length);
     return list.splice(index, 1)[0];
@@ -46,4 +64,14 @@ export function addIfNotNull<T>(list: T[], element: T | null): boolean {
 
     list.push(element);
     return true;
+}
+
+export function findMin(list: number[]): number {
+    let min = Infinity;
+    list.forEach(element => {
+        if (min > element) {
+            min = element;
+        }
+    });
+    return min;
 }
