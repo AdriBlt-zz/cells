@@ -1,6 +1,6 @@
 
 import { getDirectNeighboursInOrder } from "../../utils/grid-helper";
-import { createDefaultFlatMatrix, createDefaultList, findMin, peekRandomElement } from "../../utils/list-helpers";
+import { createDefaultFlatMatrix, createDefaultList, findMin, peekRandomElement, peekRandomElementWithWeight } from "../../utils/list-helpers";
 import { isInGrid } from "../../utils/numbers";
 import { Tile, WaveFunctionCollapseProps } from "./wave-function-collapse-models";
 
@@ -63,7 +63,12 @@ export class WaveFunctionCollapseEngine {
     }
 
     // TODO impl backtrack
-    const collapsedTile = peekRandomElement(cellToCollapse.possibleTiles);
+    const collapsedTile = this.props.supportsWeights
+      ? peekRandomElementWithWeight(
+        cellToCollapse.possibleTiles,
+        cellToCollapse.possibleTiles.map(i => this.props.tiles[i].weight || 1)
+      )
+      : peekRandomElement(cellToCollapse.possibleTiles);
     cellToCollapse.possibleTiles = [collapsedTile];
     cellToCollapse.isCollapsed = true;
     if (!disableDraw) {

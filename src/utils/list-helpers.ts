@@ -1,4 +1,4 @@
-import { randomInt } from "./random";
+import { random, randomInt } from "./random";
 
 export function shuffleList<T>(list: T[]): void {
     for (let i = list.length - 1; i > 0; i--) {
@@ -51,6 +51,24 @@ export function removeRandomElement<T>(list: T[]): T {
 export function peekRandomElement<T>(list: T[]): T {
     const index = randomInt(0, list.length);
     return list[index];
+}
+
+export function peekRandomElementWithWeight<T>(list: T[], weights: number[]): T {
+    if (list.length !== weights.length) {
+        throw new Error("Invalid arguments");
+    }
+
+    let total = 0;
+    weights.forEach(w => total += w);
+    const p = random(0, total);
+    let elementMax = 0;
+    for (let i = 0; i < list.length; i++) {
+        elementMax += weights[i];
+        if (p < elementMax) {
+            return list[i];
+        }
+    }
+    return list[list.length - 1];
 }
 
 export function peekLast<T>(list: T[]): T {

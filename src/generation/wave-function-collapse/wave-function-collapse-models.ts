@@ -10,12 +10,14 @@ export interface Tile {
     // color scheme in each direction (UP then clockwise)
     // TODO: bug it is actually the reverse of this: LEFT, then anticlockwise
     sockets: string[];
+    weight?: number;
 }
 
 export interface WaveFunctionCollapseProps {
     isHexaGrid: boolean;
     tiles: Tile[];
     areCompatibleSockets: (socket1: string, socket2: string) => boolean;
+    supportsWeights?: boolean;
 }
 
 const tilesMap = [
@@ -68,8 +70,13 @@ export function rotateImage(p5js: p5, image: p5.Image, rotateQuarter: number = 0
 
 export function TileSetBuilder() {
     const list: Tile[] = [];
-    const addTile = (id: string, sockets: string[], nbRotation: number) => {
-        let tile: Tile = { image: { id }, sockets };
+    const addTile = (
+        id: string,
+        sockets: string[],
+        nbRotation: number,
+        weight: number = 1,
+    ) => {
+        let tile: Tile = { image: { id }, sockets, weight };
         list.push(tile);
         for (let i = 1; i < nbRotation; i++) {
             tile = rotateTile(tile);
