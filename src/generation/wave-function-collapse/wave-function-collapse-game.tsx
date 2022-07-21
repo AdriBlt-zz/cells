@@ -42,6 +42,8 @@ export class WaveFunctionCollapseGame extends React.Component<{}, { tileTemplate
       TileTemplate.PlainHexagonTiles,
       TileTemplate.KnotsTiles,
       TileTemplate.CastleTiles,
+      TileTemplate.CirclesTiles,
+      TileTemplate.CircuitTiles,
     ];
     const strings = this.strings.waveFunctionCollapse;
     return {
@@ -58,7 +60,9 @@ export class WaveFunctionCollapseGame extends React.Component<{}, { tileTemplate
           case TileTemplate.PlainSquareTiles: return strings.simpleSquares;
           case TileTemplate.PlainHexagonTiles: return strings.simpleHexagons;
           case TileTemplate.KnotsTiles: return 'Knots';
-          case TileTemplate.CastleTiles: return 'Castles';
+          case TileTemplate.CastleTiles: return 'Castle';
+          case TileTemplate.CirclesTiles: return 'Circles';
+          case TileTemplate.CircuitTiles: return 'Circuit';
           default: return '';
         }
       }

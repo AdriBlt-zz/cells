@@ -5,6 +5,8 @@ import { COLORS, setBackground, setFillColor, setStrokeColor } from "../../utils
 import { drawHexagon, drawSquare, drawTextOnHexagon, drawTextOnSquare } from "../../utils/shape-drawer-helpers";
 import { getBasicTilesProps } from "./templates/basic-props";
 import { getCastleTilesProps } from "./templates/castle-props";
+import { getCirclesTilesProps } from "./templates/circles-props";
+import { getCircuitTilesProps } from "./templates/circuit-props";
 import { getKnotsTilesProps } from "./templates/knots-props";
 import { GenerationState, WaveFunctionCollapseEngine, WaveFunctionCollapseInterface } from "./wave-function-collapse-engine";
 import { loadTiles, rotateImage, Tile, WaveFunctionCollapseProps } from "./wave-function-collapse-models";
@@ -14,9 +16,11 @@ export enum TileTemplate {
   PlainHexagonTiles = 2,
   KnotsTiles = 3,
   CastleTiles = 4,
+  CirclesTiles = 5,
+  CircuitTiles = 6,
 }
 
-export const DEFAULT_TILE_TEMPLATE = TileTemplate.CastleTiles;
+export const DEFAULT_TILE_TEMPLATE = TileTemplate.CircuitTiles;
 
 const W = 900;
 const H = 500;
@@ -155,6 +159,10 @@ export class WaveFunctionCollapseSketch
         return getKnotsTilesProps();
       case TileTemplate.CastleTiles:
         return getCastleTilesProps();
+      case TileTemplate.CirclesTiles:
+        return getCirclesTilesProps();
+      case TileTemplate.CircuitTiles:
+        return getCircuitTilesProps();
       default:
         const never: never = template;
         throw new Error(`Unknown tempalte: ${never}`)
