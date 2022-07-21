@@ -13,10 +13,6 @@ export function getBasicTilesProps(
     const areCompatibleSockets = (s1: string, s2: string) => {
       return Math.abs(COMPATIBLE_LIST.indexOf(s1) - COMPATIBLE_LIST.indexOf(s2)) < 2;
     }
-    const hasMatchingSockets = (socket: string, socketList: string[]): boolean => {
-      // return socketList.includes(reverseString(socket));
-      return socketList.some(s => areCompatibleSockets(socket, s));
-    }
     const createTile = (color: Color, socket: string) => ({
       color, sockets: createDefaultList(nbNeighbours, () => socket),
     });
@@ -28,6 +24,6 @@ export function getBasicTilesProps(
         createTile(COLORS.LightGreen, "G"), // GRASS
         createTile(COLORS.DarkGreen, "T"), // TREE
       ],
-      hasMatchingSockets
+      areCompatibleSockets,
     };
 }

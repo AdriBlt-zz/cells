@@ -130,7 +130,7 @@ export class WaveFunctionCollapseEngine {
           continue;
         }
 
-        isValidTile = this.props.hasMatchingSockets(tile.sockets[d], validSockets);
+        isValidTile = validSockets.some(s => this.props.areCompatibleSockets(tile.sockets[d], s));
         if (!isValidTile) {
           break;
         }

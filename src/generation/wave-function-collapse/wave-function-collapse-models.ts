@@ -15,7 +15,7 @@ export interface Tile {
 export interface WaveFunctionCollapseProps {
     isHexaGrid: boolean;
     tiles: Tile[];
-    hasMatchingSockets: (socket: string, socketList: string[]) => boolean;
+    areCompatibleSockets: (socket1: string, socket2: string) => boolean;
 }
 
 const tilesMap = [
@@ -64,4 +64,22 @@ export function rotateImage(p5js: p5, image: p5.Image, rotateQuarter: number = 0
     graphics.rotate((rotateQuarter) * p5js.HALF_PI);
     graphics.image(image, 0, 0);
     return graphics;
+}
+
+export function TileSetBuilder() {
+    const list: Tile[] = [];
+    const addTile = (id: string, sockets: string[], nbRotation: number) => {
+        let tile: Tile = { image: { id }, sockets };
+        list.push(tile);
+        for (let i = 1; i < nbRotation; i++) {
+            tile = rotateTile(tile);
+            list.push(tile);
+        }
+    }
+
+    return {
+        addTile,
+        getTiles: () => list
+    };
+
 }

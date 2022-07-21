@@ -4,6 +4,7 @@ import { PlayableSketch } from "../../services/playable-sketch";
 import { COLORS, setBackground, setFillColor, setStrokeColor } from "../../utils/color";
 import { drawHexagon, drawSquare, drawTextOnHexagon, drawTextOnSquare } from "../../utils/shape-drawer-helpers";
 import { getBasicTilesProps } from "./templates/basic-props";
+import { getCastleTilesProps } from "./templates/castle-props";
 import { getKnotsTilesProps } from "./templates/knots-props";
 import { GenerationState, WaveFunctionCollapseEngine, WaveFunctionCollapseInterface } from "./wave-function-collapse-engine";
 import { loadTiles, rotateImage, Tile, WaveFunctionCollapseProps } from "./wave-function-collapse-models";
@@ -12,9 +13,10 @@ export enum TileTemplate {
   PlainSquareTiles = 1,
   PlainHexagonTiles = 2,
   KnotsTiles = 3,
+  CastleTiles = 4,
 }
 
-export const DEFAULT_TILE_TEMPLATE = TileTemplate.KnotsTiles;
+export const DEFAULT_TILE_TEMPLATE = TileTemplate.CastleTiles;
 
 const W = 900;
 const H = 500;
@@ -29,7 +31,7 @@ const BACKGROUND_COLOR = COLORS.White;
 const NB_COLS = Math.floor((W - 2 * MARGIN) / CELL_SIZE);
 const NB_ROWS = Math.floor((H - 2 * MARGIN) / CELL_SIZE);
 
-const SHOW_ENTROPY: boolean = false;
+const DEBUG: boolean = false;
 
 export class WaveFunctionCollapseSketch
   extends PlayableSketch
@@ -80,7 +82,7 @@ export class WaveFunctionCollapseSketch
     if (this.engine.generationState === GenerationState.Done) {
       this.stop();
     } else if (this.engine.generationState === GenerationState.Error) {
-      this.resetGrid();
+      this.handleError();
     }
   }
 
@@ -89,7 +91,7 @@ export class WaveFunctionCollapseSketch
       while (this.engine.generationState !== GenerationState.Done && this.isPaused) {
           this.engine.collapseOneTile(/* disableDraw */ true);
           if (this.engine.generationState === GenerationState.Error) {
-            this.resetGrid();
+            this.handleError();
           }
       }
 
@@ -115,7 +117,7 @@ export class WaveFunctionCollapseSketch
       } else {
         drawSquare(this.p5js, j, i, CELL_SIZE, MARGIN_LEFT, MARGIN_TOP);
       }
-    } else if (SHOW_ENTROPY) {
+    } else if (DEBUG) {
       setFillColor(this.p5js, BACKGROUND_COLOR);
 
       if (this.props.isHexaGrid) {
@@ -135,6 +137,14 @@ export class WaveFunctionCollapseSketch
     }
   }
 
+  private handleError = () => {
+    if (DEBUG) {
+      this.stop();
+    } else {
+      this.resetGrid();
+    }
+  }
+
   private getWaveFunctionCollapseProps(template: TileTemplate): WaveFunctionCollapseProps {
     switch (template) {
       case TileTemplate.PlainHexagonTiles:
@@ -143,6 +153,8 @@ export class WaveFunctionCollapseSketch
         return getBasicTilesProps(this.p5js, false);
       case TileTemplate.KnotsTiles:
         return getKnotsTilesProps();
+      case TileTemplate.CastleTiles:
+        return getCastleTilesProps();
       default:
         const never: never = template;
         throw new Error(`Unknown tempalte: ${never}`)
