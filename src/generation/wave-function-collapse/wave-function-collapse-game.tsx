@@ -38,8 +38,9 @@ export class WaveFunctionCollapseGame extends React.Component<{}, { tileTemplate
 
   private getTemplateTypeProps = (): SelectInputProps<TileTemplate> => {
     const options: TileTemplate[] = [
-      TileTemplate.PlainHexagonTiles,
       TileTemplate.PlainSquareTiles,
+      TileTemplate.PlainHexagonTiles,
+      TileTemplate.KnotsTiles
     ];
     const strings = this.strings.waveFunctionCollapse;
     return {
@@ -53,8 +54,9 @@ export class WaveFunctionCollapseGame extends React.Component<{}, { tileTemplate
       },
       getName: (type: TileTemplate) => {
         switch (type) {
-          case TileTemplate.PlainHexagonTiles: return strings.simpleHexagons;
           case TileTemplate.PlainSquareTiles: return strings.simpleSquares;
+          case TileTemplate.PlainHexagonTiles: return strings.simpleHexagons;
+          case TileTemplate.KnotsTiles: return 'Knots';
           default: return '';
         }
       }

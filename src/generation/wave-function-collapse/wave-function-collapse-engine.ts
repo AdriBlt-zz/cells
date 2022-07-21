@@ -2,7 +2,7 @@
 import { getDirectNeighboursInOrder } from "../../utils/grid-helper";
 import { createDefaultFlatMatrix, createDefaultList, findMin, peekRandomElement } from "../../utils/list-helpers";
 import { isInGrid } from "../../utils/numbers";
-import { Tile, WaveFunctionCollapseProps } from "./wave-function-collapse-props";
+import { Tile, WaveFunctionCollapseProps } from "./wave-function-collapse-models";
 
 export interface WaveFunctionCollapseInterface {
   drawCell: (i: number, j: number, tile: Tile | null) => void
@@ -12,9 +12,10 @@ export enum GenerationState {
     NotStarted,
     Generating,
     Done,
+    Error,
 }
 
-export interface Cell {
+interface Cell {
   i: number;
   j: number;
   isCollapsed: boolean;
@@ -45,7 +46,7 @@ export class WaveFunctionCollapseEngine {
     this.redrawGrid();
   }
 
-  public collapseOneTile() {
+  public collapseOneTile(disableDraw: boolean = false) {
     if (this.generationState === GenerationState.NotStarted) {
       this.generationState = GenerationState.Generating;
     }
@@ -57,8 +58,7 @@ export class WaveFunctionCollapseEngine {
     }
 
     if (cellToCollapse.possibleTiles.length === 0) {
-      console.log('ERROR');
-      this.generationState = GenerationState.Done;
+      this.generationState = GenerationState.Error;
       return;
     }
 
@@ -66,7 +66,9 @@ export class WaveFunctionCollapseEngine {
     const collapsedTile = peekRandomElement(cellToCollapse.possibleTiles);
     cellToCollapse.possibleTiles = [collapsedTile];
     cellToCollapse.isCollapsed = true;
-    this.drawCell(cellToCollapse);
+    if (!disableDraw) {
+      this.drawCell(cellToCollapse);
+    }
 
     const cellsToUpdate = this.getNeighboursToUpdate(cellToCollapse.i, cellToCollapse.j);
     for (let k = 0; k < cellsToUpdate.length; k++) {
@@ -78,6 +80,9 @@ export class WaveFunctionCollapseEngine {
       const oldThumbprint = cell.possibleTiles.sort().join("");
       cell.possibleTiles = this.computePossibleTiles(cell.i, cell.j);
       if (oldThumbprint !== cell.possibleTiles.sort().join("")) {
+        if (!disableDraw) {
+          this.drawCell(cell);
+        }
         cellsToUpdate.push(...this.getNeighboursToUpdate(cell.i, cell.j));
       }
     }
@@ -85,6 +90,14 @@ export class WaveFunctionCollapseEngine {
 
   public redrawGrid(): void {
       this.cells.forEach(cell => this.drawCell(cell));
+  }
+
+  public getCell(i: number, j: number): Cell {
+    if (!isInGrid(i, j, this.nbRows, this.nbCols)) {
+      throw new Error("out of bound");
+    }
+
+    return this.cells[i * this.nbCols + j]
   }
 
   private drawCell(cell: Cell): void {
@@ -98,11 +111,11 @@ export class WaveFunctionCollapseEngine {
     const nbNeighbours = this.props.isHexaGrid ? 6 : 4;
     const constraints: Array<string[]|null> = getDirectNeighboursInOrder(i, j, this.props.isHexaGrid)
       .map((point, index) => {
-        if (!isInGrid(point.x, point.y, this.nbRows, this.nbCols)) {
+        if (!isInGrid(point.i, point.j, this.nbRows, this.nbCols)) {
           return null;
         }
 
-        const neighbour = this.getCell(point.x, point.y);
+        const neighbour = this.getCell(point.i, point.j);
         const neighbourDirectionIndex = (index + nbNeighbours / 2) % nbNeighbours;
         const validNeighbourSockets = neighbour.possibleTiles.map(tileIndex => this.props.tiles[tileIndex].sockets[neighbourDirectionIndex]);
         return Array.from(new Set(validNeighbourSockets));
@@ -133,8 +146,8 @@ export class WaveFunctionCollapseEngine {
 
   private getNeighboursToUpdate(i: number, j: number): Cell[] {
     return getDirectNeighboursInOrder(i, j, this.props.isHexaGrid)
-      .filter(p => isInGrid(p.x, p.y, this.nbRows, this.nbCols))
-      .map(p => this.getCell(p.x, p.y))
+      .filter(p => isInGrid(p.i, p.j, this.nbRows, this.nbCols))
+      .map(p => this.getCell(p.i, p.j))
       .filter(c => !c.isCollapsed);
   }
 
@@ -148,13 +161,5 @@ export class WaveFunctionCollapseEngine {
     return cellsWithMinEntropie.length === 0
       ? undefined
       : peekRandomElement(cellsWithMinEntropie);
-  }
-
-  private getCell(i: number, j: number): Cell {
-    if (!isInGrid(i, j, this.nbRows, this.nbCols)) {
-      throw new Error("out of bound");
-    }
-
-    return this.cells[i * this.nbCols + j]
   }
 }

@@ -28,27 +28,27 @@ export function getNeighbourCells(
 // If isHexa, return all 6 direct neighbours
 // If not, return all 4 direct neighbours
 export function getDirectNeighboursInOrder(
-    x: number,
-    y: number,
+    i: number,
+    j: number,
     isHexa: boolean
-): Point[] {
+): Array<{i: number; j: number}> {
     const neighbours = [
-        { x, y: y - 1 }, // NORTH
-        { x: x + 1, y }, // EAST
-        { x, y: y + 1 }, // SOUTH
-        { x: x - 1, y }, // WEST
+        { i: i - 1, j }, // NORTH
+        { i, j: j + 1 }, // EAST
+        { i: i + 1, j }, // SOUTH
+        { i, j: j - 1 }, // WEST
     ];
 
     if (!isHexa) {
         return neighbours;
     }
 
-    if (x % 2 === 0) {
-        neighbours.splice(1, 0, { x: x + 1, y: y - 1 });
-        neighbours.splice(5, 0, { x: x - 1, y: y - 1 });
+    if (i % 2 === 0) {
+        neighbours.splice(1, 0, { i: i - 1, j: j + 1 });
+        neighbours.splice(5, 0, { i: i - 1, j: j - 1 });
     } else {
-        neighbours.splice(2, 0, { x: x + 1, y: y + 1 });
-        neighbours.splice(4, 0, { x: x - 1, y: y + 1 });
+        neighbours.splice(2, 0, { i: i + 1, j: j + 1 });
+        neighbours.splice(4, 0, { i: i + 1, j: j - 1 });
     }
 
     return neighbours;

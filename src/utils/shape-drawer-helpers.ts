@@ -53,7 +53,7 @@ export function drawSquare(
   y: number,
   cellSize: number,
   marginLeft: number = 0,
-  marginTop: number = 0
+  marginTop: number = 0,
 ): void {
   p5js.rect(
     marginLeft + x * cellSize,
@@ -63,7 +63,7 @@ export function drawSquare(
   );
 }
 
-export function drawText(
+export function drawTextOnSquare(
   p5js: p5,
   x: number,
   y: number,
@@ -80,13 +80,35 @@ export function drawText(
   );
 }
 
+export function drawTextOnHexagon(
+  p5js: p5,
+  x: number,
+  y: number,
+  text: string,
+  cellSize: number,
+  marginLeft: number = 0,
+  marginTop: number = 0,
+  padding: number = 4
+): void {
+  const side = cellSize / Math.sqrt(3);
+  const delta = cellSize / Math.sqrt(12);
+  const left = marginLeft + x * (side + delta) + delta / 2 + padding;
+  let top = marginTop + (y + 1) * cellSize - padding;
+
+  if (x % 2 === 1) {
+    top += cellSize / 2;
+  }
+
+  p5js.text(text, left, top);
+}
+
 export function drawHexagon(
   p5js: p5,
   x: number,
   y: number,
   cellSize: number,
   marginLeft: number = 0,
-  marginTop: number = 0
+  marginTop: number = 0,
 ): void {
   const side = cellSize / Math.sqrt(3);
   const delta = cellSize / Math.sqrt(12);

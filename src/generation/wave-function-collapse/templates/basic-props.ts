@@ -1,27 +1,12 @@
 import * as p5 from "p5";
 
-import { Color, COLORS } from "../../utils/color";
-import { createDefaultList } from "../../utils/list-helpers";
-import { getHexagonImage, getSquareImage } from "../../utils/shape-drawer-helpers";
+import { Color, COLORS } from "../../../utils/color";
+import { createDefaultList } from "../../../utils/list-helpers";
+import { WaveFunctionCollapseProps } from "../wave-function-collapse-models";
 
-export interface Tile {
-    image: p5.Image | p5.Element;
-    // color scheme in each direction (UP then clockwise)
-    sockets: string[];
-}
-
-export interface WaveFunctionCollapseProps {
-    isHexaGrid: boolean;
-    tiles: Tile[];
-    hasMatchingSockets: (socket: string, socketList: string[]) => boolean;
-}
-
-export function getPlainTilesWFCProps(
+export function getBasicTilesProps(
     p5js: p5,
     isHexaGrid: boolean,
-    cellSize: number,
-    strokeColor: Color,
-    strokeWeight: number,
   ): WaveFunctionCollapseProps {
     const nbNeighbours = isHexaGrid ? 6 : 4;
     const COMPATIBLE_LIST = ["W", "S", "G", "T"];
@@ -32,12 +17,8 @@ export function getPlainTilesWFCProps(
       // return socketList.includes(reverseString(socket));
       return socketList.some(s => areCompatibleSockets(socket, s));
     }
-    const createTileColor = (color: Color) =>  isHexaGrid
-      ? getHexagonImage(p5js, cellSize, color, strokeColor, strokeWeight)
-      : getSquareImage(p5js, cellSize, color, strokeColor, strokeWeight);
     const createTile = (color: Color, socket: string) => ({
-      image: createTileColor(color),
-      sockets: createDefaultList(nbNeighbours, () => socket),
+      color, sockets: createDefaultList(nbNeighbours, () => socket),
     });
     return {
       isHexaGrid,

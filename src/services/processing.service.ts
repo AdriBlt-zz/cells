@@ -5,6 +5,7 @@ import { isMouseWheelEvent } from "./processing-contracts";
 export interface ProcessingSketch {
   setup(p: p5): void;
   draw(): void;
+  preload?(p: p5): void;
   keyPressed?(): void;
   mousePressed?(): void;
   mouseReleased?(): void;
@@ -24,6 +25,7 @@ export class ProcessingService {
     this.p5js = new p5((p: p5) => {
       p.setup = () => processingSketch.setup(p);
       p.draw = () => processingSketch.draw && processingSketch.draw();
+      p.preload = () => processingSketch.preload && processingSketch.preload(p);
       p.keyPressed = () =>
         processingSketch.keyPressed && processingSketch.keyPressed();
       p.mousePressed = () =>

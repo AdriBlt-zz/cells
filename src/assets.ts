@@ -6,6 +6,8 @@ export enum Asset {
     MazeImage = '/maze.png',
 
     PlanetsFile = '/planets.tsv',
+
+    WaveFunctionCollapseFormat = '/tiles/{0}/{1}.png',
 }
 
 export function getAssetPath(asset: Asset): string {

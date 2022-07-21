@@ -3,7 +3,7 @@ import * as React from "react";
 import {
   drawArrow,
   drawSquare,
-  drawText,
+  drawTextOnSquare,
 } from "src/utils/shape-drawer-helpers";
 
 import {
@@ -138,7 +138,7 @@ export class TurmiteRule extends React.Component<TurmiteRuleProps>
     drawSquare(this.p5js, j, i, CELL_SIDE, 0, MARGIN);
     setFillColor(this.p5js, COLORS.Black);
     this.p5js.textSize(20);
-    drawText(
+    drawTextOnSquare(
       this.p5js,
       j,
       i,
@@ -177,7 +177,7 @@ export class TurmiteRule extends React.Component<TurmiteRuleProps>
     );
     setFillColor(this.p5js, COLORS.Black);
     this.p5js.textSize(15);
-    drawText(
+    drawTextOnSquare(
       this.p5js,
       j,
       0,
