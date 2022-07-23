@@ -12,8 +12,8 @@ export function getCircuitTilesProps(): WaveFunctionCollapseProps {
   tileSet.addTile('circuit/skew', [ 'GLG', 'GLG', 'G', 'G' ], 4, 2);
   tileSet.addTile('circuit/substrate', [ 'G', 'G', 'G', 'G' ], 1, 2);
   tileSet.addTile('circuit/t', [ 'G', 'GLG', 'GLG', 'GLG' ], 4, 0.1);
-  tileSet.addTile('circuit/track', [ 'GLG', 'G', 'GLG', 'G' ], 2);
-  tileSet.addTile('circuit/transition', [ 'GWG', 'G', 'GLG', 'G' ], 0.4);
+  tileSet.addTile('circuit/track', [ 'GLG', 'G', 'GLG', 'G' ], 2, 2);
+  tileSet.addTile('circuit/transition', [ 'GWG', 'G', 'GLG', 'G' ], 4, 0.4);
   tileSet.addTile('circuit/turn', [ 'GLG', 'GLG', 'G', 'G' ], 4, 1);
   tileSet.addTile('circuit/viad', [ 'G', 'GLG', 'G', 'GLG' ], 2, 0.1);
   tileSet.addTile('circuit/vias', [ 'GLG', 'G', 'G', 'G' ], 4, 0.3);

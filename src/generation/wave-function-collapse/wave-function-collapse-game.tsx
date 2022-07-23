@@ -1,14 +1,17 @@
 import * as React from "react";
 
+import { CheckboxInput, CheckboxInputProps } from "../../shared/checkbox-input";
 import { ControlBarInput } from "../../shared/control-bar-input";
 import { ProcessingComponent } from "../../shared/processing-component";
 import { SelectInput, SelectInputProps } from "../../shared/select-input";
 import { getStrings, LocalizedStrings } from "../../strings";
 import { DEFAULT_TILE_TEMPLATE, TileTemplate, WaveFunctionCollapseSketch } from "./wave-function-collapse-sketch";
 
-export class WaveFunctionCollapseGame extends React.Component<{}, { tileTemplate: TileTemplate }>
-{
-  public state = { tileTemplate: DEFAULT_TILE_TEMPLATE };
+export class WaveFunctionCollapseGame extends React.Component<
+  {},
+  { tileTemplate: TileTemplate; debug: boolean }
+> {
+  public state = { tileTemplate: DEFAULT_TILE_TEMPLATE, debug: false };
   private strings: LocalizedStrings = getStrings();
   private sketch = new WaveFunctionCollapseSketch();
 
@@ -32,8 +35,17 @@ export class WaveFunctionCollapseGame extends React.Component<{}, { tileTemplate
           oneStepCallback={this.sketch.playOneStep}
           skipFastForwardCallback={this.sketch.generate}
         />
+        <CheckboxInput {...this.debugCheckBoxProps()} />
       </div>
     );
+  }
+
+  private debugCheckBoxProps = (): CheckboxInputProps => {
+    return {
+      label: 'Show tiles entropy',
+      value: this.state.debug,
+      onValueChanged : (debug) => this.setState({ debug }, () => this.sketch.setIsDebug(debug)),
+    };
   }
 
   private getTemplateTypeProps = (): SelectInputProps<TileTemplate> => {
@@ -44,6 +56,8 @@ export class WaveFunctionCollapseGame extends React.Component<{}, { tileTemplate
       TileTemplate.CastleTiles,
       TileTemplate.CirclesTiles,
       TileTemplate.CircuitTiles,
+      TileTemplate.FloorPlanTiles,
+      TileTemplate.RoomsTiles
     ];
     const strings = this.strings.waveFunctionCollapse;
     return {
@@ -55,17 +69,7 @@ export class WaveFunctionCollapseGame extends React.Component<{}, { tileTemplate
           this.setState({ tileTemplate }, () => this.sketch.setTemplate(tileTemplate));
         }
       },
-      getName: (type: TileTemplate) => {
-        switch (type) {
-          case TileTemplate.PlainSquareTiles: return strings.simpleSquares;
-          case TileTemplate.PlainHexagonTiles: return strings.simpleHexagons;
-          case TileTemplate.KnotsTiles: return 'Knots';
-          case TileTemplate.CastleTiles: return 'Castle';
-          case TileTemplate.CirclesTiles: return 'Circles';
-          case TileTemplate.CircuitTiles: return 'Circuit';
-          default: return '';
-        }
-      }
+      getName: (type: TileTemplate) => type as string,
     };
   };
 }
