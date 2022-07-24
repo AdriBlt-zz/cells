@@ -13,6 +13,7 @@ import { SandpileGame } from "./fractals/sandpile-game";
 import { BattleshipGame } from "./games/battleship/battleship-game";
 import { MinesweeperGame } from "./games/minesweeper/minesweeper-game";
 import { SnakeGame } from "./games/snake/snake-game";
+import { DiffusionLimitedAggregationGame } from "./generation/diffusion-limited-aggregation/diffusion-limited-aggregation-game";
 import { WaveFunctionCollapseGame } from "./generation/wave-function-collapse/wave-function-collapse-game";
 import { BezierGame } from "./maths/bezier/bezier-game";
 import { CurvedPolygonGame } from "./maths/curved-polygon/curved-polygon-game";
@@ -210,7 +211,12 @@ const generationPages: Page[] = [
     name: strings.menu.waveFunctionCollapse,
     route: "wave_function-collapse",
     component: <WaveFunctionCollapseGame />,
-  }
+  },
+  {
+    name: strings.menu.diffusionLimitedAggregation,
+    route: "diffusion-limited-aggregation",
+    component: <DiffusionLimitedAggregationGame />,
+  },
 ];
 const miscPages: Page[] = [
   {

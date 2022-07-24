@@ -32,6 +32,7 @@ const strings = {
     mazes: "Mazes",
     generation: "Generation",
     waveFunctionCollapse: "Wave Function Collapse",
+    diffusionLimitedAggregation: "Diffusion Limited Aggregation",
     voronoi: "Voronoï cells",
     bezier: "Bézier curves",
     curvedPolygon: "Curved Polygons",
