@@ -10,6 +10,7 @@ import { getCircuitTilesProps } from "./templates/circuit-props";
 import { getFloorPlanTilesProps } from "./templates/floorPlan-props";
 import { getKnotsTilesProps } from "./templates/knots-props";
 import { getRoomsTilesProps } from "./templates/rooms-props";
+import { getSummerTilesProps } from "./templates/summer-props";
 import { GenerationState, WaveFunctionCollapseEngine, WaveFunctionCollapseInterface } from "./wave-function-collapse-engine";
 import { loadTiles, rotateImage, Tile, WaveFunctionCollapseProps } from "./wave-function-collapse-models";
 
@@ -22,9 +23,10 @@ export enum TileTemplate {
   CircuitTiles = 'Circuit',
   FloorPlanTiles = 'Floor plan',
   RoomsTiles = 'Rooms',
+  SummerTiles = 'Summer',
 }
 
-export const DEFAULT_TILE_TEMPLATE = TileTemplate.RoomsTiles;
+export const DEFAULT_TILE_TEMPLATE = TileTemplate.SummerTiles;
 
 const W = 900;
 const H = 500;
@@ -216,6 +218,8 @@ export class WaveFunctionCollapseSketch
         return getFloorPlanTilesProps();
       case TileTemplate.RoomsTiles:
         return getRoomsTilesProps();
+      case TileTemplate.SummerTiles:
+        return getSummerTilesProps();
       default:
         const never: never = template;
         throw new Error(`Unknown tempalte: ${never}`)

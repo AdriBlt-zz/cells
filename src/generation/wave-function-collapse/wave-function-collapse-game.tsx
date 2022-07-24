@@ -57,7 +57,8 @@ export class WaveFunctionCollapseGame extends React.Component<
       TileTemplate.CirclesTiles,
       TileTemplate.CircuitTiles,
       TileTemplate.FloorPlanTiles,
-      TileTemplate.RoomsTiles
+      TileTemplate.RoomsTiles,
+      TileTemplate.SummerTiles,
     ];
     const strings = this.strings.waveFunctionCollapse;
     return {

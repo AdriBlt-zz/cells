@@ -1,5 +1,4 @@
-import { reverseString } from "src/utils/string";
-
+import { reverseString } from "../../../utils/string";
 import { TileSetBuilder, WaveFunctionCollapseProps } from "../wave-function-collapse-models";
 
 export function getRoomsTilesProps(): WaveFunctionCollapseProps {
