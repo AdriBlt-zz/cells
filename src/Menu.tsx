@@ -209,7 +209,7 @@ const mazesPages: Page[] = [
 const generationPages: Page[] = [
   {
     name: strings.menu.waveFunctionCollapse,
-    route: "wave_function-collapse",
+    route: "wave-function-collapse",
     component: <WaveFunctionCollapseGame />,
   },
   {

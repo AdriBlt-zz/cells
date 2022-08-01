@@ -3,9 +3,9 @@ import { random } from "../../utils/random";
 import { areColliding, Particule } from "./particule-helpers";
 
 export interface DiffusionLimitedAggregationConfig {
-    startingTree: Particule[];
     createFreeParticulesAtStart: () => Particule[];
     createFreeParticuleOnCollide: (collidedParticuleRadius: number) => Particule[];
+    collidesWithBorder: (p: Particule) => boolean;
 }
 
 const VELOCITY = 5;
@@ -23,7 +23,7 @@ export class DiffusionLimitedAggregationEngine {
     }
 
     public reset(): void {
-        this.treeParticules = this.config.startingTree;
+        this.treeParticules = [];
         this.freeParticules = this.config.createFreeParticulesAtStart();
     }
 
@@ -36,7 +36,10 @@ export class DiffusionLimitedAggregationEngine {
             freeParticule.j = clamp(freeParticule.j + random(-VELOCITY, VELOCITY), 0, this.width);
 
             // CHECK IS COLLIDING
-            if (tree.some(p => areColliding(freeParticule, p))) {
+            if (
+                this.config.collidesWithBorder(freeParticule)
+                || tree.some(p => areColliding(freeParticule, p))
+            ) {
                 this.treeParticules.push(freeParticule);
                 nextFreeParticules.push(
                     ...this.config.createFreeParticuleOnCollide(freeParticule.radius)
