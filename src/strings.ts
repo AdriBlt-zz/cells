@@ -38,6 +38,7 @@ const strings = {
     curvedPolygon: "Curved Polygons",
     roses: "Roses",
     misc: "Misc.",
+    euclidianRythms: "Euclidian Rythms",
     secretSanta: "Secret Santa",
   },
   minesweeper: {
@@ -173,6 +174,11 @@ const strings = {
     templates: "Tile template",
     simpleSquares: "Simple squares",
     simpleHexagons: "Simple hexagons",
+  },
+  euclidianRythms: {
+    timesteps: "Timesteps",
+    info1: "An euclidian rythms E(k, n) is a repartition of k bits in a measure of n timesteps, where all the bits are as far as posisble from each other.",
+    info2: "The graphic shows the different rythms for a given 'n'. (the lines are the different values of 'k' and the columns are the time)",
   },
   shared: {
     newGame: "New Game (R)",
