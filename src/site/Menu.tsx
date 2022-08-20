@@ -1,47 +1,50 @@
 import * as React from "react";
 
-import { AntGame } from "./cellular-automaton/ant-game";
-import { ElementaryRulesGame } from "./cellular-automaton/elementary-rules-game";
-import { GameOfLifeGame } from "./cellular-automaton/game-of-life-game";
-import { TurmiteGame } from "./cellular-automaton/turmite-game";
-import { BransleyFernGame, SierpinskiChaosGame } from "./fractals/bransley-chaos-game";
-import { BurningShipFractalGame } from "./fractals/burning-ship-fractal-game";
-import { JuliaSetFractalGame } from "./fractals/julia-set-fractal-game";
-import { MandelbrotFractalGame } from "./fractals/mandelbrot-fractal-game";
-import { NewtonFractalGame } from "./fractals/newton-fractal-game";
-import { SandpileGame } from "./fractals/sandpile-game";
-import { BattleshipGame } from "./games/battleship/battleship-game";
-import { MinesweeperGame } from "./games/minesweeper/minesweeper-game";
-import { SnakeGame } from "./games/snake/snake-game";
-import { DiffusionLimitedAggregationGame } from "./generation/diffusion-limited-aggregation/diffusion-limited-aggregation-game";
-import { WaveFunctionCollapseGame } from "./generation/wave-function-collapse/wave-function-collapse-game";
-import { BezierGame } from "./maths/bezier/bezier-game";
-import { CurvedPolygonGame } from "./maths/curved-polygon/curved-polygon-game";
-import { EuclidianRythmsGame } from "./maths/euclidian-rythms/euclidian-rythms-game";
-import { FourierDrawingGame } from "./maths/fourier-drawing/fourier-drawing-game";
-import { FourierSignalGame } from "./maths/fourier-signal/fourier-signal-game";
-import { MultiplicationCircleGame } from "./maths/multiplication-circle/multiplication-circle-game";
-import { RosesGame } from "./maths/roses/roses-game";
-import { VoronoiGame } from "./maths/voronoi/voronoi-game";
-import { MazeGenerationGame } from "./mazes/maze-generation/maze-generation-game";
-import { AlixMazeGame } from "./mazes/ray-casting/alix-maze-game";
-import { GeneratedMazeGame } from "./mazes/ray-casting/generated-maze-game";
-import { WolfensteinGame } from "./mazes/ray-casting/wolfenstein-game";
-import { SecretSantaGame } from "./misc/secret-santa-game";
-import { FlockGame } from "./simulations/flock/flock-game";
-import { NBodiesGame } from "./simulations/n-bodies/n-bodies-game";
-import { StarsGame } from "./simulations/stars/stars-game";
-import { getStrings, LocalizedStrings } from "./strings";
+import { AntGame } from "../cellular-automaton/ant-game";
+import { ElementaryRulesGame } from "../cellular-automaton/elementary-rules-game";
+import { GameOfLifeGame } from "../cellular-automaton/game-of-life-game";
+import { TurmiteGame } from "../cellular-automaton/turmite-game";
+import { BransleyFernGame, SierpinskiChaosGame } from "../fractals/bransley-chaos-game";
+import { BurningShipFractalGame } from "../fractals/burning-ship-fractal-game";
+import { JuliaSetFractalGame } from "../fractals/julia-set-fractal-game";
+import { MandelbrotFractalGame } from "../fractals/mandelbrot-fractal-game";
+import { NewtonFractalGame } from "../fractals/newton-fractal-game";
+import { SandpileGame } from "../fractals/sandpile-game";
+import { BattleshipGame } from "../games/battleship/battleship-game";
+import { MinesweeperGame } from "../games/minesweeper/minesweeper-game";
+import { SnakeGame } from "../games/snake/snake-game";
+import { DiffusionLimitedAggregationGame } from "../generation/diffusion-limited-aggregation/diffusion-limited-aggregation-game";
+import { WaveFunctionCollapseGame } from "../generation/wave-function-collapse/wave-function-collapse-game";
+import { BezierGame } from "../maths/bezier/bezier-game";
+import { CurvedPolygonGame } from "../maths/curved-polygon/curved-polygon-game";
+import { EuclidianRythmsGame } from "../maths/euclidian-rythms/euclidian-rythms-game";
+import { FourierDrawingGame } from "../maths/fourier-drawing/fourier-drawing-game";
+import { FourierSignalGame } from "../maths/fourier-signal/fourier-signal-game";
+import { MultiplicationCircleGame } from "../maths/multiplication-circle/multiplication-circle-game";
+import { RosesGame } from "../maths/roses/roses-game";
+import { VoronoiGame } from "../maths/voronoi/voronoi-game";
+import { MazeGenerationGame } from "../mazes/maze-generation/maze-generation-game";
+import { AlixMazeGame } from "../mazes/ray-casting/alix-maze-game";
+import { GeneratedMazeGame } from "../mazes/ray-casting/generated-maze-game";
+import { WolfensteinGame } from "../mazes/ray-casting/wolfenstein-game";
+// import { SecretSantaGame } from "../misc/secret-santa-game";
+import { FlockGame } from "../simulations/flock/flock-game";
+import { NBodiesGame } from "../simulations/n-bodies/n-bodies-game";
+import { StarsGame } from "../simulations/stars/stars-game";
+import { getStrings, LocalizedStrings } from "../strings";
 
 export interface Page {
   name: string;
   route: string;
   component: React.ReactNode;
+  description?: string;
 }
 
 export interface Category {
   name: string;
+  route: string;
   pages: Page[];
+  description?: string;
 }
 
 export interface Menu {
@@ -224,13 +227,13 @@ const generationPages: Page[] = [
     component: <DiffusionLimitedAggregationGame />,
   },
 ];
-const miscPages: Page[] = [
-  {
-    name: strings.menu.secretSanta,
-    route: "secret-santa",
-    component: <SecretSantaGame />,
-  }
-];
+// const miscPages: Page[] = [
+//   {
+//     name: strings.menu.secretSanta,
+//     route: "secret-santa",
+//     component: <SecretSantaGame />,
+//   }
+// ];
 
 export const appMenu: Menu = {
   name: strings.menu.cells,
@@ -238,36 +241,44 @@ export const appMenu: Menu = {
   categories: [
     {
       name: strings.menu.cellularAutomaton,
+      route: "cellular-automaton",
       pages: cellularAutomatonPages,
     },
     {
       name: strings.menu.games,
+      route: "classic-games",
       pages: gamesPages,
     },
     {
       name: strings.menu.simulations,
+      route: "simulations",
       pages: simulationsPages,
     },
     {
       name: strings.menu.fractals,
+      route: "fractals",
       pages: fractalesPages,
     },
     {
       name: strings.menu.maths,
+      route: "maths",
       pages: mathsPages,
     },
     {
       name: strings.menu.mazes,
+      route: "mazes",
       pages: mazesPages,
     },
     {
       name: strings.menu.generation,
+      route: "generation",
       pages: generationPages,
     },
-    {
-      name: strings.menu.misc,
-      pages: miscPages,
-    },
+    // {
+    //   name: strings.menu.misc,
+    //   route: "miscellaneous",
+    //   pages: miscPages,
+    // },
   ],
 };
 

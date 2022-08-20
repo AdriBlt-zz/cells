@@ -8,6 +8,8 @@ export enum Asset {
     PlanetsFile = '/planets.tsv',
 
     WaveFunctionCollapseFormat = '/tiles/{0}/{1}.png',
+
+    CoversFormat = '/covers/{0}/{1}.png',
 }
 
 export function getAssetPath(asset: Asset): string {
