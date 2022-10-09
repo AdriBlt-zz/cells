@@ -27,6 +27,7 @@ import { MazeGenerationGame } from "../mazes/maze-generation/maze-generation-gam
 import { AlixMazeGame } from "../mazes/ray-casting/alix-maze-game";
 import { GeneratedMazeGame } from "../mazes/ray-casting/generated-maze-game";
 import { WolfensteinGame } from "../mazes/ray-casting/wolfenstein-game";
+import { ContradeOfSienna } from "../misc/sienna/contrade-of-sienna";
 // import { SecretSantaGame } from "../misc/secret-santa-game";
 import { FlockGame } from "../simulations/flock/flock-game";
 import { NBodiesGame } from "../simulations/n-bodies/n-bodies-game";
@@ -227,13 +228,18 @@ const generationPages: Page[] = [
     component: <DiffusionLimitedAggregationGame />,
   },
 ];
-// const miscPages: Page[] = [
+const miscPages: Page[] = [
 //   {
 //     name: strings.menu.secretSanta,
 //     route: "secret-santa",
 //     component: <SecretSantaGame />,
-//   }
-// ];
+//   },
+  {
+    name: "Contrade of Sienna",
+    route: "contrade-sienna",
+    component: <ContradeOfSienna />,
+  }
+];
 
 export const appMenu: Menu = {
   name: strings.menu.cells,
@@ -274,11 +280,11 @@ export const appMenu: Menu = {
       route: "generation",
       pages: generationPages,
     },
-    // {
-    //   name: strings.menu.misc,
-    //   route: "miscellaneous",
-    //   pages: miscPages,
-    // },
+    {
+      name: strings.menu.misc,
+      route: "miscellaneous",
+      pages: miscPages,
+    },
   ],
 };
 

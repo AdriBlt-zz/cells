@@ -37,6 +37,7 @@ export class EuclidianRythmsGame extends React.Component {
   }
 
   protected renderInfoSection(): JSX.Element {
+    // TODO: more info https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.72.1340&rep=rep1&type=pdf
     return (
       <InfoBox>
         {this.strings.euclidianRythms.info1}

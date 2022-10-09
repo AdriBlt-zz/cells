@@ -1,3 +1,5 @@
+import { isBetweenIncluded } from "./numbers";
+
 export interface Point {
   x: number;
   y: number;
@@ -46,4 +48,8 @@ export function squaredDistance(a: Point, b: Point): number {
   const dx = a.x - b.x;
   const dy = a.y - b.y;
   return dx * dx + dy * dy;
+}
+
+export function isBetweenExtremumIncluded(p: Point, e: Extremum): boolean {
+  return isBetweenIncluded(p.x, e.min.x, e.max.x) && isBetweenIncluded(p.y, e.min.y, e.max.y);
 }

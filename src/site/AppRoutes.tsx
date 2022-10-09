@@ -33,6 +33,11 @@ export function AppRoutes({ menu }: { menu: Menu }): JSX.Element {
           component={() => <Home menu={menu} />}
           exact={true}
         />
+        <Route
+          path="/"
+          component={() => <Home menu={menu} />}
+          exact={true}
+        />
         {/* <Route render={() => (<Redirect to={`/${menu.route}`} />)} /> */}
       </Switch>
     </HashRouter>

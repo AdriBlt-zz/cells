@@ -94,6 +94,19 @@ export function findMin(list: number[]): number {
     return min;
 }
 
+export function findMinElement<T>(list: T[], getValue: (element: T) => number): T {
+    let min = Infinity;
+    let minElement = undefined as unknown as T;
+    list.forEach(element => {
+        const value = getValue(element);
+        if (min > value) {
+            min = value;
+            minElement = element;
+        }
+    });
+    return minElement;
+}
+
 export function findMaxElement<T>(list: T[], getValue: (element: T) => number): T {
     let max = -Infinity;
     let maxElement = undefined as unknown as T;

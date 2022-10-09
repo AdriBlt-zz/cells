@@ -35,7 +35,8 @@ export function parseSvg(filePath: string): Promise<Point[][]> {
     });
 }
 
-function parsePath(d: string): Point[][] {
+const KnownSvgNodes = ['Z', 'z', 'M', 'm', 'L', 'l', 'C', 'c', 'H', 'h', 'V', 'v', 'S', 's', 'Q', 'q', 'T', 't', 'A', 'a'];
+export function parsePath(d: string): Point[][] {
     const shapes: Point[][] = [];
     const parts = d
         .replace(/M/g, " M ")
@@ -66,14 +67,31 @@ function parsePath(d: string): Point[][] {
 
     let currentShape: Point[] = [];
     let lastPoint: Point = { x: 0, y: 0 };
+    let lastNode = '';
     for (let i = 0; i < parts.length; i++) {
-        const node = parts[i];
+        let node = parts[i];
         if (node === 'Z' || node === 'z') {
-            shapes.push(currentShape);
+            if (currentShape.length > 0) {
+                currentShape.push(currentShape[0]);
+                shapes.push(currentShape);
+            }
+
+            currentShape = [];
+            lastNode = '';
             continue;
         }
 
         let newPoint: Point;
+        if (!KnownSvgNodes.includes(node)) {
+            if (lastNode === 'M') {
+                node = 'L';
+            } else if (lastNode === 'm') {
+                node = 'l';
+            } else {
+                node = lastNode;
+            }
+            i--;
+        }
 
         if (node === 'M') {
             currentShape = [];
@@ -133,6 +151,11 @@ function parsePath(d: string): Point[][] {
 
         currentShape.push(newPoint);
         lastPoint = newPoint;
+        lastNode = node;
+    }
+
+    if (currentShape.length > 0) {
+        shapes.push(currentShape);
     }
 
     return shapes;
