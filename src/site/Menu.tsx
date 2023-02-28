@@ -21,6 +21,7 @@ import { EuclidianRythmsGame } from "../maths/euclidian-rythms/euclidian-rythms-
 import { FourierDrawingGame } from "../maths/fourier-drawing/fourier-drawing-game";
 import { FourierSignalGame } from "../maths/fourier-signal/fourier-signal-game";
 import { MultiplicationCircleGame } from "../maths/multiplication-circle/multiplication-circle-game";
+import { PercolationGame } from "../maths/percolation/percolation-game";
 import { RosesGame } from "../maths/roses/roses-game";
 import { VoronoiGame } from "../maths/voronoi/voronoi-game";
 import { MazeGenerationGame } from "../mazes/maze-generation/maze-generation-game";
@@ -191,6 +192,11 @@ const mathsPages: Page[] = [
     name: strings.menu.euclidianRythms,
     route: 'euclidian-rythms',
     component: <EuclidianRythmsGame />,
+  },
+  {
+    name: "Percolation",
+    route: 'percolation',
+    component: <PercolationGame />
   },
   // TODO: SPACE FILLING CURVE (HILBERT)
   // TODO: CIRCLE AND ELIPSE?
