@@ -14,7 +14,7 @@ export function AppMenu({ menu }: { menu: Menu }) {
                         id={category.name}
                         title={category.name}
                     >
-                        {category.pages.map((page: Page) => (
+                        {category.pages.filter((page: Page) => !page.hideMenu).map((page: Page) => (
                             <NavDropdown.Item
                                 key={page.route}
                                 href={`#${category.route}/${page.route}`}

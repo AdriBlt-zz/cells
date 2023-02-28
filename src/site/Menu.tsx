@@ -27,8 +27,8 @@ import { MazeGenerationGame } from "../mazes/maze-generation/maze-generation-gam
 import { AlixMazeGame } from "../mazes/ray-casting/alix-maze-game";
 import { GeneratedMazeGame } from "../mazes/ray-casting/generated-maze-game";
 import { WolfensteinGame } from "../mazes/ray-casting/wolfenstein-game";
+import { SecretSantaGame } from "../misc/secret-santa-game";
 import { ContradeOfSienna } from "../misc/sienna/contrade-of-sienna";
-// import { SecretSantaGame } from "../misc/secret-santa-game";
 import { FlockGame } from "../simulations/flock/flock-game";
 import { NBodiesGame } from "../simulations/n-bodies/n-bodies-game";
 import { StarsGame } from "../simulations/stars/stars-game";
@@ -39,6 +39,7 @@ export interface Page {
   route: string;
   component: React.ReactNode;
   description?: string;
+  hideMenu?: boolean;
 }
 
 export interface Category {
@@ -229,11 +230,12 @@ const generationPages: Page[] = [
   },
 ];
 const miscPages: Page[] = [
-//   {
-//     name: strings.menu.secretSanta,
-//     route: "secret-santa",
-//     component: <SecretSantaGame />,
-//   },
+  {
+    name: strings.menu.secretSanta,
+    route: "secret-santa",
+    component: <SecretSantaGame />,
+    hideMenu: true,
+  },
   {
     name: "Contrade of Sienna",
     route: "contrade-sienna",

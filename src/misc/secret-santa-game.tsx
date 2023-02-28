@@ -34,13 +34,24 @@ export class SecretSantaGame extends React.Component<{}, SecretSantaState>
 
     // INCOMPATIBILITIES
     this.addIncompatibility('Agnès', 'Thérèse');
-    this.addIncompatibility('Agnès', 'Vincent');
     this.addIncompatibility('Adrien', 'Thérèse');
+    this.addIncompatibility('Agnès', 'Vincent');
     this.addIncompatibility('Adrien', 'Vincent');
-    this.addIncompatibility('Elisabeth', 'Thérèse');
-    this.addIncompatibility('Elisabeth', 'Vincent');
-    this.addIncompatibility('Alban', 'Thérèse');
-    this.addIncompatibility('Alban', 'Vincent');
+    this.addIncompatibility('Agnès', 'Bernie');
+    this.addIncompatibility('Adrien', 'Bernie');
+    this.addIncompatibility('Agnès', 'Léo');
+    this.addIncompatibility('Adrien', 'Léo');
+    this.addIncompatibility('Agnès', 'Anne');
+    this.addIncompatibility('Adrien', 'Anne');
+    this.addIncompatibility('Agnès', 'Alex');
+    this.addIncompatibility('Adrien', 'Alex');
+
+    this.addIncompatibility('Elisabeth', 'Thérèse', true);
+    this.addIncompatibility('Elisabeth', 'Vincent', true);
+    this.addIncompatibility('Alban', 'Thérèse', true);
+    this.addIncompatibility('Alban', 'Vincent', true);
+
+    this.addIncompatibility('Emilie', 'Thérèse');
 
     // COMPUTE
     this.computeGifts();
@@ -73,11 +84,13 @@ export class SecretSantaGame extends React.Component<{}, SecretSantaState>
     });
   }
 
-  private addIncompatibility = (name1: string, name2: string): void => {
+  private addIncompatibility = (name1: string, name2: string, twoSides = false): void => {
     const guest1 = this.getGuest(name1);
     const guest2 = this.getGuest(name2);
     guest1.cannotGiftTo.push(name2);
-    guest2.cannotGiftTo.push(name1);
+    if (twoSides) {
+      guest2.cannotGiftTo.push(name1);
+    }
   }
 
   private computeGifts = (): void => {

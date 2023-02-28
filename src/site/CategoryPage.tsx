@@ -10,7 +10,7 @@ export function CategoryPage({ category }: { category: Category }) {
         <CardsPage
             title={category.name}
             description={category.description || ''}
-            cards={category.pages.map((page: Page) => ({
+            cards={category.pages.filter((page: Page) => !page.hideMenu).map((page: Page) => ({
                 title: page.name,
                 description: page.description || '',
                 imageUrl: formatString(getAssetPath(Asset.CoversFormat), category.route, page.route),

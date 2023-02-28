@@ -126,4 +126,34 @@ export class LinkedList<T> {
 
     return list;
   }
+
+  public forEach(callback: (element: T, index: number) => void): void {
+    let index = 0;
+    let node = this.head;
+    while (node !== undefined) {
+      callback(node.value, index);
+      node = node.next;
+      index++;
+    }
+  }
+
+  public map<V>(callback: (element: T, index: number) => V): LinkedList<V> {
+    const list = new LinkedList<V>();
+    this.forEach((e, i) => list.insertTail(callback(e, i)));
+    return list;
+  }
+
+  public where(callback: (element: T, index: number) => boolean): LinkedList<T> {
+    const list = new LinkedList<T>();
+    this.forEach((e, i) => {
+      if (callback(e, i)) {
+        list.insertTail(e);
+      }
+    });
+    return list;
+  }
+
+  public clone(elementCopyFn: (element: T, index: number) => T = (element: T) => element): LinkedList<T> {
+    return this.map(elementCopyFn);
+  }
 }
